@@ -7,6 +7,7 @@ import './Flows.css';
 import LazyLoad from './react-lazyload/src';
 import {AudioWidget} from './AudioWidget';
 import {TokenCtx, ReplyForm} from './UserAction';
+import renderMd from './Markdown'
 
 import {API, THUHOLE_API_ROOT} from './flows_api';
 
@@ -129,7 +130,7 @@ class FlowItem extends PureComponent {
 
     render() {
         let props=this.props;
-        let parts=props.parts||split_text(props.info.text,[
+        let parts=props.parts||split_text(renderMd(props.info.text),[
             ['url_pid',URL_PID_RE],
             ['url',URL_RE],
             ['pid',PID_RE],
