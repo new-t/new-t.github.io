@@ -2,7 +2,14 @@ import React, {Component, PureComponent} from 'react';
 import {format_time,Time,TitleLine} from './infrastructure/widgets';
 import {THUHOLE_API_ROOT} from './flows_api';
 
+import HtmlToReact from 'html-to-react'
+
 import './Common.css';
+import { URL_PID_RE, URL_RE, split_text } from './text_splitter';
+import ProcessNodeDefinitions from 'html-to-react/lib/process-node-definitions';
+
+import ReactMarkdown from 'react-markdown'
+import htmlParser from 'react-markdown/plugins/html-parser'
 
 export {format_time,Time,TitleLine};
 
@@ -26,11 +33,13 @@ export function ColoredSpan(props) {
     )
 }
 
+
+function normalize_url(url) {
+    return /^https?:\/\//.test(url) ? url : 'http://'+url;
+}
+
 export class HighlightedText extends PureComponent {
     render() {
-        function normalize_url(url) {
-            return /^https?:\/\//.test(url) ? url : 'http://'+url;
-        }
         return (
             <pre>
                 {this.props.parts.map((part,idx)=>{
@@ -47,6 +56,75 @@ export class HighlightedText extends PureComponent {
                     );
                 })}
             </pre>
+        )
+    }
+}
+
+// props: text, show_pid, color_picker
+export class HighlightedMarkdown extends PureComponent {
+    render() {
+        const processDefs = new HtmlToReact.ProcessNodeDefinitions(React)
+        const astInst = [
+            {
+                shouldProcessNode (node) {
+                    return node.name === 'link' // urls
+                },
+                processNode (node) {
+                    const originalHref = node.attribs.href
+                    if (URL_PID_RE.test(originalHref)) { // url_pid
+                        return (
+                            <span className="url-pid-link" title={originalHref}>/##</span>
+                        )
+                    } else if (URL_RE.test(originalHref)) { // url
+                        return (
+                            <a href={normalize_url(originalHref)} target="_blank" rel="noopener">
+                                {originalHref}
+                            </a>
+                        )
+                    } else {// other cases are invalid, e.g. javascript:alert, etc
+                        return (<a></a>)
+                    }
+                }
+            },
+            {
+                shouldProcessNode (node) {
+                    return node.name === 'text' // pid, nickname, search
+                },
+                processNode (node) {
+                    const originalText = node.data
+                    const splitted = split_text(originalText, [
+                        ['pid',PID_RE],
+                        ['nickname',NICKNAME_RE],
+                    ])
+
+                    return (
+                        <>
+                            {splitted.map(([rule, p], idx) => {
+                                <span key={p}>
+                                    {rule==='pid' ? <a href={'#'+p} onClick={(e)=>{e.preventDefault(); this.props.show_pid(p.substring(1));}}>{p}</a> :
+                                    rule==='nickname' ? <ColoredSpan colors={this.props.color_picker.get(p)}>{p}</ColoredSpan> :
+                                    rule==='search' ? <span className="search-query-highlight">{p}</span> :
+                                    p}
+                                </span>
+                            })}
+                        </>
+                    )
+                }
+            },
+            {
+                shouldProcessNode: () => true,
+                processNode: processDefs.processDefaultNode
+            }
+        ]
+        return (
+            <ReactMarkdown source={this.props.text} astPlugins={
+                [
+                    htmlParser({
+                        isValidNode(node) { return node.type !== 'script' },
+                        processingInstructions: astInst
+                    })
+                ]
+            }/>
         )
     }
 }
