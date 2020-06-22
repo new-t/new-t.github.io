@@ -5,7 +5,8 @@ import 'katex/dist/katex.min.css'
 
 let md = new MarkdownIt({
   html: false,
-  linkify: false
+  linkify: false,
+  breaks: true
 }).use(MarkdownItKaTeX, {
   "throwOnError" : false,
   "errorColor" : "#aa0000"
