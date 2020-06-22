@@ -207,10 +207,10 @@ export function InfoSidebar(props) {
                     <span className="icon icon-settings" /><label>网页版树洞设置</label>
                 </a>
                 &nbsp;&nbsp;
-                {/*<a href="http://pkuhelper.pku.edu.cn/treehole_rules.html" target="_blank">*/}
-                {/*    <span className="icon icon-textfile" /><label>树洞规范</label>*/}
-                {/*</a>*/}
-                {/*&nbsp;&nbsp;*/}
+                <a href="https://thuhole.com/policy.html" target="_blank">
+                    <span className="icon icon-textfile" /><label>树洞规范（试行）</label>
+                </a>
+                &nbsp;&nbsp;
                 <a href="https://github.com/thuhole/thuhole-go-backend/issues" target="_blank">
                     <span className="icon icon-github" /><label>意见反馈</label>
                 </a>
@@ -357,7 +357,7 @@ export class LoginForm extends Component {
                                 {/*</p>*/}
                                 <p>
                                     <a onClick={this.copy_token.bind(this,token.value)}>复制 User Token</a><br />
-                                    复制 User Token 可以在新设备登录，切勿告知他人。{/*，若怀疑被盗号请尽快 <ResetUsertokenWidget token={token.value} />*/}
+                                    复制 User Token 可以在新设备登录，切勿告知他人。若怀疑被盗号请重新邮箱验证码登录以重置Token。{/*，若怀疑被盗号请尽快 <ResetUsertokenWidget token={token.value} />*/}
                                 </p>
                             </div> :
                             <LoginPopup token_callback={token.set_value}>{(do_popup)=>(
@@ -691,7 +691,7 @@ export class PostForm extends Component {
                 }
                 <SafeTextarea ref={this.area_ref} id="new_post" on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
                 <p><small>
-                    请您文明发帖，不要发表垃圾广告、不友善、政治敏感、低俗色情等内容。{/*请遵守<a href="http://pkuhelper.pku.edu.cn/treehole_rules.html" target="_blank">树洞管理规范</a>，文明发言*/}
+                    请遵守<a href="https://thuhole.com/policy.html" target="_blank">树洞管理规范（试行）</a>，文明发言*
                 </small></p>
             </form>
         )
