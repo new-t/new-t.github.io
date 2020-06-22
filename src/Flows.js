@@ -2,7 +2,7 @@ import React, {Component, PureComponent} from 'react';
 import copy from 'copy-to-clipboard';
 import {ColorPicker} from './color_picker';
 import {split_text, NICKNAME_RE, PID_RE, URL_RE, URL_PID_RE} from './text_splitter';
-import {format_time, build_highlight_re, Time, TitleLine, HighlightedText, ClickHandler, ColoredSpan} from './Common';
+import {format_time, build_highlight_re, Time, TitleLine, HighlightedText, ClickHandler, ColoredSpan, HighlightedMarkdown} from './Common';
 import './Flows.css';
 import LazyLoad from './react-lazyload/src';
 import {AudioWidget} from './AudioWidget';
@@ -74,13 +74,6 @@ class Reply extends PureComponent {
     }
 
     render() {
-        let parts=split_text(this.props.info.text,[
-            ['url_pid',URL_PID_RE],
-            ['url',URL_RE],
-            ['pid',PID_RE],
-            ['nickname',NICKNAME_RE],
-        ]);
-
         return (
             <div className={'flow-reply box'} style={this.props.info._display_color ? {
                 '--box-bgcolor-light': this.props.info._display_color[0],
@@ -102,7 +95,7 @@ class Reply extends PureComponent {
                     <Time stamp={this.props.info.timestamp} />
                 </div>
                 <div className="box-content">
-                    <HighlightedText parts={parts} color_picker={this.props.color_picker} show_pid={this.props.show_pid} />
+                    <HighlightedMarkdown text={this.props.info.text} color_picker={this.props.color_picker} show_pid={this.props.show_pid} />
                 </div>
             </div>
         );
@@ -129,12 +122,6 @@ class FlowItem extends PureComponent {
 
     render() {
         let props=this.props;
-        let parts=props.parts||split_text(props.info.text,[
-            ['url_pid',URL_PID_RE],
-            ['url',URL_RE],
-            ['pid',PID_RE],
-            ['nickname',NICKNAME_RE],
-        ]);
         return (
             <div className={'flow-item'+(props.is_quote ? ' flow-item-quote' : '')}>
                 {!!props.is_quote &&
@@ -175,7 +162,7 @@ class FlowItem extends PureComponent {
                         <Time stamp={props.info.timestamp} />
                     </div>
                     <div className="box-content">
-                        <HighlightedText parts={parts} color_picker={props.color_picker} show_pid={props.show_pid} />
+                        <HighlightedMarkdown text={props.info.text} color_picker={props.color_picker} show_pid={props.show_pid} />
                         {props.info.type==='image' &&
                             <p className="img">
                                 {props.img_clickable ?
