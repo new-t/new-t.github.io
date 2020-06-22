@@ -691,7 +691,7 @@ export class PostForm extends Component {
                 }
                 <SafeTextarea ref={this.area_ref} id="new_post" on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
                 <p><small>
-                    请遵守<a href="https://thuhole.com/policy.html" target="_blank">树洞管理规范（试行）</a>，文明发言*
+                    请遵守<a href="https://thuhole.com/policy.html" target="_blank">树洞管理规范（试行）</a>，文明发言
                 </small></p>
             </form>
         )
