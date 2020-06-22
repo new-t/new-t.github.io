@@ -140,7 +140,9 @@ export class HighlightedMarkdown extends Component {
                 </>
             )
         } else {
-            const renderedMarkdown = renderMd((props.author || '') + props.text)
+            let rawMd = props.text
+            if (props.author) rawMd = props.author + ' ' + rawMd
+            const renderedMarkdown = renderMd(rawMd)
             return parser.parseWithInstructions(renderedMarkdown, node => node.type !== 'script', processInstructions)
         }
     }
