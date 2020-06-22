@@ -65,9 +65,20 @@ export class HighlightedMarkdown extends Component {
         const processDefs = new HtmlToReact.ProcessNodeDefinitions(React)
         const processInstructions = [
             {
-                shouldProcessNode: (node) => node.name === 'img',
+                shouldProcessNode: (node) => node.name === 'img', // disable images
                 processNode (node) {
                     return (<div>[图片]</div>)
+                }
+            },
+            {
+                shouldProcessNode: (node) => (/^h[123456]$/.test(node.name)),
+                processNode (node, children, index) {
+                    let currentLevel = +(node.name[1])
+                    if (currentLevel < 3) currentLevel = 3;
+                    const HeadingTag = `h${currentLevel}`
+                    return (
+                        <HeadingTag key={index}>{children}</HeadingTag>
+                    )
                 }
             },
             {
@@ -107,7 +118,6 @@ export class HighlightedMarkdown extends Component {
         ]
         const renderedMarkdown = renderMd(this.props.text)
         const parser = new HtmlToReact.Parser()
-        console.log(`prerender:${renderedMarkdown}`)
         
         return parser.parseWithInstructions(renderedMarkdown, node => node.type !== 'script', processInstructions)
     }
