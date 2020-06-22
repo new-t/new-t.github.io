@@ -7,7 +7,6 @@ import './Flows.css';
 import LazyLoad from './react-lazyload/src';
 import {AudioWidget} from './AudioWidget';
 import {TokenCtx, ReplyForm} from './UserAction';
-import renderMd from './Markdown'
 
 import {API, THUHOLE_API_ROOT} from './flows_api';
 
@@ -75,13 +74,6 @@ class Reply extends PureComponent {
     }
 
     render() {
-        let parts=split_text(this.props.info.text,[
-            ['url_pid',URL_PID_RE],
-            ['url',URL_RE],
-            ['pid',PID_RE],
-            ['nickname',NICKNAME_RE],
-        ]);
-
         return (
             <div className={'flow-reply box'} style={this.props.info._display_color ? {
                 '--box-bgcolor-light': this.props.info._display_color[0],
@@ -103,7 +95,7 @@ class Reply extends PureComponent {
                     <Time stamp={this.props.info.timestamp} />
                 </div>
                 <div className="box-content">
-                    <HighlightedText parts={parts} color_picker={this.props.color_picker} show_pid={this.props.show_pid} />
+                    <HighlightedMarkdown text={this.props.info.text} color_picker={this.props.color_picker} show_pid={this.props.show_pid} />
                 </div>
             </div>
         );

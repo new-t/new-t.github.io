@@ -5,11 +5,9 @@ import {THUHOLE_API_ROOT} from './flows_api';
 import HtmlToReact from 'html-to-react'
 
 import './Common.css';
-import { URL_PID_RE, URL_RE, split_text } from './text_splitter';
-import ProcessNodeDefinitions from 'html-to-react/lib/process-node-definitions';
+import { URL_PID_RE, URL_RE, PID_RE, NICKNAME_RE, split_text } from './text_splitter';
 
-import ReactMarkdown from 'react-markdown'
-import htmlParser from 'react-markdown/plugins/html-parser'
+import renderMd from './Markdown'
 
 export {format_time,Time,TitleLine};
 
@@ -61,38 +59,20 @@ export class HighlightedText extends PureComponent {
 }
 
 // props: text, show_pid, color_picker
-export class HighlightedMarkdown extends PureComponent {
+export class HighlightedMarkdown extends Component {
     render() {
+        const props = this.props
         const processDefs = new HtmlToReact.ProcessNodeDefinitions(React)
-        const astInst = [
+        const processInstructions = [
             {
                 shouldProcessNode (node) {
-                    return node.name === 'link' // urls
-                },
-                processNode (node) {
-                    const originalHref = node.attribs.href
-                    if (URL_PID_RE.test(originalHref)) { // url_pid
-                        return (
-                            <span className="url-pid-link" title={originalHref}>/##</span>
-                        )
-                    } else if (URL_RE.test(originalHref)) { // url
-                        return (
-                            <a href={normalize_url(originalHref)} target="_blank" rel="noopener">
-                                {originalHref}
-                            </a>
-                        )
-                    } else {// other cases are invalid, e.g. javascript:alert, etc
-                        return (<a></a>)
-                    }
-                }
-            },
-            {
-                shouldProcessNode (node) {
-                    return node.name === 'text' // pid, nickname, search
+                    return node.type === 'text' // pid, nickname, search
                 },
                 processNode (node) {
                     const originalText = node.data
                     const splitted = split_text(originalText, [
+                        ['url_pid', URL_PID_RE],
+                        ['url',URL_RE],
                         ['pid',PID_RE],
                         ['nickname',NICKNAME_RE],
                     ])
@@ -100,12 +80,15 @@ export class HighlightedMarkdown extends PureComponent {
                     return (
                         <>
                             {splitted.map(([rule, p], idx) => {
-                                <span key={p}>
-                                    {rule==='pid' ? <a href={'#'+p} onClick={(e)=>{e.preventDefault(); this.props.show_pid(p.substring(1));}}>{p}</a> :
-                                    rule==='nickname' ? <ColoredSpan colors={this.props.color_picker.get(p)}>{p}</ColoredSpan> :
+                                return (<span key={idx}>
+                                    {
+                                    rule==='url_pid' ? <span className="url-pid-link" title={p}>/##</span> :
+                                    rule==='url' ? <a href={normalize_url(p)} target="_blank" rel="noopener">{p}</a> :
+                                    rule==='pid' ? <a href={'#'+p} onClick={(e)=>{e.preventDefault(); props.show_pid(p.substring(1));}}>{p}</a> :
+                                    rule==='nickname' ? <ColoredSpan colors={props.color_picker.get(p)}>{p}</ColoredSpan> :
                                     rule==='search' ? <span className="search-query-highlight">{p}</span> :
                                     p}
-                                </span>
+                                </span>)
                             })}
                         </>
                     )
@@ -116,16 +99,11 @@ export class HighlightedMarkdown extends PureComponent {
                 processNode: processDefs.processDefaultNode
             }
         ]
-        return (
-            <ReactMarkdown source={this.props.text} astPlugins={
-                [
-                    htmlParser({
-                        isValidNode(node) { return node.type !== 'script' },
-                        processingInstructions: astInst
-                    })
-                ]
-            }/>
-        )
+        const renderedMarkdown = renderMd(this.props.text)
+        const parser = new HtmlToReact.Parser()
+        console.log(`prerender:${renderedMarkdown}`)
+        
+        return parser.parseWithInstructions(renderedMarkdown, node => node.type !== 'script', processInstructions)
     }
 }
 
