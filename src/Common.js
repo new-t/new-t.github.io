@@ -65,6 +65,12 @@ export class HighlightedMarkdown extends Component {
         const processDefs = new HtmlToReact.ProcessNodeDefinitions(React)
         const processInstructions = [
             {
+                shouldProcessNode: (node) => node.name === 'img',
+                processNode (node) {
+                    return (<div>[图片]</div>)
+                }
+            },
+            {
                 shouldProcessNode (node) {
                     return node.type === 'text' // pid, nickname, search
                 },
