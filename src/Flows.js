@@ -74,6 +74,11 @@ class Reply extends PureComponent {
     }
 
     render() {
+        const replyContent = (this.props.info.text)
+        const splitIdx = replyContent.indexOf(']')
+        
+        const author = replyContent.substr(0, splitIdx + 1),
+              replyText = replyContent.substr(splitIdx + 2)
         return (
             <div className={'flow-reply box'} style={this.props.info._display_color ? {
                 '--box-bgcolor-light': this.props.info._display_color[0],
@@ -95,7 +100,8 @@ class Reply extends PureComponent {
                     <Time stamp={this.props.info.timestamp} />
                 </div>
                 <div className="box-content">
-                    <HighlightedMarkdown text={this.props.info.text} color_picker={this.props.color_picker} show_pid={this.props.show_pid} />
+                    <HighlightedMarkdown author={author}
+                    text={replyText} color_picker={this.props.color_picker} show_pid={this.props.show_pid} />
                 </div>
             </div>
         );
