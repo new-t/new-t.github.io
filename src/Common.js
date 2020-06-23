@@ -82,6 +82,17 @@ export class HighlightedMarkdown extends Component {
                 }
             },
             {
+                shouldProcessNode: (node) => node.name === 'a',
+                processNode (node, children) {
+                    return (
+                        <a href={normalize_url(node.attribs.href)} target="_blank" rel="noopenner noreferrer" class="ext-link">
+                            {children}
+                            <span className="icon icon-new-tab" />
+                        </a>
+                    )
+                }
+            },
+            {
                 shouldProcessNode (node) {
                     return node.type === 'text' // pid, nickname, search
                 },
@@ -100,7 +111,10 @@ export class HighlightedMarkdown extends Component {
                                 return (<span key={idx}>
                                     {
                                     rule==='url_pid' ? <span className="url-pid-link" title={p}>/##</span> :
-                                    rule==='url' ? <a href={normalize_url(p)} target="_blank" rel="noopener">{p}</a> :
+                                    rule==='url' ? <a href={normalize_url(p)} class="ext-link" target="_blank" rel="noopener noreferrer">
+                                        {p}
+                                        <span className="icon icon-new-tab" />
+                                    </a> :
                                     rule==='pid' ? <a href={'#'+p} onClick={(e)=>{e.preventDefault(); props.show_pid(p.substring(1));}}>{p}</a> :
                                     rule==='nickname' ? <ColoredSpan colors={props.color_picker.get(p)}>{p}</ColoredSpan> :
                                     rule==='search' ? <span className="search-query-highlight">{p}</span> :
@@ -116,13 +130,21 @@ export class HighlightedMarkdown extends Component {
                 processNode: processDefs.processDefaultNode
             }
         ]
-        const renderedMarkdown = renderMd(this.props.text)
         const parser = new HtmlToReact.Parser()
-
-        let rtn = parser.parseWithInstructions(renderedMarkdown, node => node.type !== 'script', processInstructions)
-        if(rtn === undefined)
-            return null
-        return rtn;
+        if (props.author && props.text.match(/^(?:#+ |>|```|\t|\s*-|\s*\d+\.)/)) {
+            const renderedMarkdown = renderMd(props.text)
+            return (
+                <>
+                    {props.author}
+                    {parser.parseWithInstructions(renderedMarkdown, node => node.type !== 'script', processInstructions) || ''}
+                </>
+            )
+        } else {
+            let rawMd = props.text
+            if (props.author) rawMd = props.author + ' ' + rawMd
+            const renderedMarkdown = renderMd(rawMd)
+            return (parser.parseWithInstructions(renderedMarkdown, node => node.type !== 'script', processInstructions) || null)
+        }
     }
 }
 
