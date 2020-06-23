@@ -136,14 +136,14 @@ export class HighlightedMarkdown extends Component {
             return (
                 <>
                     {props.author}
-                    {parser.parseWithInstructions(renderedMarkdown, node => node.type !== 'script', processInstructions)}
+                    {parser.parseWithInstructions(renderedMarkdown, node => node.type !== 'script', processInstructions) || ''}
                 </>
             )
         } else {
             let rawMd = props.text
             if (props.author) rawMd = props.author + ' ' + rawMd
             const renderedMarkdown = renderMd(rawMd)
-            return parser.parseWithInstructions(renderedMarkdown, node => node.type !== 'script', processInstructions)
+            return (parser.parseWithInstructions(renderedMarkdown, node => node.type !== 'script', processInstructions) || null)
         }
     }
 }
