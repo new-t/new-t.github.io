@@ -118,8 +118,11 @@ export class HighlightedMarkdown extends Component {
         ]
         const renderedMarkdown = renderMd(this.props.text)
         const parser = new HtmlToReact.Parser()
-        
-        return parser.parseWithInstructions(renderedMarkdown, node => node.type !== 'script', processInstructions)
+
+        let rtn = parser.parseWithInstructions(renderedMarkdown, node => node.type !== 'script', processInstructions)
+        if(rtn === undefined)
+            return null
+        return rtn;
     }
 }
 
