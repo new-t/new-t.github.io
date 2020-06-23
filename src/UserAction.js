@@ -348,13 +348,13 @@ export class LoginForm extends Component {
                                     {/*根据计算中心要求，访问授权三个月内有效，过期需重新登录。*/}
                                     {/*T大树洞将会单向加密(i.e. 哈希散列)您的邮箱后再存入数据库，因此您的发帖具有较强的匿名性。具体可见我们的<a href="https://github.com/thuhole/thuhole-go-backend/blob/76f56e6b75257b59e552b6bdba77e114151fcad1/src/db.go#L184">后端开源代码</a>。*/}
                                 {/*</p>*/}
-                                {/*<p>*/}
-                                {/*    <a onClick={()=>{this.props.show_sidebar(*/}
-                                {/*        '系统消息',*/}
-                                {/*        <MessageViewer token={token.value} />*/}
-                                {/*    )}}>查看系统消息</a><br />*/}
-                                {/*    /!*当您发送的内容违规时，我们将用系统消息提示您*!/*/}
-                                {/*</p>*/}
+                                <p>
+                                    <a onClick={()=>{this.props.show_sidebar(
+                                        '系统消息',
+                                        <MessageViewer token={token.value} />
+                                    )}}>查看系统消息</a><br />
+                                    当您发送的内容违规时，我们将用系统消息提示您
+                                </p>
                                 <p>
                                     <a onClick={this.copy_token.bind(this,token.value)}>复制 User Token</a><br />
                                     复制 User Token 可以在新设备登录，切勿告知他人。若怀疑被盗号请重新邮箱验证码登录以重置Token。{/*，若怀疑被盗号请尽快 <ResetUsertokenWidget token={token.value} />*/}
