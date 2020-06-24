@@ -94,7 +94,7 @@ export class HighlightedMarkdown extends Component {
             },
             {
                 shouldProcessNode (node) {
-                    return node.type === 'text' // pid, nickname, search
+                    return node.type === 'text' && (!node.parent || !node.parent.attribs || node.parent.attribs['encoding'] != "application/x-tex") // pid, nickname, search
                 },
                 processNode (node) {
                     const originalText = node.data
@@ -102,7 +102,7 @@ export class HighlightedMarkdown extends Component {
                         ['url_pid', URL_PID_RE],
                         ['url',URL_RE],
                         ['pid',PID_RE],
-                        // ['nickname',NICKNAME_RE],
+                        ['nickname',NICKNAME_RE],
                     ])
 
                     return (
