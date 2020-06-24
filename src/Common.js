@@ -102,7 +102,7 @@ export class HighlightedMarkdown extends Component {
                         ['url_pid', URL_PID_RE],
                         ['url',URL_RE],
                         ['pid',PID_RE],
-                        ['nickname',NICKNAME_RE],
+                        // ['nickname',NICKNAME_RE],
                     ])
 
                     return (
