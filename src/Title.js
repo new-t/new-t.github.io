@@ -89,7 +89,7 @@ class ControlBar extends PureComponent {
                             <span className="control-btn-label">关注</span>
                         </a>
                     }
-                    <input className="control-search" value={this.state.search_text} placeholder="搜索 或 #树洞号"
+                    <input className="control-search" value={this.state.search_text} placeholder="搜索 或 '#树洞号' 或 '热榜'"
                            onChange={this.on_change_bound} onKeyPress={this.on_keypress_bound}
                     />
                     <a className="no-underline control-btn" onClick={()=>{
