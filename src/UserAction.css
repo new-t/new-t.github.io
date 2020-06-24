@@ -20,10 +20,17 @@
     min-height: 2em;
     height: 4em;
 }
+
 .reply-form button {
     flex: 0 0 3em;
     margin-right: 0;
 }
+
+.reply-preview {
+    flex: 1;
+    min-height: 2em;
+}
+
 
 .post-form-bar {
     line-height: 2em;
@@ -56,6 +63,11 @@
     width: 100%;
     min-height: 5em;
     height: 20em;
+}
+
+.post-preview {
+    width: 100%;
+    min-height: 5em;
 }
 
 .life-info-table {
