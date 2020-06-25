@@ -473,7 +473,6 @@ export class ReplyForm extends Component {
     }
 
     render() {
-        let color_picker = new ColorPicker();
         return (
             <form onSubmit={this.on_submit.bind(this)} className={'reply-form box'+(this.state.text?' reply-sticky':'')}>
                 {
