@@ -17,6 +17,7 @@ const CLICKABLE_TAGS={a: true, audio: true};
 const PREVIEW_REPLY_COUNT=10;
 // const QUOTE_BLACKLIST=['23333','233333','66666','666666','10086','10000','100000','99999','999999','55555','555555'];
 const QUOTE_BLACKLIST=[];
+const FOLD_TAGS = ['性相关', '政治相关', '折叠']
 
 window.LATEST_POST_ID=parseInt(localStorage['_LATEST_POST_ID'],10)||0;
 
@@ -160,7 +161,7 @@ class FlowItem extends PureComponent {
                         }
                         <code className="box-id"><a href={'##'+props.info.pid} onClick={this.copy_link.bind(this)}>#{props.info.pid}</a></code>
                         &nbsp;
-                        {props.info.tag!==null &&
+                        {(props.info.tag!==null && props.info.tag!=='折叠') &&
                             <span className="box-header-tag">
                                 {props.info.tag}
                             </span>
@@ -168,8 +169,8 @@ class FlowItem extends PureComponent {
                         <Time stamp={props.info.timestamp} />
                     </div>
                     <div className="box-content">
-                        <HighlightedMarkdown text={props.info.text} color_picker={props.color_picker} show_pid={props.show_pid} />
-                        {props.info.type==='image' &&
+                        <HighlightedMarkdown text={(!props.img_clickable) && (FOLD_TAGS.indexOf(props.info.tag) > -1) ? '_此树洞已被折叠_' : props.info.text} color_picker={props.color_picker} show_pid={props.show_pid} />
+                        {((props.info.type==='image') && ((props.img_clickable) || !(FOLD_TAGS.indexOf(props.info.tag) > -1))) &&
                             <p className="img">
                                 {props.img_clickable ?
                                     <a className="no-underline" href={IMAGE_BASE+props.info.url} target="_blank"><img src={IMAGE_BASE+props.info.url} /></a> :
@@ -177,7 +178,7 @@ class FlowItem extends PureComponent {
                                 }
                             </p>
                         }
-                        {props.info.type==='audio' && <AudioWidget src={AUDIO_BASE+props.info.url} />}
+                        {/*{props.info.type==='audio' && <AudioWidget src={AUDIO_BASE+props.info.url} />}*/}
                     </div>
                     {!!(props.attention && props.info.variant.latest_reply) &&
                         <p className="box-footer">最新回复 <Time stamp={props.info.variant.latest_reply} /></p>
