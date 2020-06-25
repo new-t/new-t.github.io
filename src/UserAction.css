@@ -37,27 +37,46 @@
     display: flex;
     margin-bottom: .5em;
 }
+
 .post-form-bar label {
     flex: 1;
 }
+
 .post-form-bar input[type=file] {
     border: 0;
     padding: 0 0 0 .5em;
 }
+
 @media screen and (max-width: 580px) {
     .post-form-bar input[type=file] {
         width: 120px;
     }
 }
+
+@media screen and (max-width: 320px) {
+    .post-form-bar input[type=file] {
+        width: 100px;
+    }
+}
+
 .post-form-bar button {
-    flex: 0 0 8em;
+    flex: 0 0 6em;
     margin-right: 0;
 }
+
+@media screen and (max-width: 580px) {
+    .post-form-bar button {
+        flex: 0 0 4.5em;
+        margin-right: 0;
+    }
+}
+
 .post-form-img-tip {
     font-size: small;
     margin-top: -.5em;
     margin-bottom: .5em;
 }
+
 .post-form textarea {
     resize: vertical;
     width: 100%;
