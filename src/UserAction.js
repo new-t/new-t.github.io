@@ -204,7 +204,7 @@ export function InfoSidebar(props) {
                     '设置',
                     <ConfigUI />
                 )}}>
-                    <span className="icon icon-settings" /><label>网页版树洞设置</label>
+                    <span className="icon icon-settings" /><label>设置</label>
                 </a>
                 &nbsp;&nbsp;
                 <a href="https://thuhole.com/policy.html" target="_blank">
@@ -216,21 +216,6 @@ export function InfoSidebar(props) {
                 </a>
             </div>
             <div className="box help-desc-box">
-                <p>
-                    T大树洞 网页版 by @thuhole，
-                    基于&nbsp;
-                    <a href="https://www.gnu.org/licenses/gpl-3.0.zh-cn.html" target="_blank">GPLv3</a>
-                    &nbsp;协议在 <a href="https://github.com/thuhole/webhole" target="_blank">GitHub</a> 开源
-                </p>
-                <p>
-                    T大树洞 网页版的诞生离不开&nbsp;
-                    <a href="https://github.com/pkuhelper-web/webhole" target="_blank" rel="noopener">P大树洞网页版 by @xmcp</a>
-                    、
-                    <a href="https://reactjs.org/" target="_blank" rel="noopener">React</a>
-                    、
-                    <a href="https://icomoon.io/#icons" target="_blank" rel="noopener">IcoMoon</a>
-                    &nbsp;等开源项目
-                </p>
                 <p>
                     <a onClick={()=>{
                         if('serviceWorker' in navigator) {
@@ -248,6 +233,28 @@ export function InfoSidebar(props) {
                         },200);
                     }}>强制检查更新</a>
                     （当前版本：【{process.env.REACT_APP_BUILD_INFO||'---'} {process.env.NODE_ENV}】 会自动在后台检查更新并在下次访问时更新）
+                </p>
+            </div>
+            <div className="box help-desc-box">
+                <p>
+                    联系我们：thuhole at protonmail dot com
+                </p>
+            </div>
+            <div className="box help-desc-box">
+                <p>
+                    T大树洞 网页版 by @thuhole，
+                    基于&nbsp;
+                    <a href="https://www.gnu.org/licenses/gpl-3.0.zh-cn.html" target="_blank">GPLv3</a>
+                    &nbsp;协议在 <a href="https://github.com/thuhole/webhole" target="_blank">GitHub</a> 开源
+                </p>
+                <p>
+                    T大树洞 网页版的诞生离不开&nbsp;
+                    <a href="https://github.com/pkuhelper-web/webhole" target="_blank" rel="noopener">P大树洞网页版 by @xmcp</a>
+                    、
+                    <a href="https://reactjs.org/" target="_blank" rel="noopener">React</a>
+                    、
+                    <a href="https://icomoon.io/#icons" target="_blank" rel="noopener">IcoMoon</a>
+                    &nbsp;等开源项目
                 </p>
                 <p>
                     This program is free software: you can redistribute it and/or modify
