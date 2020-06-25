@@ -2,6 +2,7 @@ import React, {Component, PureComponent} from 'react';
 import {API_BASE, SafeTextarea, PromotionBar, HighlightedMarkdown} from './Common';
 import {MessageViewer} from './Message';
 import {LoginPopup} from './infrastructure/widgets';
+import {ColorPicker} from './color_picker';
 import {ConfigUI} from './Config';
 import fixOrientation from 'fix-orientation';
 import copy from 'copy-to-clipboard';
@@ -399,6 +400,7 @@ export class ReplyForm extends Component {
         this.on_change_bound=this.on_change.bind(this);
         this.area_ref=this.props.area_ref||React.createRef();
         this.global_keypress_handler_bound=this.global_keypress_handler.bind(this);
+        this.color_picker=new ColorPicker();
     }
 
     global_keypress_handler(e) {
@@ -471,14 +473,15 @@ export class ReplyForm extends Component {
     }
 
     render() {
+        let color_picker = new ColorPicker();
         return (
             <form onSubmit={this.on_submit.bind(this)} className={'reply-form box'+(this.state.text?' reply-sticky':'')}>
                 {
                     this.state.preview ? 
                     <div className='reply-preview'>
-                        <HighlightedMarkdown key={this.props.pid} text={this.state.text} color_picker={this.props.color_picker} show_pid={this.props.show_pid} />
+                        <HighlightedMarkdown text={this.state.text} color_picker={this.color_picker} show_pid={()=>{}} />
                     </div> :
-                    <SafeTextarea key={this.props.pid} ref={this.area_ref} id={this.props.pid} on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
+                    <SafeTextarea ref={this.area_ref} id={this.props.pid} on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
                 }
                 <button type='button' onClick={()=>{this.toggle_preview()}}>
                     {this.state.preview? <span className="icon icon-eye-blocked" />: <span className="icon icon-eye" />}
@@ -509,6 +512,7 @@ export class PostForm extends Component {
         this.area_ref=React.createRef();
         this.on_change_bound=this.on_change.bind(this);
         this.on_img_change_bound=this.on_img_change.bind(this);
+        this.color_picker=new ColorPicker();
     }
 
     componentDidMount() {
@@ -736,7 +740,7 @@ export class PostForm extends Component {
                 {
                     this.state.preview ? 
                     <div className='post-preview'>
-                        <HighlightedMarkdown text={this.state.text} color_picker={this.props.color_picker} show_pid={this.props.show_pid} /> 
+                        <HighlightedMarkdown text={this.state.text} color_picker={this.color_picker} show_pid={()=>{}} /> 
                     </div> :
                     <SafeTextarea ref={this.area_ref} id="new_post" on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
                 }
