@@ -1,5 +1,5 @@
 import React, {Component, PureComponent} from 'react';
-import {API_BASE, SafeTextarea, PromotionBar} from './Common';
+import {API_BASE, SafeTextarea, PromotionBar, HighlightedMarkdown} from './Common';
 import {MessageViewer} from './Message';
 import {LoginPopup} from './infrastructure/widgets';
 import {ConfigUI} from './Config';
@@ -394,6 +394,7 @@ export class ReplyForm extends Component {
         this.state={
             text: '',
             loading_status: 'done',
+            preview: false,
         };
         this.on_change_bound=this.on_change.bind(this);
         this.area_ref=this.props.area_ref||React.createRef();
@@ -462,11 +463,26 @@ export class ReplyForm extends Component {
                 });
             });
     }
+    
+    toggle_preview() {
+        this.setState({
+            preview: !this.state.preview
+        });
+    }
 
     render() {
         return (
             <form onSubmit={this.on_submit.bind(this)} className={'reply-form box'+(this.state.text?' reply-sticky':'')}>
-                <SafeTextarea key={this.props.pid} ref={this.area_ref} id={this.props.pid} on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
+                {
+                    this.state.preview ? 
+                    <div className='reply-preview'>
+                        <HighlightedMarkdown text={this.state.text} color_picker={this.props.color_picker} show_pid={this.props.show_pid} />
+                    </div> :
+                    <SafeTextarea key={this.props.pid} ref={this.area_ref} id={this.props.pid} on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
+                }
+                <button type='button' onClick={()=>{this.toggle_preview()}}>
+                    {this.state.preview? <span className="icon icon-eye-blocked" />: <span className="icon icon-eye" />}
+                </button>
                 {this.state.loading_status==='loading' ?
                     <button disabled="disabled">
                         <span className="icon icon-loading" />
@@ -487,6 +503,7 @@ export class PostForm extends Component {
             text: '',
             loading_status: 'done',
             img_tip: null,
+            preview: false,
         };
         this.img_ref=React.createRef();
         this.area_ref=React.createRef();
@@ -669,6 +686,12 @@ export class PostForm extends Component {
         }
     }
 
+    toggle_preview() {
+        this.setState({
+            preview: !this.state.preview
+        });
+    }
+
     render() {
         return (
             <form onSubmit={this.on_submit.bind(this)} className="post-form box">
@@ -679,7 +702,21 @@ export class PostForm extends Component {
                                onChange={this.on_img_change_bound}
                         />
                     </label>
-                    {this.state.loading_status!=='done' ?
+
+                    {
+                        this.state.preview ?
+                        <button type='button' onClick={()=>{this.toggle_preview()}}>
+                            <span className="icon icon-eye-blocked" />
+                            &nbsp;编辑
+                        </button> :
+                        <button type='button' onClick={()=>{this.toggle_preview()}}>
+                            <span className="icon icon-eye" />
+                            &nbsp;预览
+                        </button>
+                    }
+
+                    {
+                        this.state.loading_status!=='done' ?
                         <button disabled="disabled">
                             <span className="icon icon-loading" />
                             &nbsp;正在{this.state.loading_status==='processing' ? '处理' : '上传'}
@@ -696,7 +733,13 @@ export class PostForm extends Component {
                         {this.state.img_tip}
                     </p>
                 }
-                <SafeTextarea ref={this.area_ref} id="new_post" on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
+                {
+                    this.state.preview ? 
+                    <div className='post-preview'>
+                        <HighlightedMarkdown text={this.state.text} color_picker={this.props.color_picker} show_pid={this.props.show_pid} /> 
+                    </div> :
+                    <SafeTextarea ref={this.area_ref} id="new_post" on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
+                }
                 <p><small>
                     请遵守<a href="https://thuhole.com/policy.html" target="_blank">树洞管理规范（试行）</a>，文明发言
                 </small></p>
