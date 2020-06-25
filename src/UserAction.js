@@ -10,6 +10,7 @@ import {cache} from './cache';
 import {API_VERSION_PARAM, THUHOLE_API_ROOT, API, get_json, token_param} from './flows_api';
 
 import './UserAction.css';
+import {ColorPicker} from "./color_picker";
 
 const BASE64_RATE=4/3;
 const MAX_IMG_DIAM=8000;
@@ -723,7 +724,7 @@ export class PostForm extends Component {
                         this.state.loading_status!=='done' ?
                         <button disabled="disabled">
                             <span className="icon icon-loading" />
-                            &nbsp;正在{this.state.loading_status==='processing' ? '处理' : '上传'}
+                            &nbsp;{this.state.loading_status==='processing' ? '处理' : '上传'}
                         </button> :
                         <button type="submit">
                             <span className="icon icon-send" />
@@ -740,7 +741,7 @@ export class PostForm extends Component {
                 {
                     this.state.preview ? 
                     <div className='post-preview'>
-                        <HighlightedMarkdown text={this.state.text} color_picker={this.color_picker} show_pid={()=>{}} /> 
+                        <HighlightedMarkdown text={this.state.text} color_picker={this.color_picker} show_pid={()=>{}} />
                     </div> :
                     <SafeTextarea ref={this.area_ref} id="new_post" on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
                 }
