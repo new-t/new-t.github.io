@@ -478,7 +478,7 @@ export class ReplyForm extends Component {
                 {
                     this.state.preview ? 
                     <div className='reply-preview'>
-                        <HighlightedMarkdown key={this.props.pid} text={this.state.text} color_picker={this.color_picker} show_pid={this.props.show_pid} />
+                        <HighlightedMarkdown text={this.state.text} color_picker={this.color_picker} show_pid={()=>{}} />
                     </div> :
                     <SafeTextarea key={this.props.pid} ref={this.area_ref} id={this.props.pid} on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
                 }
@@ -739,7 +739,7 @@ export class PostForm extends Component {
                 {
                     this.state.preview ? 
                     <div className='post-preview'>
-                        <HighlightedMarkdown text={this.state.text} color_picker={this.color_picker} show_pid={this.props.show_pid} />
+                        <HighlightedMarkdown text={this.state.text} color_picker={this.color_picker} show_pid={()=>{}} />
                     </div> :
                     <SafeTextarea ref={this.area_ref} id="new_post" on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
                 }
