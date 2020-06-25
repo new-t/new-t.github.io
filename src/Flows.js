@@ -534,7 +534,7 @@ class FlowItemRow extends PureComponent {
             }}>
                 <FlowItem parts={parts} info={this.state.info} attention={this.state.attention} img_clickable={false} is_quote={this.props.is_quote}
                     color_picker={this.color_picker} show_pid={show_pid} replies={this.state.replies} />
-                <div className="flow-reply-row">
+                {(!(FOLD_TAGS.indexOf(this.state.info.tag) > -1)) && <div className="flow-reply-row">
                     {this.state.reply_status==='loading' && <div className="box box-tip">加载中</div>}
                     {this.state.reply_status==='failed' &&
                         <div className="box box-tip">
@@ -548,7 +548,7 @@ class FlowItemRow extends PureComponent {
                     {this.state.replies.length>PREVIEW_REPLY_COUNT &&
                         <div className="box box-tip">还有 {this.state.replies.length-PREVIEW_REPLY_COUNT} 条</div>
                     }
-                </div>
+                </div>}
             </div>
         );
 
