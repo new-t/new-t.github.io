@@ -66,8 +66,8 @@ export class HighlightedMarkdown extends Component {
         const processInstructions = [
             {
                 shouldProcessNode: (node) => node.name === 'img', // disable images
-                processNode (node) {
-                    return (<div>[图片]</div>)
+                processNode (node, children, index) {
+                    return (<div key={index}>[图片]</div>)
                 }
             },
             {
@@ -83,9 +83,9 @@ export class HighlightedMarkdown extends Component {
             },
             {
                 shouldProcessNode: (node) => node.name === 'a',
-                processNode (node, children) {
+                processNode (node, children, index) {
                     return (
-                        <a href={normalize_url(node.attribs.href)} target="_blank" rel="noopenner noreferrer" class="ext-link">
+                        <a href={normalize_url(node.attribs.href)} target="_blank" rel="noopenner noreferrer" class="ext-link" key={index}>
                             {children}
                             <span className="icon icon-new-tab" />
                         </a>
@@ -96,7 +96,7 @@ export class HighlightedMarkdown extends Component {
                 shouldProcessNode (node) {
                     return node.type === 'text' && (!node.parent || !node.parent.attribs || node.parent.attribs['encoding'] != "application/x-tex") // pid, nickname, search
                 },
-                processNode (node) {
+                processNode (node, children, index) {
                     const originalText = node.data
                     const splitted = split_text(originalText, [
                         ['url_pid', URL_PID_RE],
@@ -106,7 +106,7 @@ export class HighlightedMarkdown extends Component {
                     ])
 
                     return (
-                        <>
+                        <React.Fragment key={index}>
                             {splitted.map(([rule, p], idx) => {
                                 return (<span key={idx}>
                                     {
@@ -121,7 +121,7 @@ export class HighlightedMarkdown extends Component {
                                     p}
                                 </span>)
                             })}
-                        </>
+                        </React.Fragment>
                     )
                 }
             },

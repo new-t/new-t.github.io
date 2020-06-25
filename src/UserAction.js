@@ -10,7 +10,6 @@ import {cache} from './cache';
 import {API_VERSION_PARAM, THUHOLE_API_ROOT, API, get_json, token_param} from './flows_api';
 
 import './UserAction.css';
-import {ColorPicker} from "./color_picker";
 
 const BASE64_RATE=4/3;
 const MAX_IMG_DIAM=8000;
