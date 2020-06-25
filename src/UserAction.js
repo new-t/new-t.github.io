@@ -9,6 +9,7 @@ import {cache} from './cache';
 import {API_VERSION_PARAM, THUHOLE_API_ROOT, API, get_json, token_param} from './flows_api';
 
 import './UserAction.css';
+import {ColorPicker} from "./color_picker";
 
 const BASE64_RATE=4/3;
 const MAX_IMG_DIAM=8000;
@@ -399,6 +400,7 @@ export class ReplyForm extends Component {
         this.on_change_bound=this.on_change.bind(this);
         this.area_ref=this.props.area_ref||React.createRef();
         this.global_keypress_handler_bound=this.global_keypress_handler.bind(this);
+        this.color_picker=new ColorPicker();
     }
 
     global_keypress_handler(e) {
@@ -476,7 +478,7 @@ export class ReplyForm extends Component {
                 {
                     this.state.preview ? 
                     <div className='reply-preview'>
-                        <HighlightedMarkdown key={this.props.pid} text={this.state.text} color_picker={this.props.color_picker} show_pid={this.props.show_pid} />
+                        <HighlightedMarkdown key={this.props.pid} text={this.state.text} color_picker={this.color_picker} show_pid={this.props.show_pid} />
                     </div> :
                     <SafeTextarea key={this.props.pid} ref={this.area_ref} id={this.props.pid} on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
                 }
@@ -509,6 +511,7 @@ export class PostForm extends Component {
         this.area_ref=React.createRef();
         this.on_change_bound=this.on_change.bind(this);
         this.on_img_change_bound=this.on_img_change.bind(this);
+        this.color_picker=new ColorPicker();
     }
 
     componentDidMount() {
@@ -736,7 +739,7 @@ export class PostForm extends Component {
                 {
                     this.state.preview ? 
                     <div className='post-preview'>
-                        <HighlightedMarkdown text={this.state.text} color_picker={this.props.color_picker} show_pid={this.props.show_pid} /> 
+                        <HighlightedMarkdown text={this.state.text} color_picker={this.color_picker} show_pid={this.props.show_pid} />
                     </div> :
                     <SafeTextarea ref={this.area_ref} id="new_post" on_change={this.on_change_bound} on_submit={this.on_submit.bind(this)} />
                 }
