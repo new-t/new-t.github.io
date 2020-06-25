@@ -719,7 +719,7 @@ export class PostForm extends Component {
                         this.state.loading_status!=='done' ?
                         <button disabled="disabled">
                             <span className="icon icon-loading" />
-                            &nbsp;正在{this.state.loading_status==='processing' ? '处理' : '上传'}
+                            &nbsp;{this.state.loading_status==='processing' ? '处理' : '上传'}
                         </button> :
                         <button type="submit">
                             <span className="icon icon-send" />
