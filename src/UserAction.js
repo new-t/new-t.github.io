@@ -453,6 +453,7 @@ export class ReplyForm extends Component {
                 this.setState({
                     loading_status: 'done',
                     text: '',
+                    preview: false,
                 });
                 this.area_ref.current.clear();
                 this.props.on_complete();
@@ -550,6 +551,7 @@ export class PostForm extends Component {
                 this.setState({
                     loading_status: 'done',
                     text: '',
+                    preview: false,
                 });
                 this.area_ref.current.clear();
                 this.props.on_complete();
