@@ -17,7 +17,7 @@ const CLICKABLE_TAGS={a: true, audio: true};
 const PREVIEW_REPLY_COUNT=10;
 // const QUOTE_BLACKLIST=['23333','233333','66666','666666','10086','10000','100000','99999','999999','55555','555555'];
 const QUOTE_BLACKLIST=[];
-const FOLD_TAGS = ['性相关', '政治相关', '性话题', '政治话题', '折叠', 'NSFW', '刷屏', '真实性可疑']
+const FOLD_TAGS = ['性相关', '政治相关', '性话题', '政治话题', '折叠', 'NSFW', '刷屏', '真实性可疑', '用户举报较多']
 
 window.LATEST_POST_ID=parseInt(localStorage['_LATEST_POST_ID'],10)||0;
 
