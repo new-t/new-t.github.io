@@ -17,7 +17,7 @@ const CLICKABLE_TAGS={a: true, audio: true};
 const PREVIEW_REPLY_COUNT=10;
 // const QUOTE_BLACKLIST=['23333','233333','66666','666666','10086','10000','100000','99999','999999','55555','555555'];
 const QUOTE_BLACKLIST=[];
-const FOLD_TAGS = ['性相关', '政治相关', '性话题', '政治话题', '折叠', 'NSFW', '刷屏', '真实性可疑', '用户举报较多']
+const FOLD_TAGS = ['性相关', '政治相关', '性话题', '政治话题', '折叠', 'NSFW', '刷屏', '真实性可疑', '用户举报较多', '重复内容']
 
 window.LATEST_POST_ID=parseInt(localStorage['_LATEST_POST_ID'],10)||0;
 
@@ -169,7 +169,7 @@ class FlowItem extends PureComponent {
                         <Time stamp={props.info.timestamp} />
                     </div>
                     <div className="box-content">
-                        <HighlightedMarkdown text={(!props.img_clickable) && (FOLD_TAGS.indexOf(props.info.tag) > -1) ? '_此树洞已被折叠_' : props.info.text} color_picker={props.color_picker} show_pid={props.show_pid} />
+                        <HighlightedMarkdown text={(!props.img_clickable) && (FOLD_TAGS.indexOf(props.info.tag) > -1) ? '_单击以查看树洞_' : props.info.text} color_picker={props.color_picker} show_pid={props.show_pid} />
                         {((props.info.type==='image') && ((props.img_clickable) || !(FOLD_TAGS.indexOf(props.info.tag) > -1))) &&
                             <p className="img">
                                 {props.img_clickable ?
