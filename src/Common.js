@@ -85,7 +85,7 @@ export class HighlightedMarkdown extends Component {
                 shouldProcessNode: (node) => node.name === 'a',
                 processNode (node, children, index) {
                     return (
-                        <a href={normalize_url(node.attribs.href)} target="_blank" rel="noopenner noreferrer" class="ext-link" key={index}>
+                        <a href={normalize_url(node.attribs.href)} target="_blank" rel="noopenner noreferrer" className="ext-link" key={index}>
                             {children}
                             <span className="icon icon-new-tab" />
                         </a>
@@ -111,7 +111,7 @@ export class HighlightedMarkdown extends Component {
                                 return (<span key={idx}>
                                     {
                                     rule==='url_pid' ? <span className="url-pid-link" title={p}>/##</span> :
-                                    rule==='url' ? <a href={normalize_url(p)} class="ext-link" target="_blank" rel="noopener noreferrer">
+                                    rule==='url' ? <a href={normalize_url(p)} className="ext-link" target="_blank" rel="noopener noreferrer">
                                         {p}
                                         <span className="icon icon-new-tab" />
                                     </a> :
