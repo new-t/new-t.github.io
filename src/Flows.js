@@ -169,8 +169,8 @@ class FlowItem extends PureComponent {
                         <Time stamp={props.info.timestamp} />
                     </div>
                     <div className="box-content">
-                        <HighlightedMarkdown text={(!props.img_clickable) && (FOLD_TAGS.indexOf(props.info.tag) > -1) ? '_单击以查看树洞_' : props.info.text} color_picker={props.color_picker} show_pid={props.show_pid} />
-                        {((props.info.type==='image') && ((props.img_clickable) || !(FOLD_TAGS.indexOf(props.info.tag) > -1))) &&
+                        <HighlightedMarkdown text={props.fold ? '_单击以查看树洞_' : props.info.text} color_picker={props.color_picker} show_pid={props.show_pid} />
+                        {((props.info.type==='image') && (!props.fold)) &&
                             <p className="img">
                                 {props.img_clickable ?
                                     <a className="no-underline" href={IMAGE_BASE+props.info.url} target="_blank"><img src={IMAGE_BASE+props.info.url} /></a> :
@@ -349,7 +349,7 @@ class FlowSidebar extends PureComponent {
         // hide main thread when filtered
         let main_thread_elem=(this.state.filter_name && this.state.filter_name!==DZ_NAME) ? null : (
             <ClickHandler callback={(e)=>{this.show_reply_bar('',e);}}>
-                <FlowItem info={this.state.info} attention={this.state.attention} img_clickable={true}
+                <FlowItem info={this.state.info} attention={this.state.attention} img_clickable={true} fold={false}
                           color_picker={this.color_picker} show_pid={show_pid} replies={this.state.replies}
                           set_variant={(variant)=>{this.set_variant(null,variant);}}
                           do_filter_name={replies_cnt[DZ_NAME]>1 ? this.set_filter_name.bind(this) : null}
@@ -526,6 +526,7 @@ class FlowItemRow extends PureComponent {
                         break;
                     }
             }
+        let needFold = (FOLD_TAGS.indexOf(this.state.info.tag) > -1) && (!this.props.search_param)
 
         let res=(
             <div className={'flow-item-row flow-item-row-with-prompt'+(this.props.is_quote ? ' flow-item-row-quote' : '')} onClick={(event)=>{
@@ -533,8 +534,8 @@ class FlowItemRow extends PureComponent {
                     this.show_sidebar();
             }}>
                 <FlowItem parts={parts} info={this.state.info} attention={this.state.attention} img_clickable={false} is_quote={this.props.is_quote}
-                    color_picker={this.color_picker} show_pid={show_pid} replies={this.state.replies} />
-                {(!(FOLD_TAGS.indexOf(this.state.info.tag) > -1)) && <div className="flow-reply-row">
+                    color_picker={this.color_picker} show_pid={show_pid} replies={this.state.replies} fold={needFold}/>
+                {(!needFold) && <div className="flow-reply-row">
                     {this.state.reply_status==='loading' && <div className="box box-tip">加载中</div>}
                     {this.state.reply_status==='failed' &&
                         <div className="box box-tip">
@@ -552,7 +553,7 @@ class FlowItemRow extends PureComponent {
             </div>
         );
 
-        return quote_id ? (
+        return ((!needFold) && quote_id) ? (
             <div>
                 {res}
                 <FlowItemQuote pid={quote_id} show_sidebar={this.props.show_sidebar} token={this.props.token}
