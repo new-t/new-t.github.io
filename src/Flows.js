@@ -526,7 +526,7 @@ class FlowItemRow extends PureComponent {
                         break;
                     }
             }
-        let needFold = (FOLD_TAGS.indexOf(this.state.info.tag) > -1) && (this.props.search_param === '热榜' || !this.props.search_param)
+        let needFold = (FOLD_TAGS.indexOf(this.state.info.tag) > -1) && (this.props.search_param === '热榜' || !this.props.search_param) && window.config.fold
 
         let res=(
             <div className={'flow-item-row flow-item-row-with-prompt'+(this.props.is_quote ? ' flow-item-row-quote' : '')} onClick={(event)=>{

@@ -18,6 +18,7 @@ const DEFAULT_CONFIG={
     pressure: false,
     easter_egg: true,
     color_scheme: 'default',
+    fold: true
 };
 
 export function load_config() {
@@ -236,6 +237,10 @@ export class ConfigUI extends PureComponent {
                     <hr />
                     <ConfigSwitch callback={this.save_changes_bound} id="easter_egg" name="允许彩蛋"
                                   description="在某些情况下显示彩蛋"
+                    />
+                    <hr />
+                    <ConfigSwitch callback={this.save_changes_bound} id="fold" name="折叠树洞"
+                                  description="不在timeline中直接展示被用户或管理员标记为['性相关', '政治相关', '性话题', '政治话题', '折叠', 'NSFW', '刷屏', '真实性可疑', '用户举报较多', '重复内容']的树洞"
                     />
                     <hr />
                     <p>
