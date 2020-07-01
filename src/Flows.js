@@ -10,8 +10,8 @@ import {TokenCtx, ReplyForm} from './UserAction';
 
 import {API, THUHOLE_API_ROOT} from './flows_api';
 
-const IMAGE_BASE=THUHOLE_API_ROOT+'/images/';
-const AUDIO_BASE=THUHOLE_API_ROOT+'services/thuhole/audios/';
+const IMAGE_BASE='//img.thuhole.com/';
+// const AUDIO_BASE=THUHOLE_API_ROOT+'services/thuhole/audios/';
 
 const CLICKABLE_TAGS={a: true, audio: true};
 const PREVIEW_REPLY_COUNT=10;
