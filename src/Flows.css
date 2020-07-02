@@ -190,6 +190,7 @@
 
 .box-content {
     padding: .5em 0;
+    overflow-x: auto;
 }
 
 .left-container .box-content {
