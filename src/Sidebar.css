@@ -142,7 +142,7 @@
 
 .sidebar-flow-item {
     display: block;
-    overflow-x: hidden;
+    /*overflow-x: hidden;*/
 }
 .sidebar-flow-item .box {
     width: 100%;
