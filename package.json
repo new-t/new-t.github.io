@@ -23,10 +23,10 @@
     "build": "react-scripts build",
     "test": "echo 'skipped react-scripts test --env=jsdom'",
     "predeploy": "",
-    "deploy": "gh-pages -b gh-pages-dev -d build -m $(TZ=Asia/Shanghai date +\"%y%m%d%H%M%S\")",
+    "deploy": "gh-pages -r https://github.com/thuhole/webhole-dev -d build -m $(TZ=Asia/Shanghai date +\"%y%m%d%H%M%S\")",
     "eject": "react-scripts eject"
   },
-  "homepage": "https://://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages-dev",
+  "homepage": "https://://cdn.jsdelivr.net/gh/thuhole/webhole-dev@gh-pages",
   "browserslist": {
     "production": [
       ">0.2%",
