@@ -32,6 +32,12 @@
 
 对 T大树洞 后端服务、客户端、账号、树洞内容的反馈请联系邮件 thuhole at protonmail dot com。
 
+## branch说明：
+- master branch: 主分支
+- dev branch: 开发分支
+- gh-pages branch: dev分支的部署分支，用于测试
+- gh-pages-master branch: master分支的部署分支，用于jsdelivr CDN
+
 ## License
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
