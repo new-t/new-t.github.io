@@ -15,4 +15,5 @@ after_success:
   - sed -i 's/\/\/cdn.jsdelivr.net\/gh\/thuhole\/webhole@gh-pages-master\/index.html/.\/index.html/g' build/*-*
   - sed -i 's/\/\/cdn.jsdelivr.net\/gh\/thuhole\/webhole@gh-pages-master\/service-worker.js/.\/service-worker.js/g' build/*-*
   - sed -i 's/"\/\/cdn.jsdelivr.net\/gh\/thuhole\/webhole@gh-pages-master","\/service-worker.js"/".","\/service-worker.js"/' build/static/js/*.js
+  - sed -i 's/storage.googleapis.com\/workbox-cdn\/releases\/4.3.1/cdn.jsdelivr.net\/npm\/workbox-cdn@4.3.1\/workbox/g' build/service-worker.js
   - npm run deploy
