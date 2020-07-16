@@ -10,7 +10,8 @@ import {TokenCtx, ReplyForm} from './UserAction';
 
 import {API, THUHOLE_API_ROOT} from './flows_api';
 
-const IMAGE_BASE='//img.thuhole.com/';
+const IMAGE_BASE='https://img.thuhole.com/';
+const IMAGE_BAK_BASE='https://img2.thuhole.com/';
 // const AUDIO_BASE=THUHOLE_API_ROOT+'services/thuhole/audios/';
 
 const CLICKABLE_TAGS={a: true, audio: true};
@@ -173,8 +174,16 @@ class FlowItem extends PureComponent {
                         {((props.info.type==='image') && (!props.fold)) &&
                             <p className="img">
                                 {props.img_clickable ?
-                                    <a className="no-underline" href={IMAGE_BASE+props.info.url} target="_blank"><img src={IMAGE_BASE+props.info.url} /></a> :
-                                    <img src={IMAGE_BASE+props.info.url} />
+                                    <a className="no-underline" href={IMAGE_BASE+props.info.url} target="_blank">
+                                        <img src={IMAGE_BASE+props.info.url}
+                                             onError={(e)=>{ if (e.target.src === IMAGE_BASE+props.info.url){
+                                                 e.target.src=IMAGE_BAK_BASE+props.info.url
+                                             }}} alt={IMAGE_BASE+props.info.url}/>
+                                    </a> :
+                                    <img src={IMAGE_BASE+props.info.url}
+                                         onError={(e)=>{ if (e.target.src === IMAGE_BASE+props.info.url){
+                                             e.target.src=IMAGE_BAK_BASE+props.info.url
+                                         }}} alt={IMAGE_BASE+props.info.url}/>
                                 }
                             </p>
                         }
