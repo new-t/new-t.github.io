@@ -99,7 +99,7 @@ class Reply extends PureComponent {
                                 {this.props.info.tag}
                             </span>
                     }
-                    <Time stamp={this.props.info.timestamp} />
+                    <Time stamp={this.props.info.timestamp} short={false} />
                 </div>
                 <div className="box-content">
                     <HighlightedMarkdown author={author}
@@ -167,7 +167,7 @@ class FlowItem extends PureComponent {
                                 {props.info.tag}
                             </span>
                         }
-                        <Time stamp={props.info.timestamp} />
+                        <Time stamp={props.info.timestamp} short={!props.img_clickable} />
                     </div>
                     <div className="box-content">
                         <HighlightedMarkdown text={props.fold ? '_单击以查看树洞_' : props.info.text} color_picker={props.color_picker} show_pid={props.show_pid} />
@@ -190,7 +190,7 @@ class FlowItem extends PureComponent {
                         {/*{props.info.type==='audio' && <AudioWidget src={AUDIO_BASE+props.info.url} />}*/}
                     </div>
                     {!!(props.attention && props.info.variant.latest_reply) &&
-                        <p className="box-footer">最新回复 <Time stamp={props.info.variant.latest_reply} /></p>
+                        <p className="box-footer">最新回复 <Time stamp={props.info.variant.latest_reply} short={false} /></p>
                     }
                 </div>
             </div>

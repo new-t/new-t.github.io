@@ -51,7 +51,7 @@ export class MessageViewer extends PureComponent {
             return this.state.msg.map((msg)=>(
                 <div className="box">
                     <div className="box-header">
-                        <Time stamp={msg.timestamp} />
+                        <Time stamp={msg.timestamp} short={false} />
                         &nbsp; <b>{msg.title}</b>
                     </div>
                     <div className="box-content">
