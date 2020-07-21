@@ -185,6 +185,7 @@ export function Title(props) {
         <ControlBar
           show_sidebar={props.show_sidebar}
           set_mode={props.set_mode}
+          mode={props.mode}
         />
       </div>
     </div>
