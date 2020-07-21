@@ -867,7 +867,7 @@ class FlowItemRow extends PureComponent {
                   <span className="box-header-tag">{this.props.info.tag}</span>
                 )}
                 <Time stamp={this.props.info.timestamp} short={true} />
-                <span className="box-header-badge">{this.needFold ? '已折叠' : '已隐藏'}</span>
+                <span className="box-header-badge">已隐藏</span>
                 <div style={{ clear: 'both' }} />
               </div>
             </div>
