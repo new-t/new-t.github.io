@@ -637,7 +637,7 @@ class FlowSidebar extends PureComponent {
 class FlowItemRow extends PureComponent {
   constructor(props) {
     super(props);
-    let needFold =
+    this.needFold =
       FOLD_TAGS.indexOf(props.info.tag) > -1 &&
       (props.search_param === '热榜' || !props.search_param) &&
       window.config.fold;
@@ -648,7 +648,7 @@ class FlowItemRow extends PureComponent {
       info: Object.assign({}, props.info, { variant: {} }),
       hidden: window.config.block_words.some((word) =>
         props.info.text.includes(word),
-      ) || needFold,
+      ) || this.needFold,
       attention:
         props.attention_override === null ? false : props.attention_override,
       cached: true, // default no display anything
@@ -864,7 +864,7 @@ class FlowItemRow extends PureComponent {
                   <span className="box-header-tag">{this.props.info.tag}</span>
                 )}
                 <Time stamp={this.props.info.timestamp} short={true} />
-                <span className="box-header-badge">已隐藏</span>
+                <span className="box-header-badge">{this.needFold ? '已折叠' : '已隐藏'}</span>
                 <div style={{ clear: 'both' }} />
               </div>
             </div>
