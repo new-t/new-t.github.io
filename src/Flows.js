@@ -191,9 +191,9 @@ class FlowItem extends PureComponent {
             <div>
               <span className="icon icon-quote" />
             </div>
-            <div>
-              <small>提到</small>
-            </div>
+            {/*<div>*/}
+            {/*  <small>提到</small>*/}
+            {/*</div>*/}
           </div>
         )}
         <div className="box">
@@ -841,9 +841,9 @@ class FlowItemRow extends PureComponent {
                 <div>
                   <span className="icon icon-quote" />
                 </div>
-                <div>
-                  <small>提到</small>
-                </div>
+                {/*<div>*/}
+                {/*  <small>提到</small>*/}
+                {/*</div>*/}
               </div>
             )}
             <div className="box">
