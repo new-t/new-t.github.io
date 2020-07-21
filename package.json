@@ -23,7 +23,7 @@
     "build": "react-scripts build",
     "test": "echo 'skipped react-scripts test --env=jsdom'",
     "predeploy": "",
-    "deploy": "gh-pages -d build -m $(TZ=Asia/Shanghai date +\"%y%m%d%H%M%S\")",
+    "deploy": "gh-pages -b $DEPLOY_BRANCH -d build -m $(TZ=Asia/Shanghai date +\"%y%m%d%H%M%S\")",
     "eject": "react-scripts eject",
     "lint": "eslint --fix src/*.js"
   },
