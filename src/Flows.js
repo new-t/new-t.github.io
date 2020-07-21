@@ -860,7 +860,7 @@ class FlowItemRow extends PureComponent {
                 )}
                 <code className="box-id">#{this.props.info.pid}</code>
                 &nbsp;
-                {this.props.info.tag !== null && (
+                {this.props.info.tag !== null && this.props.info.tag !== '折叠' && (
                   <span className="box-header-tag">{this.props.info.tag}</span>
                 )}
                 <Time stamp={this.props.info.timestamp} short={true} />
