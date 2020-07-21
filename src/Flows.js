@@ -976,9 +976,9 @@ function FlowChunk(props) {
           {props.list.map((info, ind) => (
             <LazyLoad
               key={info.pid}
-              offset={1500}
+              offset={200}
               height="15em"
-              hiddenIfInvisible={true}
+              hiddenIfInvisible={false}
             >
               <div>
                 {!!(
