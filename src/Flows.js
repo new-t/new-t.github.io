@@ -863,7 +863,7 @@ class FlowItemRow extends PureComponent {
                 {this.props.info.tag !== null && (
                   <span className="box-header-tag">{this.props.info.tag}</span>
                 )}
-                <Time stamp={this.props.info.timestamp} />
+                <Time stamp={this.props.info.timestamp} short={true} />
                 <span className="box-header-badge">已隐藏</span>
                 <div style={{ clear: 'both' }} />
               </div>
