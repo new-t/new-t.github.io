@@ -247,11 +247,11 @@ class FlowItem extends PureComponent {
           </div>
           <div className="box-content">
             <HighlightedMarkdown
-              text={props.fold ? '_单击以查看树洞_' : props.info.text}
+              text={props.info.text}
               color_picker={props.color_picker}
               show_pid={props.show_pid}
             />
-            {props.info.type === 'image' && !props.fold && (
+            {props.info.type === 'image' && (
               <p className="img">
                 {props.img_clickable ? (
                   <a
@@ -491,7 +491,6 @@ class FlowSidebar extends PureComponent {
             info={this.state.info}
             attention={this.state.attention}
             img_clickable={true}
-            fold={false}
             color_picker={this.color_picker}
             show_pid={show_pid}
             replies={this.state.replies}
@@ -638,6 +637,10 @@ class FlowSidebar extends PureComponent {
 class FlowItemRow extends PureComponent {
   constructor(props) {
     super(props);
+    let needFold =
+      FOLD_TAGS.indexOf(props.info.tag) > -1 &&
+      (props.search_param === '热榜' || !props.search_param) &&
+      window.config.fold;
     this.state = {
       replies: [],
       reply_status: 'done',
@@ -645,7 +648,7 @@ class FlowItemRow extends PureComponent {
       info: Object.assign({}, props.info, { variant: {} }),
       hidden: window.config.block_words.some((word) =>
         props.info.text.includes(word),
-      ),
+      ) || needFold,
       attention:
         props.attention_override === null ? false : props.attention_override,
       cached: true, // default no display anything
@@ -764,10 +767,6 @@ class FlowItemRow extends PureComponent {
             break;
           }
       }
-    let needFold =
-      FOLD_TAGS.indexOf(this.state.info.tag) > -1 &&
-      (this.props.search_param === '热榜' || !this.props.search_param) &&
-      window.config.fold;
 
     let res = (
       <div
@@ -790,42 +789,39 @@ class FlowItemRow extends PureComponent {
           show_pid={show_pid}
           replies={this.state.replies}
           cached={this.state.cached}
-          fold={needFold}
         />
-        {!needFold && (
-          <div className="flow-reply-row">
-            {this.state.reply_status === 'loading' && (
-              <div className="box box-tip">加载中</div>
-            )}
-            {this.state.reply_status === 'failed' && (
-              <div className="box box-tip">
-                <p>
-                  <a
-                    onClick={() => {
-                      this.load_replies();
-                    }}
-                  >
-                    重新加载评论
-                  </a>
-                </p>
-                <p>{this.state.reply_error}</p>
-              </div>
-            )}
-            {this.state.replies.slice(0, PREVIEW_REPLY_COUNT).map((reply) => (
-              <Reply
-                key={reply.cid}
-                info={reply}
-                color_picker={this.color_picker}
-                show_pid={show_pid}
-              />
-            ))}
-            {this.state.replies.length > PREVIEW_REPLY_COUNT && (
-              <div className="box box-tip">
-                还有 {this.state.replies.length - PREVIEW_REPLY_COUNT} 条
-              </div>
-            )}
-          </div>
-        )}
+        <div className="flow-reply-row">
+          {this.state.reply_status === 'loading' && (
+            <div className="box box-tip">加载中</div>
+          )}
+          {this.state.reply_status === 'failed' && (
+            <div className="box box-tip">
+              <p>
+                <a
+                  onClick={() => {
+                    this.load_replies();
+                  }}
+                >
+                  重新加载评论
+                </a>
+              </p>
+              <p>{this.state.reply_error}</p>
+            </div>
+          )}
+          {this.state.replies.slice(0, PREVIEW_REPLY_COUNT).map((reply) => (
+            <Reply
+              key={reply.cid}
+              info={reply}
+              color_picker={this.color_picker}
+              show_pid={show_pid}
+            />
+          ))}
+          {this.state.replies.length > PREVIEW_REPLY_COUNT && (
+            <div className="box box-tip">
+              还有 {this.state.replies.length - PREVIEW_REPLY_COUNT} 条
+            </div>
+          )}
+        </div>
       </div>
     );
 
@@ -877,7 +873,7 @@ class FlowItemRow extends PureComponent {
       );
     }
 
-    return !needFold && quote_id ? (
+    return quote_id ? (
       <div>
         {res}
         <FlowItemQuote
