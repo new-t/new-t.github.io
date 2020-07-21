@@ -662,9 +662,9 @@ class FlowItemRow extends PureComponent {
     }
   }
 
-  reveal() {
-    this.setState({ hidden: false });
-  }
+  // reveal() {
+  //   this.setState({ hidden: false });
+  // }
 
   load_replies(callback, update_count = true) {
     console.log('fetching reply', this.state.info.pid);
@@ -829,7 +829,10 @@ class FlowItemRow extends PureComponent {
       return (
         <div
           className="flow-item-row flow-item-row-with-prompt"
-          onClick={() => this.reveal()}
+          onClick={(event) => {
+            if (!CLICKABLE_TAGS[event.target.tagName.toLowerCase()])
+              this.show_sidebar();
+          }}
         >
           <div
             className={
