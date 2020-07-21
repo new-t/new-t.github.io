@@ -26,6 +26,7 @@ const DEFAULT_CONFIG = {
   pressure: false,
   easter_egg: true,
   color_scheme: 'default',
+  fold: true,
   block_words: [],
 };
 
