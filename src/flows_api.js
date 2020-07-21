@@ -13,127 +13,98 @@ export { get_json };
 
 const SEARCH_PAGESIZE = 50;
 
+const handle_response = async (response, notify = false) => {
+  let json = await get_json(response);
+  if (json.code !== 0) {
+    if (json.msg) {
+      if (notify) alert(json.msg);
+      else throw new Error(json.msg);
+    } else throw new Error(JSON.stringify(json));
+  }
+  return json;
+};
+
+const parse_replies = (replies, color_picker) =>
+  replies
+    .sort((a, b) => parseInt(a.cid, 10) - parseInt(b.cid, 10))
+    .map((info) => {
+      info._display_color = color_picker.get(info.name);
+      info.variant = {};
+      return info;
+    });
+
 export const API = {
-  load_replies: (pid, token, color_picker, cache_version) => {
+  load_replies: async (pid, token, color_picker, cache_version) => {
     pid = parseInt(pid);
-    return fetch(
-      API_BASE +
-        '/api.php?action=getcomment' +
-        '&pid=' +
-        pid +
-        token_param(token),
-    )
-      .then(get_json)
-      .then((json) => {
-        if (json.code !== 0) {
-          if (json.msg) throw new Error(json.msg);
-          else throw new Error(JSON.stringify(json));
-        }
-
-        cache()
-          .delete(pid)
-          .then(() => {
-            cache().put(pid, cache_version, json);
-          });
-
-        // also change load_replies_with_cache!
-        json.data = json.data
-          .sort((a, b) => {
-            return parseInt(a.cid, 10) - parseInt(b.cid, 10);
-          })
-          .map((info) => {
-            info._display_color = color_picker.get(info.name);
-            info.variant = {};
-            return info;
-          });
-
-        return json;
-      });
+    let response = await fetch(
+      API_BASE + '/api.php?action=getcomment&pid=' + pid + token_param(token),
+    );
+    let json = await handle_response(response);
+    // Why delete then put ??
+    cache().put(pid, cache_version, json);
+    json.data = parse_replies(json.data, color_picker);
+    return json;
   },
 
-  load_replies_with_cache: (pid, token, color_picker, cache_version) => {
+  load_replies_with_cache: async (pid, token, color_picker, cache_version) => {
     pid = parseInt(pid);
-    return cache()
-      .get(pid, cache_version)
-      .then((json) => {
-        if (json) {
-          // also change load_replies!
-          json.data = json.data
-            .sort((a, b) => {
-              return parseInt(a.cid, 10) - parseInt(b.cid, 10);
-            })
-            .map((info) => {
-              info._display_color = color_picker.get(info.name);
-              info.variant = {};
-              return info;
-            });
-
-          return json;
-        } else return API.load_replies(pid, token, color_picker, cache_version);
-      });
+    let json = await cache().get(pid, cache_version);
+    if (json) {
+      json.data = parse_replies(json.data, color_picker);
+      return { data: json, cached: true };
+    } else {
+      json = await API.load_replies(pid, token, color_picker, cache_version);
+      return { data: json, cached: !json };
+    }
   },
 
-  set_attention: (pid, attention, token) => {
+  set_attention: async (pid, attention, token) => {
     let data = new URLSearchParams();
     data.append('user_token', token);
     data.append('pid', pid);
     data.append('switch', attention ? '1' : '0');
-    return fetch(API_BASE + '/api.php?action=attention' + token_param(token), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    let response = await fetch(
+      API_BASE + '/api.php?action=attention' + token_param(token),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: data,
       },
-      body: data,
-    })
-      .then(get_json)
-      .then((json) => {
-        cache().delete(pid);
-        if (json.code !== 0) {
-          if (json.msg && json.msg === '已经关注过了') {
-          } else {
-            if (json.msg) alert(json.msg);
-            throw new Error(JSON.stringify(json));
-          }
-        }
-        return json;
-      });
+    );
+    // Delete cache to update `attention` on next reload
+    cache().delete(pid);
+    return handle_response(response, true);
   },
 
-  report: (pid, reason, token) => {
+  report: async (pid, reason, token) => {
     let data = new URLSearchParams();
     data.append('user_token', token);
     data.append('pid', pid);
     data.append('reason', reason);
-    return fetch(API_BASE + '/api.php?action=report' + token_param(token), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    let response = await fetch(
+      API_BASE + '/api.php?action=report' + token_param(token),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: data,
       },
-      body: data,
-    })
-      .then(get_json)
-      .then((json) => {
-        if (json.code !== 0) {
-          if (json.msg) alert(json.msg);
-          throw new Error(JSON.stringify(json));
-        }
-        return json;
-      });
+    );
+    return handle_response(response, true);
   },
 
-  get_list: (page, token) => {
-    return fetch(
+  get_list: async (page, token) => {
+    let response = await fetch(
       API_BASE + '/api.php?action=getlist' + '&p=' + page + token_param(token),
-    )
-      .then(get_json)
-      .then((json) => {
-        if (json.code !== 0) throw new Error(JSON.stringify(json));
-        return json;
-      });
+    );
+    return handle_response(response);
   },
 
-  get_search: (page, keyword, token) => {
-    return fetch(
+  get_search: async (page, keyword, token) => {
+    let response = await fetch(
       API_BASE +
         '/api.php?action=search' +
         '&pagesize=' +
@@ -143,40 +114,21 @@ export const API = {
         '&keywords=' +
         encodeURIComponent(keyword) +
         token_param(token),
-    )
-      .then(get_json)
-      .then((json) => {
-        if (json.code !== 0) {
-          if (json.msg) throw new Error(json.msg);
-          throw new Error(JSON.stringify(json));
-        }
-        return json;
-      });
+    );
+    return handle_response(response);
   },
 
-  get_single: (pid, token) => {
-    return fetch(
+  get_single: async (pid, token) => {
+    let response = await fetch(
       API_BASE + '/api.php?action=getone' + '&pid=' + pid + token_param(token),
-    )
-      .then(get_json)
-      .then((json) => {
-        if (json.code !== 0) {
-          if (json.msg) throw new Error(json.msg);
-          else throw new Error(JSON.stringify(json));
-        }
-        return json;
-      });
+    );
+    return handle_response(response);
   },
 
-  get_attention: (token) => {
-    return fetch(API_BASE + '/api.php?action=getattention' + token_param(token))
-      .then(get_json)
-      .then((json) => {
-        if (json.code !== 0) {
-          if (json.msg) throw new Error(json.msg);
-          throw new Error(JSON.stringify(json));
-        }
-        return json;
-      });
+  get_attention: async (token) => {
+    let response = await fetch(
+      API_BASE + '/api.php?action=getattention' + token_param(token),
+    );
+    return handle_response(response);
   },
 };

@@ -1,24 +1,25 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('icomoon.eot?f9daqg');
-  src:  url('icomoon.eot?f9daqg#iefix') format('embedded-opentype'),
-    url('icomoon.ttf?f9daqg') format('truetype'),
-    url('icomoon.woff?f9daqg') format('woff'),
-    url('icomoon.svg?f9daqg#icomoon') format('svg');
+  src:
+    url('icomoon.ttf?8qh3rt') format('truetype'),
+    url('icomoon.woff?8qh3rt') format('woff'),
+    url('icomoon.svg?8qh3rt#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+.icon {
   /* use !important to prevent issues with browser extensions that change fonts */
+  /*noinspection CssNoGenericFontName*/
   font-family: 'icomoon' !important;
-  speak: never;
+  speak: none;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
   line-height: 1;
+  vertical-align: -.0625em;
 
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
@@ -93,6 +94,7 @@
 }
 .icon-order-rev:before {
   content: "\ea46";
+  font-size: 1.2em;
 }
 .icon-github:before {
   content: "\eab0";

@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 // import {AppSwitcher} from './infrastructure/widgets';
 import { InfoSidebar, PostForm } from './UserAction';
 import { TokenCtx } from './UserAction';
@@ -67,7 +67,11 @@ class ControlBar extends PureComponent {
         return;
       }
 
-      const mode = this.state.search_text.startsWith('#') ? 'single' : 'search';
+      const mode = this.state.search_text.startsWith('#')
+        ? 'single'
+        : this.props.mode !== 'attention'
+        ? 'search'
+        : 'attention';
       this.set_mode(mode, this.state.search_text || '');
     }
   }
@@ -112,7 +116,9 @@ class ControlBar extends PureComponent {
             <input
               className="control-search"
               value={this.state.search_text}
-              placeholder="搜索 或 #树洞号"
+              placeholder={`${
+                this.props.mode === 'attention' ? '在关注列表中' : ''
+              }搜索 或 #PID`}
               onChange={this.on_change_bound}
               onKeyPress={this.on_keypress_bound}
             />

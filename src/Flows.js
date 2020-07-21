@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import copy from 'copy-to-clipboard';
 import { ColorPicker } from './color_picker';
 import {
@@ -19,11 +19,11 @@ import {
   HighlightedMarkdown,
 } from './Common';
 import './Flows.css';
-import LazyLoad from './react-lazyload/src';
+import LazyLoad, { forceCheck } from './react-lazyload/src';
 import { AudioWidget } from './AudioWidget';
 import { TokenCtx, ReplyForm } from './UserAction';
 
-import { API, THUHOLE_API_ROOT } from './flows_api';
+import { API } from './flows_api';
 
 const IMAGE_BASE = 'https://img.thuhole.com/';
 const IMAGE_BAK_BASE = 'https://img2.thuhole.com/';
@@ -52,7 +52,7 @@ window.LATEST_POST_ID = parseInt(localStorage['_LATEST_POST_ID'], 10) || 0;
 const DZ_NAME = '洞主';
 
 function load_single_meta(show_sidebar, token) {
-  return (pid, replace = false) => {
+  return async (pid, replace = false) => {
     let color_picker = new ColorPicker();
     let title_elem = '树洞 #' + pid;
     show_sidebar(
@@ -60,56 +60,44 @@ function load_single_meta(show_sidebar, token) {
       <div className="box box-tip">正在加载 #{pid}</div>,
       replace ? 'replace' : 'push',
     );
-    API.get_single(pid, token)
-      .then((single) => {
-        single.data.variant = {};
-        return new Promise((resolve, reject) => {
-          API.load_replies_with_cache(
-            pid,
-            token,
-            color_picker,
-            parseInt(single.data.reply),
-          )
-            .then((replies) => {
-              resolve([single, replies]);
-            })
-            .catch(reject);
-        });
-      })
-      .then((res) => {
-        let [single, replies] = res;
-        show_sidebar(
-          title_elem,
-          <FlowSidebar
-            key={+new Date()}
-            info={single.data}
-            replies={replies.data}
-            attention={replies.attention}
-            token={token}
-            show_sidebar={show_sidebar}
-            color_picker={color_picker}
-            deletion_detect={localStorage['DELETION_DETECT'] === 'on'}
-          />,
-          'replace',
-        );
-      })
-      .catch((e) => {
-        console.error(e);
-        show_sidebar(
-          title_elem,
-          <div className="box box-tip">
-            <p>
-              <a
-                onClick={() => load_single_meta(show_sidebar, token)(pid, true)}
-              >
-                重新加载
-              </a>
-            </p>
-            <p>{'' + e}</p>
-          </div>,
-          'replace',
-        );
-      });
+    try {
+      let single = await API.get_single(pid, token);
+      single.data.variant = {};
+      let { data: replies } = await API.load_replies_with_cache(
+        pid,
+        token,
+        color_picker,
+        parseInt(single.data.reply),
+      );
+      show_sidebar(
+        title_elem,
+        <FlowSidebar
+          key={+new Date()}
+          info={single.data}
+          replies={replies.data}
+          attention={replies.attention}
+          token={token}
+          show_sidebar={show_sidebar}
+          color_picker={color_picker}
+          deletion_detect={localStorage['DELETION_DETECT'] === 'on'}
+        />,
+        'replace',
+      );
+    } catch (e) {
+      console.error(e);
+      show_sidebar(
+        title_elem,
+        <div className="box box-tip">
+          <p>
+            <a onClick={() => load_single_meta(show_sidebar, token)(pid, true)}>
+              重新加载
+            </a>
+          </p>
+          <p>{'' + e}</p>
+        </div>,
+        'replace',
+      );
+    }
   };
 }
 
@@ -213,6 +201,9 @@ class FlowItem extends PureComponent {
             parseInt(props.info.pid, 10) > window.LATEST_POST_ID && (
               <div className="flow-item-dot" />
             )}
+          {!!this.props.attention && !this.props.cached && (
+            <div className="flow-item-dot" />
+          )}
           <div className="box-header">
             {!!this.props.do_filter_name && (
               <span
@@ -446,9 +437,7 @@ class FlowSidebar extends PureComponent {
   }
 
   toggle_rev() {
-    this.setState((prevState) => ({
-      rev: !prevState.rev,
-    }));
+    this.setState((prevState) => ({ rev: !prevState.rev }), forceCheck);
   }
 
   show_reply_bar(name, event) {
@@ -479,9 +468,10 @@ class FlowSidebar extends PureComponent {
       : this.state.replies.slice();
     if (this.state.rev) replies_to_show.reverse();
 
+    // may not need key, for performance
     // key for lazyload elem
-    let view_mode_key =
-      (this.state.rev ? 'y-' : 'n-') + (this.state.filter_name || 'null');
+    // let view_mode_key =
+    //   (this.state.rev ? 'y-' : 'n-') + (this.state.filter_name || 'null');
 
     let replies_cnt = { [DZ_NAME]: 1 };
     replies_to_show.forEach((r) => {
@@ -600,9 +590,9 @@ class FlowSidebar extends PureComponent {
               条回复被删除
             </div>
           )}
-        {replies_to_show.map((reply) => (
+        {replies_to_show.map((reply, i) => (
           <LazyLoad
-            key={reply.cid + view_mode_key}
+            key={i}
             offset={1500}
             height="5em"
             overflow={true}
@@ -630,7 +620,7 @@ class FlowSidebar extends PureComponent {
           </LazyLoad>
         ))}
         {this.state.rev && main_thread_elem}
-        {!!this.props.token ? (
+        {this.props.token ? (
           <ReplyForm
             pid={this.state.info.pid}
             token={this.props.token}
@@ -653,8 +643,12 @@ class FlowItemRow extends PureComponent {
       reply_status: 'done',
       reply_error: null,
       info: Object.assign({}, props.info, { variant: {} }),
+      hidden: window.config.block_words.some((word) =>
+        props.info.text.includes(word),
+      ),
       attention:
         props.attention_override === null ? false : props.attention_override,
+      cached: true, // default no display anything
     };
     this.color_picker = new ColorPicker();
   }
@@ -663,6 +657,10 @@ class FlowItemRow extends PureComponent {
     if (parseInt(this.state.info.reply, 10)) {
       this.load_replies(null, /*update_count=*/ false);
     }
+  }
+
+  reveal() {
+    this.setState({ hidden: false });
   }
 
   load_replies(callback, update_count = true) {
@@ -677,7 +675,7 @@ class FlowItemRow extends PureComponent {
       this.color_picker,
       parseInt(this.state.info.reply),
     )
-      .then((json) => {
+      .then(({ data: json, cached }) => {
         this.setState(
           (prev, props) => ({
             replies: json.data,
@@ -695,6 +693,7 @@ class FlowItemRow extends PureComponent {
             attention: !!json.attention,
             reply_status: 'done',
             reply_error: null,
+            cached,
           }),
           callback,
         );
@@ -740,11 +739,14 @@ class FlowItemRow extends PureComponent {
       ['pid', PID_RE],
       ['nickname', NICKNAME_RE],
     ];
-    if (this.props.search_param)
+    if (this.props.search_param) {
       hl_rules.push([
         'search',
-        build_highlight_re(this.props.search_param, ' ', 'gi'),
+        !!this.props.search_param.match(/\/.+\//)
+          ? build_highlight_re(this.props.search_param, ' ', 'gi', true) // Use regex
+          : build_highlight_re(this.props.search_param, ' ', 'gi'), // Don't use regex
       ]);
+    }
     let parts = split_text(this.state.info.text, hl_rules);
 
     let quote_id = null;
@@ -787,6 +789,7 @@ class FlowItemRow extends PureComponent {
           color_picker={this.color_picker}
           show_pid={show_pid}
           replies={this.state.replies}
+          cached={this.state.cached}
           fold={needFold}
         />
         {!needFold && (
@@ -825,6 +828,54 @@ class FlowItemRow extends PureComponent {
         )}
       </div>
     );
+
+    if (this.state.hidden) {
+      return (
+        <div
+          className="flow-item-row flow-item-row-with-prompt"
+          onClick={() => this.reveal()}
+        >
+          <div
+            className={
+              'flow-item' + (this.props.is_quote ? ' flow-item-quote' : '')
+            }
+          >
+            {!!this.props.is_quote && (
+              <div className="quote-tip black-outline">
+                <div>
+                  <span className="icon icon-quote" />
+                </div>
+                <div>
+                  <small>提到</small>
+                </div>
+              </div>
+            )}
+            <div className="box">
+              <div className="box-header">
+                {!!this.props.do_filter_name && (
+                  <span
+                    className="reply-header-badge clickable"
+                    onClick={() => {
+                      this.props.do_filter_name(DZ_NAME);
+                    }}
+                  >
+                    <span className="icon icon-locate" />
+                  </span>
+                )}
+                <code className="box-id">#{this.props.info.pid}</code>
+                &nbsp;
+                {this.props.info.tag !== null && (
+                  <span className="box-header-tag">{this.props.info.tag}</span>
+                )}
+                <Time stamp={this.props.info.timestamp} />
+                <span className="box-header-badge">已隐藏</span>
+                <div style={{ clear: 'both' }} />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
 
     return !needFold && quote_id ? (
       <div>
@@ -1061,12 +1112,38 @@ export class Flow extends PureComponent {
           })
           .catch(failed);
       } else if (this.state.mode === 'attention') {
+        let use_search = !!this.state.search_param;
+        let use_regex = use_search && !!this.state.search_param.match(/\/.+\//);
+        let regex_search = /.+/;
+        if (use_regex) {
+          try {
+            regex_search = new RegExp(this.state.search_param.slice(1, -1));
+          } catch (e) {
+            alert(`请检查正则表达式合法性！\n${e}`);
+            regex_search = /.+/;
+          }
+        }
+        console.log(use_search, use_regex);
         API.get_attention(this.props.token)
           .then((json) => {
             this.setState({
               chunks: {
-                title: 'Attention List',
-                data: json.data,
+                title: `${
+                  use_search
+                    ? use_regex
+                      ? `Result for RegEx ${regex_search.toString()} in `
+                      : `Result for "${this.state.search_param}" in `
+                    : ''
+                }Attention List`,
+                data: !use_search
+                  ? json.data
+                  : !use_regex
+                  ? json.data.filter((post) => {
+                      return this.state.search_param
+                        .split(' ')
+                        .every((keyword) => post.text.includes(keyword));
+                    }) // Not using regex
+                  : json.data.filter((post) => !!post.text.match(regex_search)), // Using regex
               },
               mode: 'attention_finished',
               loading_status: 'done',

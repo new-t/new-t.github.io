@@ -24,17 +24,30 @@ function escape_regex(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
-export function build_highlight_re(txt, split, option = 'g') {
-  return txt
-    ? new RegExp(
-        `(${txt
-          .split(split)
-          .filter((x) => !!x)
-          .map(escape_regex)
-          .join('|')})`,
-        option,
-      )
-    : /^$/g;
+export function build_highlight_re(
+  txt,
+  split = ' ',
+  option = 'g',
+  isRegex = false,
+) {
+  if (isRegex) {
+    try {
+      return new RegExp('(' + txt.slice(1, -1) + ')', option);
+    } catch (e) {
+      return /^$/g;
+    }
+  } else {
+    return txt
+      ? new RegExp(
+          `(${txt
+            .split(split)
+            .filter((x) => !!x)
+            .map(escape_regex)
+            .join('|')})`,
+          option,
+        )
+      : /^$/g;
+  }
 }
 
 export function ColoredSpan(props) {
@@ -142,7 +155,7 @@ export class HighlightedMarkdown extends Component {
             node.type === 'text' &&
             (!node.parent ||
               !node.parent.attribs ||
-              node.parent.attribs['encoding'] != 'application/x-tex')
+              node.parent.attribs['encoding'] !== 'application/x-tex')
           ); // pid, nickname, search
         },
         processNode(node, children, index) {

@@ -1,19 +1,12 @@
-import React, { Component, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import './Sidebar.css';
 
 export class Sidebar extends PureComponent {
   constructor(props) {
     super(props);
-    this.sidebar_ref = React.createRef();
+    // this.sidebar_ref = React.createRef();
     this.do_close_bound = this.do_close.bind(this);
     this.do_back_bound = this.do_back.bind(this);
-  }
-
-  componentDidUpdate(nextProps) {
-    if (this.props.stack !== nextProps.stack) {
-      //console.log('sidebar top');
-      if (this.sidebar_ref.current) this.sidebar_ref.current.scrollTop = 0;
-    }
   }
 
   do_close() {
@@ -24,9 +17,24 @@ export class Sidebar extends PureComponent {
   }
 
   render() {
-    let [cur_title, cur_content] = this.props.stack[
-      this.props.stack.length - 1
-    ];
+    // hide old contents to remember state
+    let contents = this.props.stack.map(
+      ({ 1: content }, i) =>
+        content && (
+          <div
+            key={i}
+            className={
+              'sidebar-content ' +
+              (i === this.props.stack.length - 1
+                ? 'sidebar-content-show'
+                : 'sidebar-content-hide')
+            }
+          >
+            {content}
+          </div>
+        ),
+    );
+    let cur_title = this.props.stack[this.props.stack.length - 1][0];
     return (
       <div
         className={
@@ -42,9 +50,7 @@ export class Sidebar extends PureComponent {
             e.target.click();
           }}
         />
-        <div ref={this.sidebar_ref} className="sidebar">
-          {cur_content}
-        </div>
+        <div className="sidebar">{contents}</div>
         <div className="sidebar-title">
           <a className="no-underline" onClick={this.do_close_bound}>
             &nbsp;

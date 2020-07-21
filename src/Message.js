@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import { THUHOLE_API_ROOT, get_json, API_VERSION_PARAM } from './flows_api';
 import { Time } from './Common';
 
@@ -65,10 +65,10 @@ export class MessageViewer extends PureComponent {
       );
     else if (this.state.loading_status === 'done')
       return this.state.msg.map((msg) => (
-        <div className="box">
+        <div className="box" key={msg.timestamp}>
           <div className="box-header">
             <Time stamp={msg.timestamp} short={false} />
-            &nbsp; <b>{msg.title}</b>
+            <b>{msg.title}</b>
           </div>
           <div className="box-content">
             <pre>{msg.content}</pre>
