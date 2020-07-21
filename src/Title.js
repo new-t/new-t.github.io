@@ -118,7 +118,7 @@ class ControlBar extends PureComponent {
               value={this.state.search_text}
               placeholder={`${
                 this.props.mode === 'attention' ? '在关注列表中' : ''
-              }搜索 或 #PID`}
+              }搜索 或 #树洞号`}
               onChange={this.on_change_bound}
               onKeyPress={this.on_keypress_bound}
             />
