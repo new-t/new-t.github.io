@@ -640,7 +640,8 @@ class FlowItemRow extends PureComponent {
     this.needFold =
       FOLD_TAGS.indexOf(props.info.tag) > -1 &&
       (props.search_param === '热榜' || !props.search_param) &&
-      window.config.fold;
+      window.config.fold &&
+      props.mode !== 'attention' && props.mode !== 'attention_finished';
     this.state = {
       replies: [],
       reply_status: 'done',
@@ -961,6 +962,7 @@ class FlowItemQuote extends PureComponent {
       return (
         <FlowItemRow
           info={this.state.info}
+          mode={this.props.mode}
           show_sidebar={this.props.show_sidebar}
           token={this.props.token}
           is_quote={true}
@@ -998,6 +1000,7 @@ function FlowChunk(props) {
                 )}
                 <FlowItemRow
                   info={info}
+                  mode={props.mode}
                   show_sidebar={props.show_sidebar}
                   token={token}
                   attention_override={
