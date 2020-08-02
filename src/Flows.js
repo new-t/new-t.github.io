@@ -25,7 +25,7 @@ import { TokenCtx, ReplyForm } from './UserAction';
 
 import { API } from './flows_api';
 
-const IMAGE_BASE = 'https://img.thuhole.com/';
+const IMAGE_BASE = 'https://thimg.yecdn.com/';
 const IMAGE_BAK_BASE = 'https://img2.thuhole.com/';
 // const AUDIO_BASE=THUHOLE_API_ROOT+'services/thuhole/audios/';
 
