@@ -16,7 +16,7 @@ import renderMd from './Markdown';
 
 export { format_time, Time, TitleLine };
 
-export const API_BASE = '/api/v1/';
+export const API_BASE = '/_api/v1/';
 
 // https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 function escape_regex(string) {
