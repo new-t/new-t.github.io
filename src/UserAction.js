@@ -13,8 +13,6 @@ import fixOrientation from 'fix-orientation';
 import copy from 'copy-to-clipboard';
 import { cache } from './cache';
 import {
-  API_VERSION_PARAM,
-  THUHOLE_API_ROOT,
   API,
   get_json,
   token_param,
@@ -107,7 +105,7 @@ export function InfoSidebar(props) {
           开源
         </p>
         <p>
-          新Ｔ树洞 网页版基于
+          新T树洞 网页版基于
           <a
             href="https://github.com/pkuhelper-web/webhole"
             target="_blank"
@@ -128,71 +126,6 @@ export function InfoSidebar(props) {
       </div>
     </div>
   );
-}
-
-class ResetUsertokenWidget extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading_status: 'done',
-    };
-  }
-
-  do_reset() {
-    if (
-      window.confirm(
-        '您正在重置 UserToken！\n您的账号将会在【所有设备】上注销，您需要手动重新登录！',
-      )
-    ) {
-      let uid = window.prompt(
-        '您正在重置 UserToken！\n请输入您的学号以确认身份：',
-      );
-      if (uid)
-        this.setState(
-          {
-            loading_status: 'loading',
-          },
-          () => {
-            fetch(THUHOLE_API_ROOT + 'api_xmcp/hole/reset_usertoken', {
-              method: 'post',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                user_token: this.props.token,
-                uid: uid,
-              }),
-            })
-              .then(get_json)
-              .then((json) => {
-                if (json.error) throw new Error(json.error);
-                else alert('重置成功！您需要在所有设备上重新登录。');
-
-                this.setState({
-                  loading_status: 'done',
-                });
-              })
-              .catch((e) => {
-                alert('重置失败：' + e);
-                this.setState({
-                  loading_status: 'done',
-                });
-              });
-          },
-        );
-    }
-  }
-
-  render() {
-    if (this.state.loading_status === 'done')
-      return <a onClick={this.do_reset.bind(this)}>重置</a>;
-    else if (this.state.loading_status === 'loading')
-      return (
-        <a>
-          <span className="icon icon-loading" />
-        </a>
-      );
-  }
 }
 
 export class LoginForm extends Component {
@@ -242,9 +175,7 @@ export class LoginForm extends Component {
                       复制 User Token
                     </a>
                     <br />
-                    复制 User Token
-                    可以在新设备登录，切勿告知他人。若怀疑被盗号请重置Token。
-                    {/*，若怀疑被盗号请尽快 <ResetUsertokenWidget token={token.value} />*/}
+                    User Token仅用于开发bot，切勿告知他人。若怀疑被盗号请刷新Token。
                   </p>
                 </div>
               ) : (

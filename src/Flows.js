@@ -25,7 +25,6 @@ import { API } from './flows_api';
 
 const IMAGE_BASE = 'https://thimg.yecdn.com/';
 const IMAGE_BAK_BASE = 'https://img2.thuhole.com/';
-// const AUDIO_BASE=THUHOLE_API_ROOT+'services/thuhole/audios/';
 
 const CLICKABLE_TAGS = { a: true, audio: true };
 const PREVIEW_REPLY_COUNT = 10;

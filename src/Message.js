@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { THUHOLE_API_ROOT, get_json, API_VERSION_PARAM } from './flows_api';
 import { Time } from './Common';
 
 export class MessageViewer extends PureComponent {
@@ -23,8 +22,7 @@ export class MessageViewer extends PureComponent {
       },
       () => {
         fetch(
-          THUHOLE_API_ROOT +
-            'api_xmcp/hole/system_msg?user_token=' +
+            '/api/v1/system_msg?user_token=' +
             encodeURIComponent(this.props.token) +
             API_VERSION_PARAM(),
         )

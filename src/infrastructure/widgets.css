@@ -241,7 +241,7 @@ a.app-switcher-item, .app-switcher-item a {
     line-height: 2em;
 }
 .thuhole-login-popup button {
-    width: 6rem;
+    min-width: 6rem;
     color: black;
     background-color: rgba(235,235,235,.5);
     border-radius: 5px;
@@ -298,4 +298,16 @@ a.app-switcher-item, .app-switcher-item a {
 
 .time-str {
     color: #999999;
+}
+
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+
+    text-decoration: none;
+    color: initial;
+
+	min-width: 6em;
+	font-size: 0.85em;
 }

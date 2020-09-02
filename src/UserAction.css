@@ -3,7 +3,7 @@
     text-align: center;
 }
 .login-form button {
-    width: 6rem;
+    min-width: 6rem;
 }
 
 .reply-form {

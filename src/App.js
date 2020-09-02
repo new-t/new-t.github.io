@@ -33,12 +33,6 @@ class App extends Component {
     this.show_sidebar_bound = this.show_sidebar.bind(this);
     this.set_mode_bound = this.set_mode.bind(this);
     this.on_pressure_bound = this.on_pressure.bind(this);
-    // a silly self-deceptive approach to ban guests, enough to fool those muggles
-    //                     document             cookie                    'pku_ip_flag=yes'
-    this.inthu_flag =
-      window[atob('ZG9jdW1lbnQ')][atob('Y29va2ll')].indexOf(
-        atob('dGh1X2lwX2ZsYWc9eWVz'),
-      ) !== -1;
   }
 
   static is_darkmode() {
@@ -102,6 +96,15 @@ class App extends Component {
     });
   }
 
+  componentDidMount() {
+    let arg = window.location.search;
+    console.log(arg);
+    if (arg.startsWith('?token=')) {
+      localStorage['TOKEN'] = arg.substr(7);
+      window.location.search = '';
+    }
+  }
+
   render() {
     return (
       <TokenCtx.Provider
@@ -129,20 +132,18 @@ class App extends Component {
               {!token.value && (
                 <div className="flow-item-row aux-margin">
                   <div className="box box-tip">
-                    <p>
-                      <LoginPopup token_callback={token.set_value}>
-                        {(do_popup) => (
-                          <a onClick={do_popup}>
-                            <span className="icon icon-login" />
-                            &nbsp;登录到 新T树洞
-                          </a>
-                        )}
-                      </LoginPopup>
-                    </p>
+                    <LoginPopup token_callback={token.set_value}>
+                      {(do_popup) => (
+                        <a onClick={do_popup}>
+                          <span className="icon icon-login" />
+                          &nbsp;登录到 新T树洞
+                        </a>
+                      )}
+                    </LoginPopup>
                   </div>
                 </div>
               )}
-              {this.inthu_flag || token.value ? (
+              {token.value ? (
                 <Flow
                   key={this.state.flow_render_key}
                   show_sidebar={this.show_sidebar_bound}
