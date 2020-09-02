@@ -27,184 +27,13 @@ const MAX_IMG_DIAM = 8000;
 const MAX_IMG_PX = 5000000;
 const MAX_IMG_FILESIZE = 450000 * BASE64_RATE;
 
+const REPOSITORY = 'https://a.com/b';
+const EMAIL = 'a@b.com';
+
 export const TokenCtx = React.createContext({
   value: null,
   set_value: () => {},
 });
-
-// class LifeInfoBox extends Component {
-//     constructor(props) {
-//         super(props);
-//         if(!window._life_info_cache)
-//             window._life_info_cache={};
-//         this.CACHE_TIMEOUT_S=15;
-//         this.state={
-//             today_info: this.cache_get('today_info'),
-//             card_balance: this.cache_get('card_balance'),
-//             net_balance: this.cache_get('net_balance'),
-//             mail_count: this.cache_get('mail_count'),
-//         };
-//         this.INTERNAL_NETWORK_FAILURE='_network_failure';
-//         this.API_NAME={
-//             today_info: 'hole/today_info',
-//             card_balance: 'isop/card_balance',
-//             net_balance: 'isop/net_balance',
-//             mail_count: 'isop/mail_count',
-//         };
-//     }
-//
-//     cache_get(key) {
-//         let cache_item=window._life_info_cache[key];
-//         if(!cache_item || (+new Date())-cache_item[0]>1000*this.CACHE_TIMEOUT_S)
-//             return null;
-//         else
-//             return cache_item[1];
-//     }
-//     cache_set(key,value) {
-//         if(!window._life_info_cache[key] || window._life_info_cache[key][1]!==value)
-//             window._life_info_cache[key]=[+new Date(),value];
-//     }
-//
-//     load(state_key) {
-//         this.setState({
-//             [state_key]: null,
-//         },()=>{
-//             fetch(
-//                 PKUHELPER_ROOT+'api_xmcp/'+this.API_NAME[state_key]
-//                 +'?user_token='+encodeURIComponent(this.props.token)
-//                 +API_VERSION_PARAM()
-//             )
-//                 .then(get_json)
-//                 .then((json)=>{
-//                     //console.log(json);
-//                     this.setState({
-//                         [state_key]: json,
-//                     });
-//                 })
-//                 .catch((e)=>{
-//                     this.setState({
-//                         [state_key]: {
-//                             errMsg: '网络错误 '+e,
-//                             errCode: this.INTERNAL_NETWORK_FAILURE,
-//                             success: false,
-//                         }
-//                     });
-//                 })
-//         });
-//     }
-//
-//     componentDidMount() {
-//         ['today_info','card_balance','net_balance','mail_count'].forEach((k)=>{
-//             if(!this.state[k])
-//                 this.load(k);
-//         });
-//     }
-//
-//     reload_all() {
-//         ['today_info','card_balance','net_balance','mail_count'].forEach((k)=>{
-//             this.load(k);
-//         });
-//     }
-//
-//     render_line(state_key,title,value_fn,action,url_fn,do_login) {
-//         let s=this.state[state_key];
-//         if(!s)
-//             return (
-//                 <tr>
-//                     <td>{title}</td>
-//                     <td>加载中……</td>
-//                     <td />
-//                 </tr>
-//             );
-//         else if(!s.success) {
-//             let type='加载失败';
-//             if(s.errCode===this.INTERNAL_NETWORK_FAILURE)
-//                 type='网络错误';
-//             else if(['E01','E02','E03'].indexOf(s.errCode)!==-1)
-//                 type='授权失效';
-//
-//             let details=JSON.stringify(s);
-//             if(s.errMsg)
-//                 details=s.errMsg;
-//             else if(s.error)
-//                 details=s.error;
-//
-//             return (
-//                 <tr>
-//                     <td>{title}</td>
-//                     <td className="life-info-error">
-//                         <a onClick={()=>alert(details)}>{type}</a>
-//                     </td>
-//                     <td>
-//                         {type==='授权失效' ?
-//                             <a onClick={do_login}>
-//                                 <span className="icon icon-forward" />&nbsp;重新登录
-//                             </a> :
-//                             <a onClick={()=>this.load(state_key)}>
-//                                 <span className="icon icon-forward" />&nbsp;重试
-//                             </a>
-//                         }
-//                     </td>
-//                 </tr>
-//             )
-//         }
-//         else {
-//             this.cache_set(state_key,s);
-//
-//             return (
-//                 <tr>
-//                     <td>{title}</td>
-//                     <td>{value_fn(s)}</td>
-//                     <td>
-//                         <a href={url_fn(s)} target="_blank">
-//                             <span className="icon icon-forward" />&nbsp;{action}
-//                         </a>
-//                     </td>
-//                 </tr>
-//             );
-//         }
-//     }
-//
-//     render() {
-//         return (
-//             <LoginPopup token_callback={(t)=>{
-//                 this.props.set_token(t);
-//                 this.reload_all();
-//             }}>{(do_login)=>(
-//                 <div className="box">
-//                     <table className="life-info-table">
-//                         <tbody>
-//                             {this.render_line(
-//                                 'today_info',
-//                                 '今日',(s)=>s.info,
-//                                 '校历',(s)=>s.schedule_url,
-//                                 do_login,
-//                             )}
-//                             {this.render_line(
-//                                 'card_balance',
-//                                 '校园卡',(s)=>`余额￥${s.balance.toFixed(2)}`,
-//                                 '充值',()=>'https://virtualprod.alipay.com/educate/educatePcRecharge.htm?schoolCode=PKU&schoolName=',
-//                                 do_login,
-//                             )}
-//                             {this.render_line(
-//                                 'net_balance',
-//                                 '网费',(s)=>`余额￥${s.balance.toFixed(2)}`,
-//                                 '充值',()=>'https://its.pku.edu.cn/epay.jsp',
-//                                 do_login,
-//                             )}
-//                             {this.render_line(
-//                                 'mail_count',
-//                                 '邮件',(s)=>`未读 ${s.count} 封`,
-//                                 '查看',()=>'https://mail.pku.edu.cn/',
-//                                 do_login,
-//                             )}
-//                         </tbody>
-//                     </table>
-//                 </div>
-//             )}</LoginPopup>
-//         )
-//     }
-// }
 
 export function InfoSidebar(props) {
   return (
@@ -221,13 +50,13 @@ export function InfoSidebar(props) {
           <label>设置</label>
         </a>
         &nbsp;&nbsp;
-        <a href="https://thuhole.com/policy.html" target="_blank">
+        <a href="/policy.html" target="_blank">
           <span className="icon icon-textfile" />
           <label>树洞规范（试行）</label>
         </a>
         &nbsp;&nbsp;
         <a
-          href="https://github.com/thuhole/thuhole-go-backend/issues"
+          href={REPOSITORY+"/issues"}
           target="_blank"
         >
           <span className="icon icon-github" />
@@ -261,25 +90,24 @@ export function InfoSidebar(props) {
         </p>
       </div>
       <div className="box help-desc-box">
-        <p>联系我们：thuhole at protonmail dot com</p>
+        <p>联系我们：<a href={"mailto:"+EMAIL}>{EMAIL}</a></p>
       </div>
       <div className="box help-desc-box">
         <p>
-          T大树洞 网页版 by @thuhole， 基于&nbsp;
-          <a
-            href="https://www.gnu.org/licenses/gpl-3.0.zh-cn.html"
+          新T树洞 网页版 by @hole_thu，基于
+          <a href="https://www.gnu.org/licenses/agpl-3.0.html"
             target="_blank"
           >
-            GPLv3
+            AGPLv3
           </a>
-          &nbsp;协议在{' '}
-          <a href="https://github.com/thuhole/webhole" target="_blank">
+          协议在{' '}
+          <a href={REPOSITORY} target="_blank">
             GitHub
           </a>{' '}
           开源
         </p>
         <p>
-          T大树洞 网页版的诞生离不开&nbsp;
+          新Ｔ树洞 网页版基于
           <a
             href="https://github.com/pkuhelper-web/webhole"
             target="_blank"
@@ -295,25 +123,7 @@ export function InfoSidebar(props) {
           <a href="https://icomoon.io/#icons" target="_blank" rel="noopener">
             IcoMoon
           </a>
-          &nbsp;等开源项目
-        </p>
-        <p>
-          This program is free software: you can redistribute it and/or modify
-          it under the terms of the GNU General Public License as published by
-          the Free Software Foundation, either version 3 of the License, or (at
-          your option) any later version.
-        </p>
-        <p>
-          This program is distributed in the hope that it will be useful, but
-          WITHOUT ANY WARRANTY; without even the implied warranty of
-          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the&nbsp;
-          <a
-            href="https://www.gnu.org/licenses/gpl-3.0.zh-cn.html"
-            target="_blank"
-          >
-            GNU General Public License
-          </a>
-          &nbsp;for more details.
+          等开源项目
         </p>
       </div>
     </div>
@@ -413,10 +223,6 @@ export class LoginForm extends Component {
                     </button>
                     <br />
                   </p>
-                  {/*<p>*/}
-                  {/*根据计算中心要求，访问授权三个月内有效，过期需重新登录。*/}
-                  {/*T大树洞将会单向加密(i.e. 哈希散列)您的邮箱后再存入数据库，因此您的发帖具有较强的匿名性。具体可见我们的<a href="https://github.com/thuhole/thuhole-go-backend/blob/76f56e6b75257b59e552b6bdba77e114151fcad1/src/db.go#L184">后端开源代码</a>。*/}
-                  {/*</p>*/}
                   <p>
                     <a
                       onClick={() => {
@@ -437,7 +243,7 @@ export class LoginForm extends Component {
                     </a>
                     <br />
                     复制 User Token
-                    可以在新设备登录，切勿告知他人。若怀疑被盗号请重新邮箱验证码登录以重置Token。
+                    可以在新设备登录，切勿告知他人。若怀疑被盗号请重置Token。
                     {/*，若怀疑被盗号请尽快 <ResetUsertokenWidget token={token.value} />*/}
                   </p>
                 </div>
@@ -453,8 +259,8 @@ export class LoginForm extends Component {
                       </p>
                       <p>
                         <small>
-                          T大树洞
-                          面向T大学生，通过T大邮箱验证您的身份并提供服务。
+                          新T树洞
+                          面向T大学生，通过已验证身份的第三方服务授权登陆。
                         </small>
                       </p>
                     </div>

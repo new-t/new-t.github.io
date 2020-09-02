@@ -13,14 +13,12 @@ import {
   build_highlight_re,
   Time,
   TitleLine,
-  HighlightedText,
   ClickHandler,
   ColoredSpan,
   HighlightedMarkdown,
 } from './Common';
 import './Flows.css';
 import LazyLoad, { forceCheck } from './react-lazyload/src';
-import { AudioWidget } from './AudioWidget';
 import { TokenCtx, ReplyForm } from './UserAction';
 
 import { API } from './flows_api';
@@ -868,7 +866,9 @@ class FlowItemRow extends PureComponent {
                   <span className="box-header-tag">{this.props.info.tag}</span>
                 )}
                 <Time stamp={this.props.info.timestamp} short={true} />
-                <span className="box-header-badge">{this.needFold ? '已隐藏' : '已屏蔽'}</span>
+                <span className="box-header-badge">
+                  {this.needFold ? '已隐藏' : '已屏蔽'}
+                </span>
                 <div style={{ clear: 'both' }} />
               </div>
             </div>
