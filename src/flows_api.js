@@ -1,4 +1,4 @@
-import { get_json} from './infrastructure/functions';
+import { get_json, gen_name} from './infrastructure/functions';
 import { API_BASE } from './Common';
 import { cache } from './cache';
 
@@ -25,6 +25,7 @@ const parse_replies = (replies, color_picker) =>
   replies
     .sort((a, b) => parseInt(a.cid, 10) - parseInt(b.cid, 10))
     .map((info) => {
+      info.name = gen_name(info.name_id);
       info._display_color = color_picker.get(info.name);
       info.variant = {};
       return info;
