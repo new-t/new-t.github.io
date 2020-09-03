@@ -1,5 +1,5 @@
 export function get_json(res) {
-    if(!res.ok) throw Error(`网络错误 ${res.status} ${res.statusText}`);
+    if(!res.ok) throw Error(`错误 ${res.status} ${res.statusText}`);
     return (
         res
             .text()
@@ -30,6 +30,3 @@ export function listen_darkmode(override) { // override: true/false/undefined
     });
 }
 
-export function API_VERSION_PARAM() {
-    return '&PKUHelperAPI=3.0&jsapiver='+encodeURIComponent((process.env.REACT_APP_BUILD_INFO||'null')+'-'+(Math.floor(+new Date()/7200000)*2));
-}

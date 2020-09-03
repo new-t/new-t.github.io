@@ -22,9 +22,8 @@ export class MessageViewer extends PureComponent {
       },
       () => {
         fetch(
-            '/api/v1/system_msg?user_token=' +
-            encodeURIComponent(this.props.token) +
-            API_VERSION_PARAM(),
+            '/_api/v1/system_msg?user_token=' +
+            encodeURIComponent(this.props.token)
         )
           .then(get_json)
           .then((json) => {

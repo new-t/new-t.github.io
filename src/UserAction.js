@@ -171,6 +171,8 @@ export class LoginForm extends Component {
                     当您发送的内容违规时，我们将用系统消息提示您
                   </p>
                   <p>
+                    <small>{token.value}</small>
+                    <br/>
                     <a onClick={this.copy_token.bind(this, token.value)}>
                       复制 User Token
                     </a>
@@ -263,7 +265,7 @@ export class ReplyForm extends Component {
     data.append('text', this.state.text);
     data.append('user_token', this.props.token);
     fetch(
-      API_BASE + '/api.php?action=docomment' + token_param(this.props.token),
+      API_BASE + '/docomment' + token_param(this.props.token),
       {
         method: 'POST',
         headers: {
@@ -355,6 +357,7 @@ export class PostForm extends Component {
     super(props);
     this.state = {
       text: '',
+      cw: '',
       loading_status: 'done',
       img_tip: null,
       preview: false,
@@ -362,12 +365,19 @@ export class PostForm extends Component {
     this.img_ref = React.createRef();
     this.area_ref = React.createRef();
     this.on_change_bound = this.on_change.bind(this);
+    this.on_cw_change_bound = this.on_cw_change.bind(this);
     this.on_img_change_bound = this.on_img_change.bind(this);
     this.color_picker = new ColorPicker();
   }
 
   componentDidMount() {
     if (this.area_ref.current) this.area_ref.current.focus();
+  }
+
+  on_cw_change(event) {
+    this.setState({
+      cw: event.target.value,
+    });
   }
 
   on_change(value) {
@@ -378,12 +388,13 @@ export class PostForm extends Component {
 
   do_post(text, img) {
     let data = new URLSearchParams();
+    data.append('cw', this.state.cw);
     data.append('text', this.state.text);
     data.append('type', img ? 'image' : 'text');
     data.append('user_token', this.props.token);
     if (img) data.append('data', img);
 
-    fetch(API_BASE + '/api.php?action=dopost' + token_param(this.props.token), {
+    fetch(API_BASE + '/dopost' + token_param(this.props.token), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -632,12 +643,23 @@ export class PostForm extends Component {
             />
           </div>
         ) : (
-          <SafeTextarea
-            ref={this.area_ref}
-            id="new_post"
-            on_change={this.on_change_bound}
-            on_submit={this.on_submit.bind(this)}
-          />
+          <>
+            <input
+              type="text"
+              placeholder="折叠警告(留空表示不折叠)"
+              value={this.state.cw}
+              id="post_cw"
+              className="spoiler-input"
+              onChange={this.on_cw_change_bound}
+              maxLength="32"
+            />
+            <SafeTextarea
+              ref={this.area_ref}
+              id="new_post"
+              on_change={this.on_change_bound}
+              on_submit={this.on_submit.bind(this)}
+            />
+          </>
         )}
         <p>
           <small>

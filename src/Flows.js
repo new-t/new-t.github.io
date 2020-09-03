@@ -30,19 +30,6 @@ const CLICKABLE_TAGS = { a: true, audio: true };
 const PREVIEW_REPLY_COUNT = 10;
 // const QUOTE_BLACKLIST=['23333','233333','66666','666666','10086','10000','100000','99999','999999','55555','555555'];
 const QUOTE_BLACKLIST = [];
-const FOLD_TAGS = [
-  '性相关',
-  '政治相关',
-  '性话题',
-  '政治话题',
-  '折叠',
-  'NSFW',
-  '刷屏',
-  '真实性可疑',
-  '用户举报较多',
-  '举报较多',
-  '重复内容',
-];
 
 window.LATEST_POST_ID = parseInt(localStorage['_LATEST_POST_ID'], 10) || 0;
 
@@ -104,11 +91,8 @@ class Reply extends PureComponent {
   }
 
   render() {
-    const replyContent = this.props.info.text;
-    const splitIdx = replyContent.indexOf(']');
-
-    const author = replyContent.substr(0, splitIdx + 1),
-      replyText = replyContent.substr(splitIdx + 2);
+    const author = this.props.info.name,
+      replyText = this.props.info.text;
     return (
       <div
         className={'flow-reply box'}
@@ -122,7 +106,6 @@ class Reply extends PureComponent {
         }
       >
         <div className="box-header">
-          <code className="box-id">#{this.props.info.cid}</code>
           {!!this.props.do_filter_name && (
             <span
               className="reply-header-badge clickable"
@@ -134,10 +117,12 @@ class Reply extends PureComponent {
             </span>
           )}
           &nbsp;
-          {this.props.info.tag !== null && (
-            <span className="box-header-tag">{this.props.info.tag}</span>
+          {(
+            <span className="box-header-name">{this.props.info.name}</span>
           )}
           <Time stamp={this.props.info.timestamp} short={false} />
+          &nbsp;
+          <code className="box-id">{'$' + this.props.info.cid}</code>
         </div>
         <div className="box-content">
           <HighlightedMarkdown
@@ -161,7 +146,7 @@ class FlowItem extends PureComponent {
     event.preventDefault();
     copy(
       `${event.target.href}${
-        this.props.info.tag ? ' 【' + this.props.info.tag + '】' : ''
+        this.props.info.cw ? ' 【' + this.props.info.cw + '】' : ''
       }\n` +
         `${this.props.info.text}${
           this.props.info.type === 'image'
@@ -174,7 +159,7 @@ class FlowItem extends PureComponent {
           this.props.info.likenum
         }关注 ${this.props.info.reply}回复）\n` +
         this.props.replies
-          .map((r) => (r.tag ? '【' + r.tag + '】' : '') + r.text)
+          .map((r) => (r.cw ? '【' + r.cw + '】' : '') + r.text)
           .join('\n'),
     );
   }
@@ -237,8 +222,8 @@ class FlowItem extends PureComponent {
               </a>
             </code>
             &nbsp;
-            {props.info.tag !== null && props.info.tag !== '折叠' && (
-              <span className="box-header-tag">{props.info.tag}</span>
+            {props.info.cw !== null && (
+              <span className="box-header-cw">{props.info.cw}</span>
             )}
             <Time stamp={props.info.timestamp} short={!props.img_clickable} />
           </div>
@@ -634,8 +619,7 @@ class FlowSidebar extends PureComponent {
 class FlowItemRow extends PureComponent {
   constructor(props) {
     super(props);
-    this.needFold =
-      FOLD_TAGS.indexOf(props.info.tag) > -1 &&
+    this.needFold = props.info.cw &&
       (props.search_param === '热榜' || !props.search_param) &&
       window.config.fold &&
       props.mode !== 'attention' && props.mode !== 'attention_finished';
@@ -861,8 +845,8 @@ class FlowItemRow extends PureComponent {
                 )}
                 <code className="box-id">#{this.props.info.pid}</code>
                 &nbsp;
-                {this.props.info.tag !== null && this.props.info.tag !== '折叠' && (
-                  <span className="box-header-tag">{this.props.info.tag}</span>
+                {this.props.info.cw !== null && (
+                  <span className="box-header-cw">{this.props.info.cw}</span>
                 )}
                 <Time stamp={this.props.info.timestamp} short={true} />
                 <span className="box-header-badge">
@@ -1038,10 +1022,11 @@ export class Flow extends PureComponent {
   load_page(page) {
     const failed = (err) => {
       console.error(err);
+      console.log(err.to_string);
       this.setState((prev, props) => ({
         loaded_pages: prev.loaded_pages - 1,
         loading_status: 'failed',
-        error_msg: '' + err,
+        error_msg: prev.loaded_pages>1 ? '找不到更多了' : '' + err,
       }));
     };
 
@@ -1219,7 +1204,7 @@ export class Flow extends PureComponent {
                 &nbsp;Loading...
               </span>
             ) : (
-              '© thuhole'
+              '🄯 2020 copyleft: hole_thu'
             )
           }
         />

@@ -254,7 +254,7 @@
     color: white;
 }
 
-.box-header-tag {
+.box-header-cw {
     color: white;
     background-color: #00c;
     font-weight: bold;
@@ -263,7 +263,16 @@
     padding: 0 .25em;
 }
 
-.root-dark-mode .box-header-tag {
+.box-header-name {
+    color: white;
+    background-color: #3338;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-right: .5em;
+    padding: .1em .5em;
+}
+
+.root-dark-mode .box-header-cw {
     background-color: #00a;
 }
 

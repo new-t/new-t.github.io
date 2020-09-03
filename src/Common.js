@@ -16,7 +16,7 @@ import renderMd from './Markdown';
 
 export { format_time, Time, TitleLine };
 
-export const API_BASE = '/_api/v1/';
+export const API_BASE = '/_api/v1';
 
 // https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 function escape_regex(string) {
@@ -164,6 +164,7 @@ export class HighlightedMarkdown extends Component {
             ['url', URL_RE],
             ['pid', PID_RE],
             ['nickname', NICKNAME_RE],
+            //TODO: tag
           ]);
 
           return (
@@ -217,30 +218,15 @@ export class HighlightedMarkdown extends Component {
       },
     ];
     const parser = new HtmlToReact.Parser();
-    if (props.author && props.text.match(/^(?:#+ |>|```|\t|\s*-|\s*\d+\.)/)) {
-      const renderedMarkdown = renderMd(props.text);
-      return (
-        <>
-          {props.author}
-          {parser.parseWithInstructions(
-            renderedMarkdown,
-            (node) => node.type !== 'script',
-            processInstructions,
-          ) || ''}
-        </>
-      );
-    } else {
-      let rawMd = props.text;
-      if (props.author) rawMd = props.author + ' ' + rawMd;
-      const renderedMarkdown = renderMd(rawMd);
-      return (
-        parser.parseWithInstructions(
-          renderedMarkdown,
-          (node) => node.type !== 'script',
-          processInstructions,
-        ) || null
-      );
-    }
+    let rawMd = props.text;
+    const renderedMarkdown = renderMd(rawMd);
+    return (
+      parser.parseWithInstructions(
+        renderedMarkdown,
+        (node) => node.type !== 'script',
+        processInstructions,
+      ) || null
+    );
   }
 }
 
@@ -314,6 +300,7 @@ export class SafeTextarea extends Component {
         onChange={this.on_change_bound}
         value={this.state.text}
         onKeyDown={this.on_keydown_bound}
+        maxLength="4096"
       />
     );
   }

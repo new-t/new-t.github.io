@@ -109,3 +109,9 @@
 .life-info-error a {
     --var-link-color: hsl(25,100%,45%);
 }
+
+.spoiler-input {
+  width: 100%;
+  margin-bottom: 5px;
+  padding: 2px;
+}
