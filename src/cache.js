@@ -75,7 +75,7 @@ class Cache {
           resolve(null);
         } else if (target_version === res.version) {
           // hit
-          console.log('comment cache hit', pid);
+          //console.log('comment cache hit', pid);
           res.last_access = +new Date();
           store.put(res);
           let data = this.decrypt(pid, res.data_str);
@@ -114,7 +114,7 @@ class Cache {
         data_str: this.encrypt(pid, data),
         last_access: +new Date(),
       });
-      console.log('comment cache put', pid);
+      //console.log('comment cache put', pid);
       if (++this.added_items_since_maintenance === MAINTENANCE_STEP)
         setTimeout(this.maintenance.bind(this), 1);
     });

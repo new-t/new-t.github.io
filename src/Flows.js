@@ -23,6 +23,8 @@ import { TokenCtx, ReplyForm } from './UserAction';
 
 import { API } from './flows_api';
 
+import { cache } from './cache';
+
 const IMAGE_BASE = 'https://thimg.yecdn.com/';
 const IMAGE_BAK_BASE = 'https://img2.thuhole.com/';
 
@@ -639,7 +641,8 @@ class FlowItemRow extends PureComponent {
   }
 
   componentDidMount() {
-    if (parseInt(this.state.info.reply, 10)) {
+    // cache from getlist, so always to this to update attention
+    if (true || parseInt(this.state.info.reply, 10)) {
       this.load_replies(null, /*update_count=*/ false);
     }
   }
@@ -649,7 +652,7 @@ class FlowItemRow extends PureComponent {
   // }
 
   load_replies(callback, update_count = true) {
-    console.log('fetching reply', this.state.info.pid);
+    //console.log('fetching reply', this.state.info.pid);
     this.setState({
       reply_status: 'loading',
       reply_error: null,
@@ -661,6 +664,7 @@ class FlowItemRow extends PureComponent {
       parseInt(this.state.info.reply),
     )
       .then(({ data: json, cached }) => {
+        //console.log('>> update', json, json.attention);
         this.setState(
           (prev, props) => ({
             replies: json.data,
@@ -1032,7 +1036,8 @@ export class Flow extends PureComponent {
 
     if (page > this.state.loaded_pages + 1) throw new Error('bad page');
     if (page === this.state.loaded_pages + 1) {
-      console.log('fetching page', page);
+      //console.log('fetching page', page);
+      cache();
       if (this.state.mode === 'list') {
         API.get_list(page, this.props.token)
           .then((json) => {
@@ -1041,6 +1046,16 @@ export class Flow extends PureComponent {
               let max_id = -1;
               json.data.forEach((x) => {
                 if (parseInt(x.pid, 10) > max_id) max_id = parseInt(x.pid, 10);
+                if (x.comments) {
+                  let comment_json = {
+                    'code': 0,
+                    'attention': x.attention,
+                    'data': x.comments
+                  }
+                  //console.log('My cache', comment_json, x.pid, x.reply)
+                  cache().put(x.pid, parseInt(x.reply, 10), comment_json);
+                }
+                
               });
               localStorage['_LATEST_POST_ID'] = '' + max_id;
             }
@@ -1087,6 +1102,17 @@ export class Flow extends PureComponent {
         const pid = parseInt(this.state.search_param.substr(1), 10);
         API.get_single(pid, this.props.token)
           .then((json) => {
+            let x = json.data;
+            if (x.comments) {
+              let comment_json = {
+                'code': 0,
+                'attention': x.attention,
+                'data': x.comments
+              }
+              //console.log('My cache', comment_json, x.pid, x.reply)
+              cache().put(x.pid, parseInt(x.reply, 10), comment_json);
+            }
+
             this.setState({
               chunks: {
                 title: 'PID = ' + pid,

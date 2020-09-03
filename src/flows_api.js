@@ -38,6 +38,7 @@ export const API = {
     );
     let json = await handle_response(response);
     // Why delete then put ??
+    console.log('Put cache', json, pid, cache_version);
     cache().put(pid, cache_version, json);
     json.data = parse_replies(json.data, color_picker);
     return json;
@@ -46,10 +47,13 @@ export const API = {
   load_replies_with_cache: async (pid, token, color_picker, cache_version) => {
     pid = parseInt(pid);
     let json = await cache().get(pid, cache_version);
+    //console.log('Get Cache', json, pid, cache_version);
     if (json) {
+      //console.log('cache.data', json.data);
       json.data = parse_replies(json.data, color_picker);
       return { data: json, cached: true };
     } else {
+      //console.log('Cache fail, new fetch');
       json = await API.load_replies(pid, token, color_picker, cache_version);
       return { data: json, cached: !json };
     }
