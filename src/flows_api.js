@@ -39,7 +39,7 @@ export const API = {
     );
     let json = await handle_response(response);
     // Why delete then put ??
-    console.log('Put cache', json, pid, cache_version);
+    //console.log('Put cache', json, pid, cache_version);
     cache().put(pid, cache_version, json);
     json.data = parse_replies(json.data, color_picker);
     return json;
@@ -87,6 +87,24 @@ export const API = {
     data.append('reason', reason);
     let response = await fetch(
       API_BASE + '/report' + token_param(token),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: data,
+      },
+    );
+    return handle_response(response, true);
+  },
+
+  del: async (type, id, note, token) => {
+    let data = new URLSearchParams();
+    data.append('type', type);
+    data.append('id', id);
+    data.append('note', note);
+    let response = await fetch(
+      API_BASE + '/delete' + token_param(token),
       {
         method: 'POST',
         headers: {

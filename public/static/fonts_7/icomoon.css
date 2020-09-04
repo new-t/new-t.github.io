@@ -108,3 +108,5 @@
 .icon-eye-blocked:before {
   content: "\e9d1";
 }
+.icon-trash:before {
+  content: "\1f5d1";

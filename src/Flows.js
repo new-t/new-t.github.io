@@ -93,26 +93,27 @@ class Reply extends PureComponent {
   }
 
   render() {
-    const author = this.props.info.name,
-      replyText = this.props.info.text;
+    const {info, color_picker, show_pid, do_filter_name, do_delete} = this.props;
+    const author = info.name,
+      replyText = info.text;
     return (
       <div
         className={'flow-reply box'}
         style={
-          this.props.info._display_color
+          info._display_color
             ? {
-                '--box-bgcolor-light': this.props.info._display_color[0],
-                '--box-bgcolor-dark': this.props.info._display_color[1],
+                '--box-bgcolor-light': info._display_color[0],
+                '--box-bgcolor-dark': info._display_color[1],
               }
             : null
         }
       >
         <div className="box-header">
-          {!!this.props.do_filter_name && (
+          {!!do_filter_name && (
             <span
               className="reply-header-badge clickable"
               onClick={() => {
-                this.props.do_filter_name(this.props.info.name);
+                do_filter_name(info.name);
               }}
             >
               <span className="icon icon-locate" />
@@ -120,18 +121,29 @@ class Reply extends PureComponent {
           )}
           &nbsp;
           {(
-            <span className="box-header-name">{this.props.info.name}</span>
+            <span className="box-header-name">{info.name}</span>
           )}
-          <Time stamp={this.props.info.timestamp} short={false} />
+          {!!do_delete && !!info.can_del && (
+            <span
+              className="clickable"
+              onClick={() => {
+                do_delete('cid', info.cid);
+              }}
+            >
+              <span className="icon icon-trash" />
+            </span>
+          )}
           &nbsp;
-          <code className="box-id">{'$' + this.props.info.cid}</code>
+          <Time stamp={info.timestamp} short={false} />
+          &nbsp;
+          <code className="box-id">{'$' + info.cid}</code>
         </div>
         <div className="box-content">
           <HighlightedMarkdown
             author={author}
             text={replyText}
-            color_picker={this.props.color_picker}
-            show_pid={this.props.show_pid}
+            color_picker={color_picker}
+            show_pid={show_pid}
           />
         </div>
       </div>
@@ -167,10 +179,10 @@ class FlowItem extends PureComponent {
   }
 
   render() {
-    let props = this.props;
+    const {info, is_quote, cached, attention, can_del, do_filter_name, do_delete, timestamp, img_clickable, color_picker, show_pid} = this.props;
     return (
-      <div className={'flow-item' + (props.is_quote ? ' flow-item-quote' : '')}>
-        {!!props.is_quote && (
+      <div className={'flow-item' + (is_quote ? ' flow-item-quote' : '')}>
+        {!!is_quote && (
           <div className="quote-tip black-outline">
             <div>
               <span className="icon icon-quote" />
@@ -182,96 +194,106 @@ class FlowItem extends PureComponent {
         )}
         <div className="box">
           {!!window.LATEST_POST_ID &&
-            parseInt(props.info.pid, 10) > window.LATEST_POST_ID && (
+            parseInt(info.pid, 10) > window.LATEST_POST_ID && (
               <div className="flow-item-dot" />
             )}
-          {!!this.props.attention && !this.props.cached && (
+          {!!attention && !cached && (
             <div className="flow-item-dot" />
           )}
           <div className="box-header">
-            {!!this.props.do_filter_name && (
+            {!!do_filter_name && (
               <span
                 className="reply-header-badge clickable"
                 onClick={() => {
-                  this.props.do_filter_name(DZ_NAME);
+                  do_filter_name(DZ_NAME);
                 }}
               >
                 <span className="icon icon-locate" />
               </span>
             )}
-            {!!parseInt(props.info.likenum, 10) && (
+            {!!parseInt(info.likenum, 10) && (
               <span className="box-header-badge">
-                {props.info.likenum}&nbsp;
+                {info.likenum}&nbsp;
                 <span
                   className={
-                    'icon icon-' + (props.attention ? 'star-ok' : 'star')
+                    'icon icon-' + (attention ? 'star-ok' : 'star')
                   }
                 />
               </span>
             )}
-            {!!parseInt(props.info.reply, 10) && (
+            {!!parseInt(info.reply, 10) && (
               <span className="box-header-badge">
-                {props.info.reply}&nbsp;
+                {info.reply}&nbsp;
                 <span className="icon icon-reply" />
               </span>
             )}
             <code className="box-id">
               <a
-                href={'##' + props.info.pid}
+                href={'##' + info.pid}
                 onClick={this.copy_link.bind(this)}
               >
-                #{props.info.pid}
+                #{info.pid}
               </a>
             </code>
-            &nbsp;
-            {props.info.cw !== null && (
-              <span className="box-header-cw">{props.info.cw}</span>
+            {!!do_delete && !!info.can_del && (
+              <span
+                className="clickable"
+                onClick={() => {
+                  do_delete('pid', info.pid);
+                }}
+              >
+                <span className="icon icon-trash" />
+              </span>
             )}
-            <Time stamp={props.info.timestamp} short={!props.img_clickable} />
+            &nbsp;
+            {info.cw !== null && (
+              <span className="box-header-cw">{info.cw}</span>
+            )}
+            <Time stamp={info.timestamp} short={!img_clickable} />
           </div>
           <div className="box-content">
             <HighlightedMarkdown
-              text={props.info.text}
-              color_picker={props.color_picker}
-              show_pid={props.show_pid}
+              text={info.text}
+              color_picker={color_picker}
+              show_pid={show_pid}
             />
-            {props.info.type === 'image' && (
+            {info.type === 'image' && (
               <p className="img">
-                {props.img_clickable ? (
+                {img_clickable ? (
                   <a
                     className="no-underline"
-                    href={IMAGE_BASE + props.info.url}
+                    href={IMAGE_BASE + info.url}
                     target="_blank"
                   >
                     <img
-                      src={IMAGE_BASE + props.info.url}
+                      src={IMAGE_BASE + info.url}
                       onError={(e) => {
-                        if (e.target.src === IMAGE_BASE + props.info.url) {
-                          e.target.src = IMAGE_BAK_BASE + props.info.url;
+                        if (e.target.src === IMAGE_BASE + info.url) {
+                          e.target.src = IMAGE_BAK_BASE + info.url;
                         }
                       }}
-                      alt={IMAGE_BASE + props.info.url}
+                      alt={IMAGE_BASE + info.url}
                     />
                   </a>
                 ) : (
                   <img
-                    src={IMAGE_BASE + props.info.url}
+                    src={IMAGE_BASE + info.url}
                     onError={(e) => {
-                      if (e.target.src === IMAGE_BASE + props.info.url) {
-                        e.target.src = IMAGE_BAK_BASE + props.info.url;
+                      if (e.target.src === IMAGE_BASE + info.url) {
+                        e.target.src = IMAGE_BAK_BASE + info.url;
                       }
                     }}
-                    alt={IMAGE_BASE + props.info.url}
+                    alt={IMAGE_BASE + info.url}
                   />
                 )}
               </p>
             )}
-            {/*{props.info.type==='audio' && <AudioWidget src={AUDIO_BASE+props.info.url} />}*/}
+            {/*{info.type==='audio' && <AudioWidget src={AUDIO_BASE+info.url} />}*/}
           </div>
-          {!!(props.attention && props.info.variant.latest_reply) && (
+          {!!(attention && info.variant.latest_reply) && (
             <p className="box-footer">
               最新回复{' '}
-              <Time stamp={props.info.variant.latest_reply} short={false} />
+              <Time stamp={info.variant.latest_reply} short={false} />
             </p>
           )}
         </div>
@@ -441,6 +463,24 @@ class FlowSidebar extends PureComponent {
     }
   }
 
+  make_do_delete(token) {
+    const do_delete = (type, id) => {
+      console.log('del', type, id, token);
+      let note = prompt(`将删除${type}=${id}, 备注：`);
+      if (note !== null) {
+        API.del(type, id, note, token)
+          .then((json) => {
+            alert('删除成功');
+          })
+          .catch((e) => {
+            alert('删除失败\n' + e);
+            console.error(e);
+          });
+      }
+    }
+    return do_delete;
+  }
+
   render() {
     if (this.state.loading_status === 'loading')
       return <p className="box box-tip">加载中……</p>;
@@ -484,6 +524,7 @@ class FlowSidebar extends PureComponent {
             do_filter_name={
               replies_cnt[DZ_NAME] > 1 ? this.set_filter_name.bind(this) : null
             }
+            do_delete={this.make_do_delete(this.props.token)}
           />
         </ClickHandler>
       );
@@ -598,6 +639,7 @@ class FlowSidebar extends PureComponent {
                     ? this.set_filter_name.bind(this)
                     : null
                 }
+                do_delete={this.make_do_delete(this.props.token)}
               />
             </ClickHandler>
           </LazyLoad>
@@ -1036,7 +1078,7 @@ export class Flow extends PureComponent {
 
     if (page > this.state.loaded_pages + 1) throw new Error('bad page');
     if (page === this.state.loaded_pages + 1) {
-      //console.log('fetching page', page);
+      console.log('fetching page', page);
       cache();
       if (this.state.mode === 'list') {
         API.get_list(page, this.props.token)
@@ -1046,19 +1088,20 @@ export class Flow extends PureComponent {
               let max_id = -1;
               json.data.forEach((x) => {
                 if (parseInt(x.pid, 10) > max_id) max_id = parseInt(x.pid, 10);
-                if (x.comments) {
-                  let comment_json = {
-                    'code': 0,
-                    'attention': x.attention,
-                    'data': x.comments
-                  }
-                  //console.log('My cache', comment_json, x.pid, x.reply)
-                  cache().put(x.pid, parseInt(x.reply, 10), comment_json);
-                }
-                
               });
               localStorage['_LATEST_POST_ID'] = '' + max_id;
             }
+            json.data.forEach((x) => {
+              if (x.comments) {
+                let comment_json = {
+                  'code': 0,
+                  'attention': x.attention,
+                  'data': x.comments
+                }
+                //console.log('My cache', comment_json, x.pid, x.reply)
+                cache().put(x.pid, parseInt(x.reply, 10), comment_json);
+              }
+            });
             this.setState((prev, props) => ({
               chunks: {
                 title: 'News Feed',
@@ -1105,10 +1148,10 @@ export class Flow extends PureComponent {
             let x = json.data;
             if (x.comments) {
               let comment_json = {
-                'code': 0,
-                'attention': x.attention,
-                'data': x.comments
-              }
+                code: 0,
+                attention: x.attention,
+                data: x.comments,
+              };
               //console.log('My cache', comment_json, x.pid, x.reply)
               cache().put(x.pid, parseInt(x.reply, 10), comment_json);
             }

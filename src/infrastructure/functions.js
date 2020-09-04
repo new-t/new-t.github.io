@@ -1,5 +1,5 @@
 export function get_json(res) {
-    if(!res.ok) throw Error(`错误 ${res.status} ${res.statusText}`);
+    if(!res.ok) throw Error(`${res.status} ${res.statusText}`);
     return (
         res
             .text()

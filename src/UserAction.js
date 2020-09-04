@@ -291,7 +291,7 @@ export class ReplyForm extends Component {
       })
       .catch((e) => {
         console.error(e);
-        alert('回复失败');
+        alert('回复失败\n' + e);
         this.setState({
           loading_status: 'done',
         });
