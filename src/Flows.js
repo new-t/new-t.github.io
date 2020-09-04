@@ -463,14 +463,15 @@ class FlowSidebar extends PureComponent {
     }
   }
 
-  make_do_delete(token) {
+  make_do_delete(token, on_complete=null) {
     const do_delete = (type, id) => {
       console.log('del', type, id, token);
-      let note = prompt(`将删除${type}=${id}, 备注：`);
+      let note = prompt(`将删除${type}=${id}, 备注：`, '(无)');
       if (note !== null) {
         API.del(type, id, note, token)
           .then((json) => {
             alert('删除成功');
+            on_complete();
           })
           .catch((e) => {
             alert('删除失败\n' + e);
@@ -524,7 +525,7 @@ class FlowSidebar extends PureComponent {
             do_filter_name={
               replies_cnt[DZ_NAME] > 1 ? this.set_filter_name.bind(this) : null
             }
-            do_delete={this.make_do_delete(this.props.token)}
+            do_delete={this.make_do_delete(this.props.token, ()=>{window.location.reload();})}
           />
         </ClickHandler>
       );
@@ -639,7 +640,7 @@ class FlowSidebar extends PureComponent {
                     ? this.set_filter_name.bind(this)
                     : null
                 }
-                do_delete={this.make_do_delete(this.props.token)}
+                do_delete={this.make_do_delete(this.props.token, this.load_replies.bind(this))}
               />
             </ClickHandler>
           </LazyLoad>
