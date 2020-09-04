@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Time } from './Common';
+import { get_json } from './infrastructure/functions';
 
 export class MessageViewer extends PureComponent {
   constructor(props) {
@@ -22,17 +23,17 @@ export class MessageViewer extends PureComponent {
       },
       () => {
         fetch(
-            '/_api/v1/system_msg?user_token=' +
+            '/_api/v1/systemlog?user_token=' +
             encodeURIComponent(this.props.token)
         )
           .then(get_json)
           .then((json) => {
-            if (json.error) throw new Error(json.error);
-            else
-              this.setState({
-                loading_status: 'done',
-                msg: json.result,
-              });
+            this.setState({
+              loading_status: 'done',
+              msg: json.data,
+              start_time: json.start_time,
+              salt: json.salt
+            });
           })
           .catch((err) => {
             console.error(err);
@@ -61,17 +62,32 @@ export class MessageViewer extends PureComponent {
         </div>
       );
     else if (this.state.loading_status === 'done')
-      return this.state.msg.map((msg) => (
-        <div className="box" key={msg.timestamp}>
-          <div className="box-header">
-            <Time stamp={msg.timestamp} short={false} />
-            <b>{msg.title}</b>
-          </div>
-          <div className="box-content">
-            <pre>{msg.content}</pre>
-          </div>
-        </div>
-      ));
+      return (
+        <>
+          <br/>
+          <p>
+            最近一次重置 <Time stamp={this.state.start_time} short={false} />
+          </p>
+          <p>
+            随机盐 <b>{this.state.salt}</b>
+          </p>
+          {this.state.msg.map((msg) => (
+            <div className="box" key={msg.timestamp}>
+              <div className="box-header">
+                <Time stamp={msg.timestamp} short={false} />
+                &nbsp;
+                &nbsp;
+                <b>{msg.type}</b>
+                &nbsp;
+                <span className="box-header-name">{msg.user}</span>
+              </div>
+              <div className="box-content">
+                <pre>{msg.detail}</pre>
+              </div>
+            </div>
+        ))}
+        </>
+      )
     else return null;
   }
 }

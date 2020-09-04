@@ -160,15 +160,15 @@ export class LoginForm extends Component {
                     <a
                       onClick={() => {
                         this.props.show_sidebar(
-                          '系统消息',
+                          '系统日志',
                           <MessageViewer token={token.value} />,
                         );
                       }}
                     >
-                      查看系统消息
+                      查看系统日志
                     </a>
                     <br />
-                    当您发送的内容违规时，我们将用系统消息提示您
+                    举报记录、管理日志等都是公开的
                   </p>
                   <p>
                     <small>{token.value}</small>
@@ -177,7 +177,7 @@ export class LoginForm extends Component {
                       复制 User Token
                     </a>
                     <br />
-                    User Token仅用于开发bot，切勿告知他人。若怀疑被盗号请刷新Token。
+                    User Token仅用于开发bot，切勿告知他人。若怀疑被盗号请刷新Token(刷新功能即将上线)。
                   </p>
                 </div>
               ) : (
