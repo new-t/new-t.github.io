@@ -3,8 +3,10 @@ import React, { PureComponent } from 'react';
 import './Config.css';
 
 const BUILTIN_IMGS = {
+  'https://www.tsinghua.edu.cn/images/footer.jpg':
+    '清华紫（默认）',
   'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/gbp.jpg':
-    '寻觅繁星（默认）',
+    '寻觅繁星',
   'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/eriri.jpg':
     '平成著名画师',
   'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/yurucamp.jpg':
@@ -21,13 +23,14 @@ const BUILTIN_IMGS = {
 
 const DEFAULT_CONFIG = {
   background_img:
-    'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/gbp.jpg',
+    'https://www.tsinghua.edu.cn/images/footer.jpg',
   background_color: '#113366',
   pressure: false,
   easter_egg: true,
   color_scheme: 'default',
-  fold: true,
+  no_c_post: false,
   block_words: [],
+  whitelist_cw: []
 };
 
 export function load_config() {
@@ -370,7 +373,7 @@ export class ConfigUI extends PureComponent {
           </p>
           <p>
             <b>
-              修改设置后{' '}
+              部分设置修改后需要{' '}
               <a
                 onClick={() => {
                   window.location.reload();
@@ -407,6 +410,16 @@ export class ConfigUI extends PureComponent {
             parse={(string) => string.split('\n')}
           />
           <hr />
+          <ConfigTextArea
+            id="whitelist_cw"
+            callback={this.save_changes_bound}
+            name="展开指定的折叠警告"
+            description={'完全匹配的树洞不会被折叠，每行一个豁免词，也可使用一个星号("*")表示豁免所有'}
+            display={(array) => array.join('\n')}
+            sift={(array) => array.filter((v) => v)}
+            parse={(string) => string.split('\n')}
+          />
+          <hr />
           <ConfigSwitch
             callback={this.save_changes_bound}
             id="pressure"
@@ -423,15 +436,15 @@ export class ConfigUI extends PureComponent {
           <hr />
           <ConfigSwitch
             callback={this.save_changes_bound}
-            id="fold"
-            name="折叠树洞"
-            description="在时间线中折叠可能引起不适的树洞"
+            id="no_c_post"
+            name="忽略折叠的树洞"
+            description="不获取所有带折叠警告的树洞，折叠警告豁免将不起作用"
           />
           <hr />
           <p>
             新功能建议或问题反馈请在&nbsp;
             <a
-              href="https://github.com/thuhole/thuhole-go-backend/issues"
+              href="https://github.com/newthuhole/hole-backend/issues"
               target="_blank"
             >
               GitHub <span className="icon icon-github" />

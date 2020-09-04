@@ -301,13 +301,15 @@ a.app-switcher-item, .app-switcher-item a {
 }
 
 a.button {
-    -webkit-appearance: button;
-    -moz-appearance: button;
-    appearance: button;
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
 
-    text-decoration: none;
-    color: initial;
+  text-decoration: none;
+  color: initial;
 
-	min-width: 6em;
-	font-size: 0.85em;
+  min-width: 6em;
+  font-size: 0.85em;
+
+  padding: 5px;
 }

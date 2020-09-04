@@ -25,8 +25,8 @@ const MAX_IMG_DIAM = 8000;
 const MAX_IMG_PX = 5000000;
 const MAX_IMG_FILESIZE = 450000 * BASE64_RATE;
 
-const REPOSITORY = 'https://a.com/b';
-const EMAIL = 'a@b.com';
+const REPOSITORY = 'https://github.com/newthuhole';
+const EMAIL = 'hole_thu@riseup.net';
 
 export const TokenCtx = React.createContext({
   value: null,
@@ -39,6 +39,11 @@ export function InfoSidebar(props) {
       <PromotionBar />
       <LoginForm show_sidebar={props.show_sidebar} />
       <div className="box list-menu">
+        <a href="/about.html" target="_blank">
+          <span className="icon icon-textfile" />
+          <label>关于</label>
+        </a>
+        &nbsp;&nbsp;
         <a
           onClick={() => {
             props.show_sidebar('设置', <ConfigUI />);
@@ -51,14 +56,6 @@ export function InfoSidebar(props) {
         <a href="/policy.html" target="_blank">
           <span className="icon icon-textfile" />
           <label>树洞规范（试行）</label>
-        </a>
-        &nbsp;&nbsp;
-        <a
-          href={REPOSITORY+"/issues"}
-          target="_blank"
-        >
-          <span className="icon icon-github" />
-          <label>意见反馈</label>
         </a>
       </div>
       <div className="box help-desc-box">
@@ -88,7 +85,8 @@ export function InfoSidebar(props) {
         </p>
       </div>
       <div className="box help-desc-box">
-        <p>联系我们：<a href={"mailto:"+EMAIL}>{EMAIL}</a></p>
+        <p>意见反馈请加tag #意见反馈 或到github后端的issus区。</p>
+        <p>联系我们：<a href={"mailto:"+EMAIL}>{EMAIL}</a> 。</p>
       </div>
       <div className="box help-desc-box">
         <p>
@@ -102,7 +100,7 @@ export function InfoSidebar(props) {
           <a href={REPOSITORY} target="_blank">
             GitHub
           </a>{' '}
-          开源
+          开源。
         </p>
         <p>
           新T树洞 网页版基于
@@ -121,7 +119,7 @@ export function InfoSidebar(props) {
           <a href="https://icomoon.io/#icons" target="_blank" rel="noopener">
             IcoMoon
           </a>
-          等开源项目
+          等开源项目。
         </p>
       </div>
     </div>

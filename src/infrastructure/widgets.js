@@ -76,27 +76,30 @@ class LoginPopupSelf extends Component {
                         <b>通过第三方验证登陆T大树洞</b>
                     </p>
 			        <p>
-                        <a className="button" href="/_login?p=cs" target="_blank"
-                                >
-                            闭社
+                        <a href="/_login?p=cs" target="_blank">
+                            <span className="icon icon-login" />
+                            &nbsp;闭社
                         </a>
 			        </p>
 			        <p>
                         <button type="button" disabled
                                 >
-                            T大树洞
+                            <span className="icon icon-login" />
+                            &nbsp;T大树洞
                         </button>
 			        </p>
 			        <p>
                         <button type="button" disabled
                                 >
-                            未名bbs
+                            <span className="icon icon-login" />
+                            &nbsp;未名bbs
                         </button>
 			        </p>
 			        <p>
                         <button type="button" disabled
                                 >
-                            清华统一身份认证
+                            <span className="icon icon-login" />
+                            &nbsp;清华统一身份认证
                         </button>
                     </p>
                     <hr />

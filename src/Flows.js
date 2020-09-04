@@ -666,7 +666,7 @@ class FlowItemRow extends PureComponent {
     super(props);
     this.needFold = props.info.cw &&
       (props.search_param === '热榜' || !props.search_param) &&
-      window.config.fold &&
+      (window.config.whitelist_cw.indexOf('*')==-1 && window.config.whitelist_cw.indexOf(props.info.cw)==-1) &&
       props.mode !== 'attention' && props.mode !== 'attention_finished';
     this.state = {
       replies: [],
@@ -674,8 +674,8 @@ class FlowItemRow extends PureComponent {
       reply_error: null,
       info: Object.assign({}, props.info, { variant: {} }),
       hidden: window.config.block_words.some((word) =>
-        props.info.text.includes(word),
-      ) || this.needFold,
+          props.info.text.includes(word),
+        ) || this.needFold,
       attention:
         props.attention_override === null ? false : props.attention_override,
       cached: true, // default no display anything
@@ -897,7 +897,7 @@ class FlowItemRow extends PureComponent {
                 )}
                 <Time stamp={this.props.info.timestamp} short={true} />
                 <span className="box-header-badge">
-                  {this.needFold ? '已隐藏' : '已屏蔽'}
+                  {this.needFold ? '已折叠' : '已屏蔽'}
                 </span>
                 <div style={{ clear: 'both' }} />
               </div>
@@ -1073,7 +1073,7 @@ export class Flow extends PureComponent {
       this.setState((prev, props) => ({
         loaded_pages: prev.loaded_pages - 1,
         loading_status: 'failed',
-        error_msg: prev.loaded_pages>1 ? '找不到更多了' : '' + err,
+        error_msg: prev.loaded_pages > 1 ? '找不到更多了' : '' + err,
       }));
     };
 
@@ -1095,10 +1095,10 @@ export class Flow extends PureComponent {
             json.data.forEach((x) => {
               if (x.comments) {
                 let comment_json = {
-                  'code': 0,
-                  'attention': x.attention,
-                  'data': x.comments
-                }
+                  code: 0,
+                  attention: x.attention,
+                  data: x.comments,
+                };
                 //console.log('My cache', comment_json, x.pid, x.reply)
                 cache().put(x.pid, parseInt(x.reply, 10), comment_json);
               }

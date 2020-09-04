@@ -118,7 +118,10 @@ export const API = {
 
   get_list: async (page, token) => {
     let response = await fetch(
-      API_BASE + '/getlist' + token_param(token) + '&p=' + page,
+      API_BASE + '/getlist' 
+        + token_param(token) 
+        + '&p=' + page 
+        + (window.config.no_c_post ? '&no_cw' : '')
     );
     return handle_response(response);
   },
