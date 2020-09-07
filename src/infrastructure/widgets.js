@@ -8,15 +8,6 @@ import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
 import './global.css';
 import './widgets.css';
 
-import appicon_hole from './appicon/hole.png';
-import appicon_imasugu from './appicon/imasugu.png';
-import appicon_imasugu_rev from './appicon/imasugu_rev.png';
-import appicon_syllabus from './appicon/syllabus.png';
-import appicon_score from './appicon/score.png';
-import appicon_course_survey from './appicon/course_survey.png';
-import appicon_dropdown from './appicon/dropdown.png';
-import appicon_dropdown_rev from './appicon/dropdown_rev.png';
-import appicon_homepage from './appicon/homepage.png';
 import {get_json, API_VERSION_PARAM} from './functions';
 
 function pad2(x) {
