@@ -666,7 +666,7 @@ export class PostForm extends Component {
         <p>
           <small>
             请遵守
-            <a href="https://thuhole.com/policy.html" target="_blank">
+            <a href="/policy.html" target="_blank">
               树洞管理规范（试行）
             </a>
             ，文明发言。
