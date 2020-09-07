@@ -26,8 +26,10 @@ import { API } from './flows_api';
 
 import { cache } from './cache';
 
+/*
 const IMAGE_BASE = 'https://thimg.yecdn.com/';
 const IMAGE_BAK_BASE = 'https://img2.thuhole.com/';
+*/
 
 const CLICKABLE_TAGS = { a: true, audio: true };
 const PREVIEW_REPLY_COUNT = 10;

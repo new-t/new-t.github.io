@@ -40,7 +40,7 @@ export function InfoSidebar(props) {
       <LoginForm show_sidebar={props.show_sidebar} />
       <div className="box list-menu">
         <a href="/about.html" target="_blank">
-          <span className="icon icon-textfile" />
+          <span className="icon icon-about" />
           <label>关于</label>
         </a>
         &nbsp;&nbsp;

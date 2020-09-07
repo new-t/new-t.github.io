@@ -1,14 +1,14 @@
 {
   "short_name": "树洞",
-  "name": "T大树洞",
+  "name": "新T树洞",
   "icons": [
     {
-      "src": "favicon/512.png",
+      "src": "https://s1.ax1x.com/2020/09/07/wnnsOO.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "favicon/192.png",
+      "src": "https://s1.ax1x.com/2020/09/07/wnrovV.png",
       "sizes": "192x192",
       "type": "image/png"
     }
