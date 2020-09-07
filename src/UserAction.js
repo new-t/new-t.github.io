@@ -416,7 +416,7 @@ export class PostForm extends Component {
       })
       .catch((e) => {
         console.error(e);
-        alert('发表失败');
+        alert('发表失败\n' + e);
         this.setState({
           loading_status: 'done',
         });
