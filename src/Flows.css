@@ -193,17 +193,6 @@
     overflow-x: auto;
 }
 
-.box-content img {
-  max-width: 100%;
-  max-height: 2000px;
-  display: block;
-  margin: 0 auto;
-}
-
-.left-container .box-content img {
-  max-height: 500px;
-}
-
 .left-container .box-content {
     max-height: calc(100vh + 15em);
     overflow-y: hidden;

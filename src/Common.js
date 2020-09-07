@@ -136,7 +136,7 @@ export class HighlightedMarkdown extends Component {
               href={normalize_url(node.attribs.src)}
               target="_blank"
               rel="noopenner noreferrer"
-              className="ext-link"
+              className="ext-link img-link"
               key={index}
             >
               <img
