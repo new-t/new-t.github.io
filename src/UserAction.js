@@ -85,7 +85,7 @@ export function InfoSidebar(props) {
         </p>
       </div>
       <div className="box help-desc-box">
-        <p>意见反馈请加tag #意见反馈 或到github后端的issus区。</p>
+        <p>意见反馈请加tag #意见反馈 或到github后端的issue区。</p>
         <p>联系我们：<a href={"mailto:"+EMAIL}>{EMAIL}</a> 。</p>
       </div>
       <div className="box help-desc-box">
