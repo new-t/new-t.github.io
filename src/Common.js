@@ -9,6 +9,7 @@ import {
   URL_RE,
   PID_RE,
   NICKNAME_RE,
+  TAG_RE,
   split_text,
 } from './text_splitter';
 
@@ -67,6 +68,7 @@ function normalize_url(url) {
   return /^https?:\/\//.test(url) ? url : 'http://' + url;
 }
 
+/*
 export class HighlightedText extends PureComponent {
   render() {
     return (
@@ -109,6 +111,7 @@ export class HighlightedText extends PureComponent {
     );
   }
 }
+*/
 
 // props: text, show_pid, color_picker
 export class HighlightedMarkdown extends Component {
@@ -117,18 +120,32 @@ export class HighlightedMarkdown extends Component {
     const processDefs = new HtmlToReact.ProcessNodeDefinitions(React);
     const processInstructions = [
       {
-        shouldProcessNode: (node) => node.name === 'img', // disable images
-        processNode(node, children, index) {
-          return <div key={index}>[图片]</div>;
-        },
-      },
-      {
         shouldProcessNode: (node) => /^h[123456]$/.test(node.name),
         processNode(node, children, index) {
           let currentLevel = +node.name[1];
           if (currentLevel < 3) currentLevel = 3;
           const HeadingTag = `h${currentLevel}`;
           return <HeadingTag key={index}>{children}</HeadingTag>;
+        },
+      },
+      {
+        shouldProcessNode: (node) => node.name === 'img',
+        processNode(node, index) {
+          return (
+            <a
+              href={normalize_url(node.attribs.src)}
+              target="_blank"
+              rel="noopenner noreferrer"
+              className="ext-link"
+              key={index}
+            >
+              <img
+                src={normalize_url(node.attribs.src)}
+                alt={node.alt}
+                referrerpolicy="no-referrer"
+              />
+            </a>
+          );
         },
       },
       {
@@ -164,7 +181,7 @@ export class HighlightedMarkdown extends Component {
             ['url', URL_RE],
             ['pid', PID_RE],
             ['nickname', NICKNAME_RE],
-            //TODO: tag
+            ['tag', TAG_RE],
           ]);
 
           return (
@@ -202,6 +219,12 @@ export class HighlightedMarkdown extends Component {
                       </ColoredSpan>
                     ) : rule === 'search' ? (
                       <span className="search-query-highlight">{p}</span>
+                    ) : rule === 'tag' ? (
+                      <a
+                        href={p}
+                      >
+                        {p}
+                      </a>
                     ) : (
                       p
                     )}

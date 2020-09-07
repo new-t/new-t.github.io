@@ -541,6 +541,7 @@ export class PostForm extends Component {
   on_submit(event) {
     if (event) event.preventDefault();
     if (this.state.loading_status === 'loading') return;
+    /*
     if (this.img_ref.current.files.length) {
       this.setState({
         loading_status: 'processing',
@@ -555,7 +556,8 @@ export class PostForm extends Component {
         .catch((e) => {
           alert(e);
         });
-    } else {
+    } else */
+    {
       this.setState({
         loading_status: 'loading',
       });
@@ -573,6 +575,7 @@ export class PostForm extends Component {
     return (
       <form onSubmit={this.on_submit.bind(this)} className="post-form box">
         <div className="post-form-bar">
+          {/*
           <label>
             图片
             <input
@@ -583,6 +586,7 @@ export class PostForm extends Component {
               onChange={this.on_img_change_bound}
             />
           </label>
+          */}
 
           {this.state.preview ? (
             <button
@@ -665,7 +669,28 @@ export class PostForm extends Component {
             <a href="https://thuhole.com/policy.html" target="_blank">
               树洞管理规范（试行）
             </a>
-            ，文明发言
+            ，文明发言。
+          </small>
+        </p>
+        <p>
+          <small>
+            插入图片请使用图片外链，Markdown格式 ![](图片链接)， 支持动图，支持多图。推荐的图床： 
+            <a href="https://imgchr.com/" target="_blank">
+              路过图床
+            </a>
+            、
+            <a href="https://sm.ms/" target="_blank">
+              sm.ms
+            </a>
+            、
+            <a href="https://bbs.pku.edu.cn/v2/post-read.php?bid=154&threadid=3743" target="_blank">
+              未名BBS
+            </a>
+            、
+            <a href="https://zhuanlan.zhihu.com/write" target="_blank">
+              知乎
+            </a>
+            。
           </small>
         </p>
       </form>

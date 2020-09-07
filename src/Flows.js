@@ -7,6 +7,7 @@ import {
   PID_RE,
   URL_RE,
   URL_PID_RE,
+  TAG_RE,
 } from './text_splitter';
 import {
   format_time,
@@ -665,7 +666,7 @@ class FlowItemRow extends PureComponent {
   constructor(props) {
     super(props);
     this.needFold = props.info.cw &&
-      (props.search_param === '热榜' || !props.search_param) &&
+      !props.search_param &&
       (window.config.whitelist_cw.indexOf('*')==-1 && window.config.whitelist_cw.indexOf(props.info.cw)==-1) &&
       props.mode !== 'attention' && props.mode !== 'attention_finished';
     this.state = {
@@ -770,6 +771,7 @@ class FlowItemRow extends PureComponent {
       ['url', URL_RE],
       ['pid', PID_RE],
       ['nickname', NICKNAME_RE],
+      ['tag', TAG_RE],
     ];
     if (this.props.search_param) {
       hl_rules.push([
@@ -780,6 +782,8 @@ class FlowItemRow extends PureComponent {
       ]);
     }
     let parts = split_text(this.state.info.text, hl_rules);
+
+    //console.log('hl:', parts,this.state.info.pid);
 
     let quote_id = null;
     if (!this.props.is_quote)

@@ -35,6 +35,24 @@ class ControlBar extends PureComponent {
         },
       );
     }
+
+    window.addEventListener("hashchange",
+      () => {
+        let text = decodeURIComponent(window.location.hash).substr(1);
+        if(text && text[0]!='#') {
+          console.log('search', text);
+          this.setState(
+            {
+              search_text: text,
+            },
+            () => {
+              this.on_keypress({ key: 'Enter' });
+            },
+          );
+        }
+      },
+      false
+    );
   }
 
   on_change(event) {
@@ -116,9 +134,8 @@ class ControlBar extends PureComponent {
             <input
               className="control-search"
               value={this.state.search_text}
-              placeholder={`${
-                this.props.mode === 'attention' ? '在关注列表中' : ''
-              }搜索 或 #树洞号`}
+              placeholder={
+                this.props.mode === 'attention' ? '在关注列表中搜索' : '搜tag或 #树洞号, 如: 新手导引'}
               onChange={this.on_change_bound}
               onKeyPress={this.on_keypress_bound}
             />
