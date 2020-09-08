@@ -1,0 +1,19 @@
+.input-prepend {
+  display: inline-block;
+  background-color: #c9cccf;
+  border: 1px solid #ced4da;
+  height: 28px;
+  padding: 3px;
+  vertical-align: top;
+}
+
+.input-suf {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  width: 90px;
+  height: 28px;
+  border: 1px solid #ced4da;
+  vertical-align: top;
+  padding: 3px;
+}
+

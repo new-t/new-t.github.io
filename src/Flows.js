@@ -420,7 +420,7 @@ class FlowSidebar extends PureComponent {
         this.setState({
           loading_status: 'done',
         });
-        alert('设置关注失败');
+        alert('设置关注失败\n' + e);
         console.error(e);
       });
   }

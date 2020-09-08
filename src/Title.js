@@ -100,6 +100,7 @@ class ControlBar extends PureComponent {
       search_text: '',
     });
     this.set_mode('list', null);
+    window.location.hash = '';
   }
 
   do_attention() {

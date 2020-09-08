@@ -142,7 +142,7 @@ export class HighlightedMarkdown extends Component {
               <img
                 src={normalize_url(node.attribs.src)}
                 alt={node.alt}
-                referrerpolicy="no-referrer"
+                referrerPolicy="no-referrer"
               />
             </a>
           );

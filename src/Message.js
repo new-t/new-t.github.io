@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import { Time } from './Common';
 import { get_json } from './infrastructure/functions';
 
+import './Message.css';
+
 export class MessageViewer extends PureComponent {
   constructor(props) {
     super(props);
@@ -9,6 +11,7 @@ export class MessageViewer extends PureComponent {
       loading_status: 'idle',
       msg: [],
     };
+    this.input_suf_ref=React.createRef();
   }
 
   componentDidMount() {
@@ -32,7 +35,8 @@ export class MessageViewer extends PureComponent {
               loading_status: 'done',
               msg: json.data,
               start_time: json.start_time,
-              salt: json.salt
+              salt: json.salt,
+              tmp_token: json.tmp_token,
             });
           })
           .catch((err) => {
@@ -46,6 +50,20 @@ export class MessageViewer extends PureComponent {
     );
   }
 
+  do_set_token() {
+    if (this.state.loading_status==='loading')
+      return;
+    if (!this.input_suf_ref.current.value) {
+      alert("不建议后缀为空");
+      return;
+    }
+    let tt = this.state.tmp_token + '_' + this.input_suf_ref.current.value;
+    console.log(tt);
+    localStorage['TOKEN'] = tt;
+    alert('已登录为临时用户，过期后需注销重新登陆');
+    window.location.reload();
+  }
+  
   render() {
     if (this.state.loading_status === 'loading')
       return <p className="box box-tip">加载中……</p>;
@@ -71,8 +89,18 @@ export class MessageViewer extends PureComponent {
           <p>
             随机盐 <b>{this.state.salt}</b>
           </p>
+          <br/>
+          <div> 
+            <p>15分钟临时token:</p> 
+            <div className="input-prepend">{this.state.tmp_token}_ </div>
+            <input type="text" className="input-suf" ref={this.input_suf_ref} placeholder="自定义后缀" maxLength={10}/>
+            <button type="button" disabled={this.state.loading_status==='loading'}
+              onClick={(e)=>this.do_set_token()}>
+              使用
+            </button>
+          </div>
           {this.state.msg.map((msg) => (
-            <div className="box" key={msg.timestamp}>
+            <div className="box" key={msg.type + msg.timestamp}>
               <div className="box-header">
                 <Time stamp={msg.timestamp} short={false} />
                 &nbsp;
