@@ -263,6 +263,26 @@
     padding: 0 .25em;
 }
 
+.box-header-cw-edit {
+  display: inline-block;
+  background-color: #00c;
+  border-radius: 5px;
+  padding: 3px;
+  margin:0 3px;
+}
+
+.box-header-cw-edit input {
+  font-size: .8em;
+  width: 8em;
+  padding: 0 3px;
+}
+
+.box-header-cw-edit button {
+  font-size: .8em;
+  margin: 0 3px;
+  background: white;
+}
+
 .box-header-name {
     color: white;
     background-color: #3338;

@@ -157,6 +157,7 @@ class Reply extends PureComponent {
 class FlowItem extends PureComponent {
   constructor(props) {
     super(props);
+    this.input_cw_ref=React.createRef();
   }
 
   copy_link(event) {
@@ -182,7 +183,7 @@ class FlowItem extends PureComponent {
   }
 
   render() {
-    const {info, is_quote, cached, attention, can_del, do_filter_name, do_delete, timestamp, img_clickable, color_picker, show_pid} = this.props;
+    const {info, is_quote, cached, attention, can_del, do_filter_name, do_delete, do_edit_cw, timestamp, img_clickable, color_picker, show_pid} = this.props;
     return (
       <div className={'flow-item' + (is_quote ? ' flow-item-quote' : '')}>
         {!!is_quote && (
@@ -249,9 +250,27 @@ class FlowItem extends PureComponent {
               </span>
             )}
             &nbsp;
-            {info.cw !== null && (
-              <span className="box-header-cw">{info.cw}</span>
+            {info.cw !== null &&
+              (!do_edit_cw || !info.can_del) && (
+                <span className="box-header-cw">{info.cw}</span>
             )}
+            {
+              !!do_edit_cw && !!info.can_del && (
+                <div className="box-header-cw-edit clickable">
+                  <input
+                    type="text"
+                    defaultValue={info.cw}
+                    maxLength="32"
+                    ref={this.input_cw_ref}
+                    placeholder="编辑折叠警告"
+                  />
+                  <button type="button"
+                    onClick={(e)=>do_edit_cw(this.input_cw_ref.current.value, info.pid)}>
+                    更新
+                  </button>
+                </div>
+              )
+            }
             <Time stamp={info.timestamp} short={!img_clickable} />
           </div>
           <div className="box-content">
@@ -493,6 +512,22 @@ class FlowSidebar extends PureComponent {
     return do_delete;
   }
 
+  make_do_edit_cw(token) {
+    const do_edit_cw = (cw, id) => {
+      console.log('edit cw', cw);
+      API.update_cw(cw, id, token)
+        .then((json) => {
+          alert('已更新\n刷新列表显示新版本');
+        })
+        .catch((e) => {
+            alert('更新失败\n' + e);
+            console.error(e);
+        });
+    }
+
+    return do_edit_cw;
+  }
+
   render() {
     if (this.state.loading_status === 'loading')
       return <p className="box box-tip">加载中……</p>;
@@ -537,6 +572,7 @@ class FlowSidebar extends PureComponent {
               replies_cnt[DZ_NAME] > 1 ? this.set_filter_name.bind(this) : null
             }
             do_delete={this.make_do_delete(this.props.token, ()=>{window.location.reload();})}
+            do_edit_cw={this.make_do_edit_cw(this.props.token)}
           />
         </ClickHandler>
       );

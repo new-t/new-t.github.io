@@ -116,6 +116,23 @@ export const API = {
     return handle_response(response, true);
   },
 
+  update_cw: async (cw, id, token) => {
+    let data = new URLSearchParams();
+    data.append('cw', cw);
+    data.append('pid', id);
+    let response = await fetch(
+      API_BASE + '/editcw' + token_param(token),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: data,
+      },
+    );
+    return handle_response(response, true);
+  },
+
   get_list: async (page, token) => {
     let response = await fetch(
       API_BASE + '/getlist' 
