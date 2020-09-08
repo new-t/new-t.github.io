@@ -112,7 +112,14 @@ export function InfoSidebar(props) {
             P大树洞网页版 by @xmcp
           </a>
           、
-          <a href="https://reactjs.org/" target="_blank" rel="noopener">
+          <a
+            href="https://github.com/thuhole/webhole"
+            target="_blank"
+            rel="noopener"
+          >
+            T大树洞网页版 by @thuhole
+          </a>
+          、         <a href="https://reactjs.org/" target="_blank" rel="noopener">
             React
           </a>
           、
