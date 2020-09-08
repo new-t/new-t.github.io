@@ -132,19 +132,12 @@ export class HighlightedMarkdown extends Component {
         shouldProcessNode: (node) => node.name === 'img',
         processNode(node, index) {
           return (
-            <a
-              href={normalize_url(node.attribs.src)}
-              target="_blank"
-              rel="noopenner noreferrer"
-              className="ext-link img-link"
-              key={index}
-            >
-              <img
-                src={normalize_url(node.attribs.src)}
-                alt={node.alt}
-                referrerPolicy="no-referrer"
-              />
-            </a>
+            <img
+              src={normalize_url(node.attribs.src)}
+              alt={node.alt}
+              className="ext-img"
+              referrerPolicy="no-referrer"
+            />
           );
         },
       },

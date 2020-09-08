@@ -59,14 +59,11 @@
     margin-left: .15rem;
 }
 
-.img-link {
-  display: inline-block;
-}
-
-
-.img-link img {
+.ext-img {
   max-width: 100%;
   max-height: 2000px;
+  display: block;
+  margin: 0 auto;
 }
 
 .left-container .img-link img {
