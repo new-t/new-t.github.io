@@ -2,10 +2,6 @@ import { get_json, gen_name} from './infrastructure/functions';
 import { API_BASE } from './Common';
 import { cache } from './cache';
 
-export function token_param(token) {
-  return token ? '?user_token=' + token : '?notoken';
-}
-
 export { get_json };
 
 const SEARCH_PAGESIZE = 50;
@@ -35,7 +31,12 @@ export const API = {
   load_replies: async (pid, token, color_picker, cache_version) => {
     pid = parseInt(pid);
     let response = await fetch(
-      API_BASE + '/getcomment' + token_param(token) + '&pid=' + pid ,
+      API_BASE + '/getcomment?pid=' + pid ,
+      {
+        headers: {
+          'User-Token': token,
+        }
+      }
     );
     let json = await handle_response(response);
     // Why delete then put ??
@@ -62,15 +63,15 @@ export const API = {
 
   set_attention: async (pid, attention, token) => {
     let data = new URLSearchParams();
-    data.append('user_token', token);
     data.append('pid', pid);
     data.append('switch', attention ? '1' : '0');
     let response = await fetch(
-      API_BASE + '/attention' + token_param(token),
+      API_BASE + '/attention',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Token': token,
         },
         body: data,
       },
@@ -82,15 +83,15 @@ export const API = {
 
   report: async (pid, reason, token) => {
     let data = new URLSearchParams();
-    data.append('user_token', token);
     data.append('pid', pid);
     data.append('reason', reason);
     let response = await fetch(
-      API_BASE + '/report' + token_param(token),
+      API_BASE + '/report',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Token': token,
         },
         body: data,
       },
@@ -104,11 +105,12 @@ export const API = {
     data.append('id', id);
     data.append('note', note);
     let response = await fetch(
-      API_BASE + '/delete' + token_param(token),
+      API_BASE + '/delete',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Token': token,
         },
         body: data,
       },
@@ -121,11 +123,12 @@ export const API = {
     data.append('cw', cw);
     data.append('pid', id);
     let response = await fetch(
-      API_BASE + '/editcw' + token_param(token),
+      API_BASE + '/editcw',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Token': token,
         },
         body: data,
       },
@@ -135,10 +138,11 @@ export const API = {
 
   get_list: async (page, token) => {
     let response = await fetch(
-      API_BASE + '/getlist' 
-        + token_param(token) 
-        + '&p=' + page 
-        + (window.config.no_c_post ? '&no_cw' : '')
+      API_BASE + '/getlist?p=' + page 
+        + (window.config.no_c_post ? '&no_cw' : ''),
+      {
+        headers: {'User-Token': token},
+      },
     );
     return handle_response(response);
   },
@@ -146,28 +150,35 @@ export const API = {
   get_search: async (page, keyword, token) => {
     let response = await fetch(
       API_BASE +
-        '/search' +
-        token_param(token) +
-        '&pagesize=' +
+        '/search?pagesize=' +
         SEARCH_PAGESIZE +
         '&page=' +
         page +
         '&keywords=' +
-        encodeURIComponent(keyword)
+        encodeURIComponent(keyword),
+      {
+        headers: {'User-Token': token},
+      }
     );
     return handle_response(response);
   },
 
   get_single: async (pid, token) => {
     let response = await fetch(
-      API_BASE + '/getone' + token_param(token) + '&pid=' + pid,
+      API_BASE + '/getone?pid=' + pid,
+      {
+        headers: {'User-Token': token},
+      }
     );
     return handle_response(response);
   },
 
   get_attention: async (token) => {
     let response = await fetch(
-      API_BASE + '/getattention' + token_param(token),
+      API_BASE + '/getattention',
+      {
+        headers: {'User-Token': token},
+      }
     );
     return handle_response(response);
   },

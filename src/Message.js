@@ -26,8 +26,10 @@ export class MessageViewer extends PureComponent {
       },
       () => {
         fetch(
-            '/_api/v1/systemlog?user_token=' +
-            encodeURIComponent(this.props.token)
+            '/_api/v1/systemlog',
+            {
+              headers: {'User-Token': this.props.token},
+            }
         )
           .then(get_json)
           .then((json) => {

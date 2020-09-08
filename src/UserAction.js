@@ -15,7 +15,6 @@ import { cache } from './cache';
 import {
   API,
   get_json,
-  token_param,
 } from './flows_api';
 
 import './UserAction.css';
@@ -268,13 +267,13 @@ export class ReplyForm extends Component {
     let data = new URLSearchParams();
     data.append('pid', this.props.pid);
     data.append('text', this.state.text);
-    data.append('user_token', this.props.token);
     fetch(
-      API_BASE + '/docomment' + token_param(this.props.token),
+      API_BASE + '/docomment',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Token': this.props.token,
         },
         body: data,
       },
@@ -396,13 +395,13 @@ export class PostForm extends Component {
     data.append('cw', this.state.cw);
     data.append('text', this.state.text);
     data.append('type', img ? 'image' : 'text');
-    data.append('user_token', this.props.token);
     if (img) data.append('data', img);
 
-    fetch(API_BASE + '/dopost' + token_param(this.props.token), {
+    fetch(API_BASE + '/dopost', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Token': this.props.token,
       },
       body: data,
     })
