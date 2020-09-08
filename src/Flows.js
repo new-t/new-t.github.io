@@ -369,6 +369,7 @@ class FlowSidebar extends PureComponent {
             info: update_count
               ? Object.assign({}, prev.info, {
                   reply: '' + json.data.length,
+                  likenum: ''+json.likenum,
                 })
               : prev.info,
             attention: !!json.attention,
@@ -405,15 +406,22 @@ class FlowSidebar extends PureComponent {
     this.setState({
       loading_status: 'loading',
     });
-    const next_attention = !this.state.attention;
-    API.set_attention(this.state.info.pid, next_attention, this.props.token)
+    const prev_info = this.state.info;
+    API.set_attention(this.state.info.pid, !this.state.attention, this.props.token)
       .then((json) => {
         this.setState({
           loading_status: 'done',
-          attention: next_attention,
+          attention: json.attention,
+          info: Object.assign({}, prev_info, {
+                  likenum: ''+json.likenum,
+                }),
         });
+        console.log(json);
         this.syncState({
-          attention: next_attention,
+          attention: json.attention,
+          info: Object.assign({}, prev_info, {
+                  likenum: ''+json.likenum,
+                }),
         });
       })
       .catch((e) => {
