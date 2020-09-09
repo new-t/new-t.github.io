@@ -175,8 +175,6 @@ export class LoginForm extends Component {
                     举报记录、管理日志等都是公开的
                   </p>
                   <p>
-                    <small>{token.value}</small>
-                    <br/>
                     <a onClick={this.copy_token.bind(this, token.value)}>
                       复制 User Token
                     </a>

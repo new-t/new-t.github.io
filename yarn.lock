@@ -10944,6 +10944,11 @@ workbox-sw@^4.3.1:
   resolved "https://registry.npm.taobao.org/workbox-sw/download/workbox-sw-4.3.1.tgz#df69e395c479ef4d14499372bcd84c0f5e246164"
   integrity sha1-32njlcR5700USZNyvNhMD14kYWQ=
 
+workbox-sw@^5.1.3:
+  version "5.1.3"
+  resolved "https://registry.npm.taobao.org/workbox-sw/download/workbox-sw-5.1.3.tgz#7bffbf034f2f5b58e1734b5b86d240019a5332bb"
+  integrity sha1-e/+/A08vW1jhc0tbhtJAAZpTMrs=
+
 workbox-webpack-plugin@4.3.1:
   version "4.3.1"
   resolved "https://registry.npm.taobao.org/workbox-webpack-plugin/download/workbox-webpack-plugin-4.3.1.tgz#47ff5ea1cc074b6c40fb5a86108863a24120d4bd"
