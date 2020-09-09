@@ -72,7 +72,7 @@ class LoginPopupSelf extends Component {
                 <div className="thuhole-login-popup-shadow" />
                 <div className="thuhole-login-popup">
                     <p>
-                        <b>通过第三方验证登陆T大树洞</b>
+                        <b>通过第三方验证登陆新T树洞</b>
                     </p>
 			              <p>
                         <a href="/_login?p=cs" target="_blank">
@@ -117,6 +117,7 @@ class LoginPopupSelf extends Component {
                       <ul>
                         <li> 无论采用哪种方式注册，你后台记录的用户名都是本质实名的，因为闭社/T大树洞的管理员可以根据你的闭社id/树洞评论区代号查到邮箱。但是这不影响新T树洞的安全性。新T树洞的匿名性来自隔离用户名与发布的内容，而非试图隔离用户名与真实身份。</li>
                         <li> 由于T大树洞仍未提供授权接口，使用T大树洞方式登陆需要用你的token在特定洞发布一段随机内容以确定身份。这是否违反用户条例由T大树洞管理员决定，需自行承担相关风险。完成登陆后建议立即重置T大树洞token。 </li>
+                        <li> 目前一个人可能有两个帐号。</li>
                       </ul>
                     </div>
                 </div>
