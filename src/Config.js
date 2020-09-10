@@ -29,6 +29,7 @@ const DEFAULT_CONFIG = {
   easter_egg: true,
   color_scheme: 'default',
   no_c_post: false,
+  by_c: false,
   block_words: [],
   whitelist_cw: []
 };
@@ -439,6 +440,13 @@ export class ConfigUI extends PureComponent {
             id="no_c_post"
             name="忽略折叠的树洞"
             description="不获取所有带折叠警告的树洞，折叠警告豁免将不起作用"
+          />
+          <hr />
+          <ConfigSwitch
+            callback={this.save_changes_bound}
+            id="by_c"
+            name="根据最新回复排序"
+            description="有最新回复的洞在最上面"
           />
           <hr />
           <p>

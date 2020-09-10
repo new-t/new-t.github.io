@@ -139,7 +139,8 @@ export const API = {
   get_list: async (page, token) => {
     let response = await fetch(
       API_BASE + '/getlist?p=' + page 
-        + (window.config.no_c_post ? '&no_cw' : ''),
+        + (window.config.no_c_post ? '&no_cw' : '')
+        + (window.config.by_c ? '&by_c' : ''),
       {
         headers: {'User-Token': token},
       },
