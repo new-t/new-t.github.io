@@ -23,13 +23,8 @@
 
     <title>新T树洞</title>
 </head>
-<body>
-  <div id="root">
-    请开启javascript,或 <a href="#" onClick="foce_reload">强制刷新</a>
-  </div>
-</body>
 <script>
-  foce_reload() {
+function force_reload() {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .getRegistrations()
@@ -46,4 +41,10 @@
     }, 200);
   }
 </script>
+
+<body>
+  <div id="root">
+    请开启javascript,或 <a href="#" onClick="force_reload">强制刷新</a>
+  </div>
+</body>
 </html>
