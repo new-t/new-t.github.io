@@ -59,10 +59,12 @@ class LoginPopupSelf extends Component {
         this.input_token_ref=React.createRef();
 	};
    
-  setThuhole(tar, ref) {
+  setThuhole(e, tar, ref) {
     console.log(tar);
+    e.preventDefault();
     tar.href = '/_login?p=thuhole&token=' + ref.current.value;
     console.log(tar);
+    alert('应T大树洞要求，已停止T大树洞token登陆');
   }
 
 	render() {
@@ -84,7 +86,7 @@ class LoginPopupSelf extends Component {
                         <input ref={this.input_token_ref} placeholder="T大树洞Token" />
                         <br/>
                         <a href="/_login?p=thuhole" target="_blank" 
-                          onClick={(e) =>{this.setThuhole(e.target, this.input_token_ref)}}
+                          onClick={(e) =>{this.setThuhole(e, e.target, this.input_token_ref)}}
                                 >
                             <span className="icon icon-login" />
                             &nbsp;T大树洞

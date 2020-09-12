@@ -56,6 +56,7 @@ export function InfoSidebar(props) {
           <span className="icon icon-textfile" />
           <label>树洞规范（试行）</label>
         </a>
+        <p><em>强烈建议开始使用前先看一遍所有设置选项</em></p>
       </div>
       <div className="box help-desc-box">
         <p>
@@ -85,6 +86,7 @@ export function InfoSidebar(props) {
       </div>
       <div className="box help-desc-box">
         <p>意见反馈请加tag #意见反馈 或到github后端的issue区。</p>
+        <p>新T树洞强烈期待有其他更多树洞的出现，一起分布式互联，构建清华树洞族。详情见 关于 中的描述。</p>
         <p>联系我们：<a href={"mailto:"+EMAIL}>{EMAIL}</a> 。</p>
       </div>
       <div className="box help-desc-box">
