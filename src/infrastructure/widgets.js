@@ -64,7 +64,7 @@ class LoginPopupSelf extends Component {
     e.preventDefault();
     tar.href = '/_login?p=thuhole&token=' + ref.current.value;
     console.log(tar);
-    alert('应T大树洞要求，已停止T大树洞token登陆');
+    alert('应T大树洞管理员要求，已停止T大树洞token登陆');
   }
 
 	render() {
@@ -92,6 +92,15 @@ class LoginPopupSelf extends Component {
                             &nbsp;T大树洞
                         </a>
 			              </p>
+                    <p>
+                        <small>前往Telegram群查询15分钟临时token</small>
+                        <br/>
+                        <a href="//t.me/THUChatBot" target="_blank"
+                                >
+                          <span className="icon icon-login" />
+                            &nbsp;清华大水群
+                        </a>
+                    </p>
 			              <p>
                         <button type="button" disabled
                                 >
@@ -117,7 +126,7 @@ class LoginPopupSelf extends Component {
                       <p>提醒:
                       </p>
                       <ul>
-                        <li> 无论采用哪种方式注册，你后台记录的用户名都是本质实名的，因为闭社/T大树洞的管理员可以根据你的闭社id/树洞评论区代号查到邮箱。但是这不影响新T树洞的安全性。新T树洞的匿名性来自隔离用户名与发布的内容，而非试图隔离用户名与真实身份。</li>
+                        <li> 无论采用哪种方式注册，你后台记录的用户名都是本质实名的（除临时token），因为闭社/T大树洞的管理员可以根据你的闭社id/树洞评论区代号查到邮箱。但是这不影响新T树洞的安全性。新T树洞的匿名性来自隔离用户名与发布的内容，而非试图隔离用户名与真实身份。</li>
                         <li> 由于T大树洞仍未提供授权接口，使用T大树洞方式登陆需要用你的token在特定洞发布一段随机内容以确定身份。这是否违反用户条例由T大树洞管理员决定，需自行承担相关风险。完成登陆后建议立即重置T大树洞token。 </li>
                         <li> 目前一个人可能有两个帐号。</li>
                       </ul>
