@@ -100,7 +100,7 @@ class App extends Component {
     let arg = window.location.search;
     console.log(arg);
     if (arg.startsWith('?token=')) {
-      localStorage['TOKEN'] = arg.substr(7);
+      localStorage['TOKEN'] = arg.substr(7).replace(encodeURI('任意自定义后缀'), Math.random());
       window.location.search = '';
     }
   }
