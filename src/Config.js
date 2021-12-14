@@ -3,8 +3,10 @@ import React, { PureComponent } from 'react';
 import './Config.css';
 
 const BUILTIN_IMGS = {
-  'https://www.tsinghua.edu.cn/images/footer.jpg':
-    '清华紫（默认）',
+  'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/gbp.jpg':
+    '怀旧背景（默认）',
+  'https://www.tsinghua.edu.cn/image/nav-bg.jpg':
+    '清华紫',
   'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/gbp.jpg':
     '寻觅繁星',
   'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/eriri.jpg':
@@ -23,7 +25,7 @@ const BUILTIN_IMGS = {
 
 const DEFAULT_CONFIG = {
   background_img:
-    'https://www.tsinghua.edu.cn/images/footer.jpg',
+   '//cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/gbp.jpg',
   background_color: '#113366',
   pressure: false,
   easter_egg: true,
@@ -452,10 +454,10 @@ export class ConfigUI extends PureComponent {
           <p>
             新功能建议或问题反馈请在&nbsp;
             <a
-              href="https://github.com/newthuhole/hole-backend/issues"
+              href="https://git.thu.monster/newthuhole/hole_thu_backend/issues"
               target="_blank"
             >
-              GitHub <span className="icon icon-github" />
+              Gitea
             </a>
             &nbsp;提出。
           </p>

@@ -24,7 +24,7 @@ const MAX_IMG_DIAM = 8000;
 const MAX_IMG_PX = 5000000;
 const MAX_IMG_FILESIZE = 450000 * BASE64_RATE;
 
-const REPOSITORY = 'https://github.com/newthuhole';
+const REPOSITORY = 'https://git.thu.monster/newthuhole/';
 const EMAIL = 'hole_thu@riseup.net';
 
 export const TokenCtx = React.createContext({
@@ -99,7 +99,7 @@ export function InfoSidebar(props) {
           </a>
           协议在{' '}
           <a href={REPOSITORY} target="_blank">
-            GitHub
+            Gitea
           </a>{' '}
           开源。
         </p>
@@ -260,6 +260,7 @@ export class ReplyForm extends Component {
   on_submit(event) {
     if (event) event.preventDefault();
     if (this.state.loading_status === 'loading') return;
+    if (!this.state.text) return;
     this.setState({
       loading_status: 'loading',
     });
@@ -362,6 +363,7 @@ export class PostForm extends Component {
     this.state = {
       text: '',
       cw: '',
+      allow_search: false,
       loading_status: 'done',
       img_tip: null,
       preview: false,
@@ -369,6 +371,7 @@ export class PostForm extends Component {
     this.img_ref = React.createRef();
     this.area_ref = React.createRef();
     this.on_change_bound = this.on_change.bind(this);
+    this.on_allow_search_change_bound = this.on_allow_search_change.bind(this);
     this.on_cw_change_bound = this.on_cw_change.bind(this);
     this.on_img_change_bound = this.on_img_change.bind(this);
     this.color_picker = new ColorPicker();
@@ -376,6 +379,12 @@ export class PostForm extends Component {
 
   componentDidMount() {
     if (this.area_ref.current) this.area_ref.current.focus();
+  }
+
+  on_allow_search_change(event) {
+    this.setState({
+      allow_search: event.target.checked,
+    });
   }
 
   on_cw_change(event) {
@@ -394,6 +403,7 @@ export class PostForm extends Component {
     let data = new URLSearchParams();
     data.append('cw', this.state.cw);
     data.append('text', this.state.text);
+    data.append('allow_search', this.state.allow_search ? '1' : '');
     data.append('type', img ? 'image' : 'text');
     if (img) data.append('data', img);
 
@@ -547,6 +557,7 @@ export class PostForm extends Component {
   on_submit(event) {
     if (event) event.preventDefault();
     if (this.state.loading_status === 'loading') return;
+    if (!this.state.text) return;
     /*
     if (this.img_ref.current.files.length) {
       this.setState({
@@ -628,6 +639,15 @@ export class PostForm extends Component {
               &nbsp;发表
             </button>
           )}
+
+          <label>
+            <input
+              type="checkbox"
+              onChange={this.on_allow_search_change_bound}
+            />
+            允许被搜索
+          </label>
+
         </div>
         {!!this.state.img_tip && (
           <p className="post-form-img-tip">

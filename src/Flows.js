@@ -271,6 +271,9 @@ class FlowItem extends PureComponent {
                 </div>
               )
             }
+            {
+              info.allow_search && <span> 📢 </span>
+            }
             <Time stamp={info.timestamp} short={!img_clickable} />
           </div>
           <div className="box-content">
@@ -1170,7 +1173,7 @@ export class Flow extends PureComponent {
             }));
           })
           .catch(failed);
-      } else if (this.state.mode === 'search') {
+      } else if (this.state.mode === 'search' && this.state.search_param) {
         API.get_search(page, this.state.search_param, this.props.token)
           .then((json) => {
             const finished = json.data.length === 0;
