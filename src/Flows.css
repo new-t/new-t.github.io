@@ -312,3 +312,10 @@
     padding: 0 .5em;
     opacity: .4;
 }
+
+.export-textarea {
+  resize: none;
+  width: 100%;
+  height: 50vh;
+  padding: 12px;
+}

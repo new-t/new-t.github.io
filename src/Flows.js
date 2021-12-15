@@ -1112,6 +1112,7 @@ export class Flow extends PureComponent {
         title: '',
         data: [],
       },
+      can_export: false,
       export_text: '',
       loading_status: 'done',
       error_msg: null,
@@ -1257,7 +1258,7 @@ export class Flow extends PureComponent {
               },
               mode: 'attention_finished',
               loading_status: 'done',
-              export_text: json.data.map(post => `#${post.pid}`).join('\n'),
+              can_export: !use_search,
             });
           })
           .catch(failed);
@@ -1293,18 +1294,40 @@ export class Flow extends PureComponent {
     window.removeEventListener('resize', this.on_scroll_bound);
   }
 
+  trunc_string(s, max_len) {
+    return s.substr(0, max_len) + (
+      s.length > max_len ? '...' : ''
+    )
+  }
+
+  gen_export() {
+    this.setState({
+      can_export: false,
+      export_text: "以下是你关注的洞及摘要，复制保存到本地吧。\n\n" + this.state.chunks.data.map(
+        p => `#${p.pid}: ${
+          this.trunc_string(p.text.replaceAll('\n', ' '), 50)
+        }`).join('\n\n')
+    });
+  }
+
   render() {
     const should_deletion_detect = localStorage['DELETION_DETECT'] === 'on';
     return (
       <div className="flow-container">
-        {this.state.export_text && (
-          <button type="button" onClick={() => {
-            if (copy(this.state.export_text))
-              alert('导出成功，已复制到剪切板');
-          }}>
-            导出
-          </button>
+        {this.state.can_export && (
+          <button type="button" onClick={this.gen_export.bind(this)}>导出</button>
         )}
+        
+        {this.state.export_text && (
+          <div className="box">
+            <textarea
+              className="export-textarea"
+              value={this.state.export_text}
+              readOnly
+            />
+          </div>
+        )}
+
         <FlowChunk
           title={this.state.chunks.title}
           list={this.state.chunks.data}
