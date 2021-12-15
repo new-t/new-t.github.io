@@ -362,8 +362,8 @@ export class PostForm extends Component {
     super(props);
     this.state = {
       text: '',
-      cw: '',
-      allow_search: false,
+      cw: window.CW_BACKUP || '',
+      allow_search: window.AS_BACKUP || false,
       loading_status: 'done',
       img_tip: null,
       preview: false,
@@ -379,6 +379,11 @@ export class PostForm extends Component {
 
   componentDidMount() {
     if (this.area_ref.current) this.area_ref.current.focus();
+  }
+
+  componentWillUnmount() {
+    window.CW_BACKUP = this.state.cw;
+    window.AS_BACKUP = this.state.allow_search;
   }
 
   on_allow_search_change(event) {
@@ -429,6 +434,7 @@ export class PostForm extends Component {
         });
         this.area_ref.current.clear();
         this.props.on_complete();
+        window.CW_BACKUP = '';
       })
       .catch((e) => {
         console.error(e);
@@ -644,6 +650,7 @@ export class PostForm extends Component {
             <input
               type="checkbox"
               onChange={this.on_allow_search_change_bound}
+              checked={this.state.allow_search}
             />
             允许被搜索
           </label>

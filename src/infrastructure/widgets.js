@@ -64,7 +64,7 @@ class LoginPopupSelf extends Component {
     e.preventDefault();
     tar.href = '/_login?p=thuhole&token=' + ref.current.value;
     console.log(tar);
-    alert('应T大树洞管理员要求，已停止T大树洞token登陆');
+    alert('T大树洞已经没有啦😭');
   }
 
 	render() {
