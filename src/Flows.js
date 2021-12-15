@@ -1112,6 +1112,7 @@ export class Flow extends PureComponent {
         title: '',
         data: [],
       },
+      export_text: '',
       loading_status: 'done',
       error_msg: null,
     };
@@ -1256,6 +1257,7 @@ export class Flow extends PureComponent {
               },
               mode: 'attention_finished',
               loading_status: 'done',
+              export_text: json.data.map(post => `#${post.pid}`).join('\n'),
             });
           })
           .catch(failed);
@@ -1295,6 +1297,14 @@ export class Flow extends PureComponent {
     const should_deletion_detect = localStorage['DELETION_DETECT'] === 'on';
     return (
       <div className="flow-container">
+        {this.state.export_text && (
+          <button type="button" onClick={() => {
+            if (copy(this.state.export_text))
+              alert('导出成功，已复制到剪切板');
+          }}>
+            导出
+          </button>
+        )}
         <FlowChunk
           title={this.state.chunks.title}
           list={this.state.chunks.data}
