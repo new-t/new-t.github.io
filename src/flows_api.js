@@ -136,11 +136,11 @@ export const API = {
     return handle_response(response, true);
   },
 
-  get_list: async (page, token) => {
+  get_list: async (page, token, submode) => {
     let response = await fetch(
       API_BASE + '/getlist?p=' + page 
         + (window.config.no_c_post ? '&no_cw' : '')
-        + (window.config.by_c ? '&by_c' : ''),
+        + (submode ? '&by_c' : ''),
       {
         headers: {'User-Token': token},
       },

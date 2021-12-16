@@ -21,10 +21,9 @@ import {
 import './Flows.css';
 import LazyLoad, { forceCheck } from './react-lazyload/src';
 import { TokenCtx, ReplyForm } from './UserAction';
-
 import { API } from './flows_api';
-
 import { cache } from './cache';
+import { save_attentions } from './Attention'
 
 /*
 const IMAGE_BASE = 'https://thimg.yecdn.com/';
@@ -429,7 +428,8 @@ class FlowSidebar extends PureComponent {
       loading_status: 'loading',
     });
     const prev_info = this.state.info;
-    API.set_attention(this.state.info.pid, !this.state.attention, this.props.token)
+    const pid = prev_info.pid;
+    API.set_attention(pid, !this.state.attention, this.props.token)
       .then((json) => {
         this.setState({
           loading_status: 'done',
@@ -439,6 +439,17 @@ class FlowSidebar extends PureComponent {
                 }),
         });
         console.log(json);
+
+        let saved_attentions = window.saved_attentions;
+        if (json.attention && !saved_attentions.includes(pid)) {
+          saved_attentions.unshift(pid)
+        } else if (!json.attention && saved_attentions.includes(pid)) {
+          const idx = saved_attentions.indexOf(pid);
+          saved_attentions.splice(idx, 1)
+        }
+        window.saved_attentions = saved_attentions;
+        save_attentions();
+
         this.syncState({
           attention: json.attention,
           info: Object.assign({}, prev_info, {
@@ -1105,6 +1116,67 @@ export class Flow extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      submode: this.props.mode == 'list' ? (window.config.by_c ? 1 : 0) : 0,
+      subflow_render_key: +new Date(),
+    }
+  }
+
+  get_submode_names(mode) {
+    switch(mode) {
+      case('list'):
+        return ['最新', '最近回复', '近期热门'];
+      case('attention'):
+        return ['线上', '本地']
+    }
+    return []
+  }
+
+  set_submode(submode) {
+    if (this.props.mode === 'list' && submode === 2) {
+      alert('将在下个版本提供');
+      return;
+    }
+    this.setState({
+      submode: submode,
+      subflow_render_key: +new Date(),
+    });
+  }
+
+  render() {
+    const { submode } = this.state;
+    const submode_names = this.get_submode_names(this.props.mode)
+    return (
+      <>
+        <div className="aux-margin flow-submode-choice">
+          {submode_names.map((name, idx) => (
+            <a 
+              key={idx}
+              className={submode === idx ? 'choiced' : ''}
+              onClick={this.set_submode.bind(this, idx)}
+            >
+              {name}
+            </a>
+          ))}
+        </div>
+  
+        <SubFlow
+          key={this.state.subflow_render_key}
+          show_sidebar={this.props.show_sidebar}
+          mode={this.props.mode}
+          submode={this.state.submode}
+          search_text={this.props.search_text}
+          token={this.props.token}
+        />
+      </>
+    )
+  }
+}
+
+
+class SubFlow extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
       mode: props.mode,
       search_param: props.search_text,
       loaded_pages: 0,
@@ -1112,7 +1184,6 @@ export class Flow extends PureComponent {
         title: '',
         data: [],
       },
-      can_export: false,
       export_text: '',
       loading_status: 'done',
       error_msg: null,
@@ -1137,7 +1208,7 @@ export class Flow extends PureComponent {
       console.log('fetching page', page);
       cache();
       if (this.state.mode === 'list') {
-        API.get_list(page, this.props.token)
+        API.get_list(page, this.props.token, this.props.submode)
           .then((json) => {
             if (page === 1 && json.data.length) {
               // update latest_post_id
@@ -1235,33 +1306,52 @@ export class Flow extends PureComponent {
           }
         }
         console.log(use_search, use_regex);
-        API.get_attention(this.props.token)
-          .then((json) => {
-            this.setState({
-              chunks: {
-                title: `${
-                  use_search
-                    ? use_regex
-                      ? `Result for RegEx ${regex_search.toString()} in `
-                      : `Result for "${this.state.search_param}" in `
-                    : ''
-                }Attention List`,
-                data: !use_search
-                  ? json.data
-                  : !use_regex
-                  ? json.data.filter((post) => {
-                      return this.state.search_param
+
+        if (this.props.submode === 0) {
+          API.get_attention(this.props.token)
+            .then((json) => {
+              this.setState({
+                chunks: {
+                  title: `${
+                    use_search
+                      ? use_regex
+                        ? `Result for RegEx ${regex_search.toString()} in `
+                        : `Result for "${this.state.search_param}" in `
+                      : ''
+                  }Attention List`,
+                  data: !use_search
+                    ? json.data
+                    : !use_regex
+                    ? json.data.filter((post) => {
+                       return this.state.search_param
                         .split(' ')
                         .every((keyword) => post.text.includes(keyword));
-                    }) // Not using regex
-                  : json.data.filter((post) => !!post.text.match(regex_search)), // Using regex
-              },
-              mode: 'attention_finished',
-              loading_status: 'done',
-              can_export: !use_search,
-            });
-          })
-          .catch(failed);
+                      }) // Not using regex
+                    : json.data.filter((post) => !!post.text.match(regex_search)), // Using regex
+                },
+                mode: 'attention_finished',
+                loading_status: 'done',
+              });
+              if (!use_search) {
+                window.saved_attentions = Array.from(
+                  new Set([
+                    ...window.saved_attentions,
+                    ...json.data.map(post => post.pid)
+                  ])
+                ).sort().reverse();
+                save_attentions();
+              }
+            })
+            .catch(failed);
+        } else if (this.props.submode === 1) {
+          this.setState({
+            title: 'Attention List: Local',
+            data: [],
+            export_text: `以下是浏览器本地保存的关注列表，将在下个版本提供直接展示\n\n#${
+              window.saved_attentions.join('\n#')
+            }`
+          });
+        }
       } else {
         console.log('nothing to load');
         return;
@@ -1274,7 +1364,7 @@ export class Flow extends PureComponent {
       }));
     }
   }
-
+  
   on_scroll(event) {
     if (event.target === document) {
       const avail =
@@ -1314,10 +1404,11 @@ export class Flow extends PureComponent {
     const should_deletion_detect = localStorage['DELETION_DETECT'] === 'on';
     return (
       <div className="flow-container">
-        {this.state.can_export && (
-          <button type="button" onClick={this.gen_export.bind(this)}>导出</button>
+
+        {this.state.mode === 'attention_finished' && this.props.submode == 0 && (
+          <button className="export-btn" type="button" onClick={this.gen_export.bind(this)}>导出</button>
         )}
-        
+
         {this.state.export_text && (
           <div className="box">
             <textarea

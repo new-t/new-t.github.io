@@ -5,6 +5,7 @@ import { Sidebar } from './Sidebar';
 import { PressureHelper } from './PressureHelper';
 import { TokenCtx } from './UserAction';
 import { load_config, bgimg_style } from './Config';
+import { load_attentions } from './Attention.js';
 import { listen_darkmode } from './infrastructure/functions';
 import { LoginPopup, TitleLine } from './infrastructure/widgets';
 
@@ -18,6 +19,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     load_config();
+    load_attentions();
     listen_darkmode(
       { default: undefined, light: false, dark: true }[
         window.config.color_scheme

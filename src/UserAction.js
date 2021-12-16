@@ -16,6 +16,7 @@ import {
   API,
   get_json,
 } from './flows_api';
+import { save_attentions } from './Attention'
 
 import './UserAction.css';
 
@@ -266,7 +267,8 @@ export class ReplyForm extends Component {
     });
 
     let data = new URLSearchParams();
-    data.append('pid', this.props.pid);
+    let pid = this.props.pid;
+    data.append('pid', pid);
     data.append('text', this.state.text);
     fetch(
       API_BASE + '/docomment',
@@ -284,6 +286,13 @@ export class ReplyForm extends Component {
         if (json.code !== 0) {
           if (json.msg) alert(json.msg);
           throw new Error(JSON.stringify(json));
+        }
+        
+        let saved_attentions = window.saved_attentions;
+        if (!saved_attentions.includes(pid)) {
+          saved_attentions.unshift(pid)
+          window.saved_attentions = saved_attentions;
+          save_attentions();
         }
 
         this.setState({

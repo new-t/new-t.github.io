@@ -319,3 +319,23 @@
   height: 50vh;
   padding: 12px;
 }
+
+.export-btn {
+  float: right;
+}
+
+.flow-submode-choice {
+  display: inline-block;
+  color: white;
+}
+
+.flow-submode-choice a {
+  margin: 10px;
+  color: white;
+}
+
+.flow-submode-choice a.choiced {
+  margin: 10px;
+  color: white;
+  font-weight: bold;
+}
