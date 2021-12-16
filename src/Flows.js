@@ -723,9 +723,9 @@ class FlowItemRow extends PureComponent {
       reply_status: 'done',
       reply_error: null,
       info: Object.assign({}, props.info, { variant: {} }),
-      hidden: window.config.block_words.some((word) =>
+      hidden: window.config.block_words_v2.some((word) =>
           props.info.text.includes(word),
-        ) || this.needFold,
+        ) && !props.info.can_del || this.needFold,
       attention:
         props.attention_override === null ? false : props.attention_override,
       cached: true, // default no display anything
@@ -908,7 +908,7 @@ class FlowItemRow extends PureComponent {
     );
 
     if (this.state.hidden) {
-      return (
+      return this.needFold && (
         <div
           className="flow-item-row flow-item-row-with-prompt"
           onClick={(event) => {

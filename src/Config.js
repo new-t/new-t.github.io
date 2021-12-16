@@ -32,7 +32,7 @@ const DEFAULT_CONFIG = {
   color_scheme: 'default',
   no_c_post: false,
   by_c: false,
-  block_words: [],
+  block_words_v2: ['#天火', '#桃花石'],
   whitelist_cw: []
 };
 
@@ -51,6 +51,10 @@ export function load_config() {
   Object.keys(loaded_config).forEach((key) => {
     if (config[key] !== undefined) config[key] = loaded_config[key];
   });
+
+  if (loaded_config['block_words']) {
+    config['block_words_v2'] = loaded_config['block_words'].concat(config['block_words_v2'])
+  }
 
   console.log('config loaded', config);
   window.config = config;
@@ -257,50 +261,6 @@ class ConfigTextArea extends PureComponent {
   }
 }
 
-/* class ConfigBlockWords extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      block_words: window.config.block_words,
-    };
-  }
-
-  save_changes() {
-    this.props.callback({
-      block_words: this.state.block_words.filter((v) => v),
-    });
-  }
-
-  on_change(e) {
-    // Filter out those blank lines
-    let value = e.target.value.split('\n');
-    this.setState(
-      {
-        block_words: value,
-      },
-      this.save_changes.bind(this),
-    );
-  }
-
-  render() {
-    return (
-      <div>
-        <p>
-          {' '}
-          <b>设置屏蔽词 </b>
-        </p>
-        <p>
-          <textarea
-            className="block-words"
-            value={this.state.block_words.join('\n')}
-            onChange={this.on_change.bind(this)}
-          />
-        </p>
-      </div>
-    );
-  }
-} */
-
 class ConfigSwitch extends PureComponent {
   constructor(props) {
     super(props);
@@ -404,7 +364,7 @@ export class ConfigUI extends PureComponent {
             callback={this.save_changes_bound}
           /> */}
           <ConfigTextArea
-            id="block_words"
+            id="block_words_v2"
             callback={this.save_changes_bound}
             name="设置屏蔽词"
             description={'包含屏蔽词的树洞会被折叠，每行写一个屏蔽词'}
