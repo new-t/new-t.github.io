@@ -156,7 +156,10 @@ class Reply extends PureComponent {
 class FlowItem extends PureComponent {
   constructor(props) {
     super(props);
-    this.input_cw_ref=React.createRef();
+    this.state = {
+      hot_score: props.info.hot_score || 0,
+      cw: props.info.cw || '',
+    }
   }
 
   copy_link(event) {
@@ -181,8 +184,24 @@ class FlowItem extends PureComponent {
     );
   }
 
+  on_hot_score_change(event) {
+    this.setState({
+      hot_score: event.target.value
+    });
+  }
+
+  on_cw_change(event) {
+    this.setState({
+      cw: event.target.value,
+    });
+  }
+
   render() {
-    const {info, is_quote, cached, attention, can_del, do_filter_name, do_delete, do_edit_cw, timestamp, img_clickable, color_picker, show_pid} = this.props;
+    const {
+      info, is_quote, cached, attention, can_del, do_filter_name, do_delete,
+      do_edit_cw, do_edit_score, timestamp, img_clickable, color_picker, show_pid
+    } = this.props;
+    const { cw, hot_score } = this.state;
     return (
       <div className={'flow-item' + (is_quote ? ' flow-item-quote' : '')}>
         {!!is_quote && (
@@ -258,13 +277,13 @@ class FlowItem extends PureComponent {
                 <div className="box-header-cw-edit clickable">
                   <input
                     type="text"
-                    defaultValue={info.cw}
+                    value={cw}
                     maxLength="32"
-                    ref={this.input_cw_ref}
                     placeholder="编辑折叠警告"
+                    onChange={this.on_cw_change.bind(this)}
                   />
                   <button type="button"
-                    onClick={(e)=>do_edit_cw(this.input_cw_ref.current.value, info.pid)}>
+                    onClick={(e)=>do_edit_cw(cw, info.pid)}>
                     更新
                   </button>
                 </div>
@@ -275,6 +294,21 @@ class FlowItem extends PureComponent {
             }
             <Time stamp={info.timestamp} short={!img_clickable} />
           </div>
+          {info.hot_score !== undefined && (do_edit_score ? (
+            <>
+              <input
+                type="text"
+                value={hot_score}
+                onChange={this.on_hot_score_change.bind(this)}
+              />
+              <button type="button"
+                  onClick={(e)=>do_edit_score(hot_score, info.pid)}>
+                更新
+              </button>
+            </>
+          ) : (
+            <span className="box-header">hot score: {info.hot_score}</span>
+          ))}
           <div className="box-content">
             <HighlightedMarkdown
               text={info.text}
@@ -538,8 +572,22 @@ class FlowSidebar extends PureComponent {
             console.error(e);
         });
     }
-
     return do_edit_cw;
+  }
+
+  make_do_edit_score(token) {
+    const do_edit_score = (score, id) => {
+      console.log('edit score', score);
+      API.update_score(score, id, token)
+        .then((json) => {
+          console.log('已更新');
+        })
+        .catch((e) => {
+            alert('更新失败\n' + e);
+            console.error(e);
+        });
+    }
+    return do_edit_score;
   }
 
   render() {
@@ -587,6 +635,7 @@ class FlowSidebar extends PureComponent {
             }
             do_delete={this.make_do_delete(this.props.token, ()=>{window.location.reload();})}
             do_edit_cw={this.make_do_edit_cw(this.props.token)}
+            do_edit_score={this.make_do_edit_score(this.props.token)}
           />
         </ClickHandler>
       );
@@ -1124,7 +1173,7 @@ export class Flow extends PureComponent {
   get_submode_names(mode) {
     switch(mode) {
       case('list'):
-        return ['最新', '最近回复', '近期热门'];
+        return ['最新', '最近回复', '近期热门', '随机'];
       case('attention'):
         return ['线上', '本地']
     }
@@ -1132,10 +1181,6 @@ export class Flow extends PureComponent {
   }
 
   set_submode(submode) {
-    if (this.props.mode === 'list' && submode === 2) {
-      alert('将在下个版本提供');
-      return;
-    }
     this.setState({
       submode: submode,
       subflow_render_key: +new Date(),

@@ -1,5 +1,8 @@
 export function get_json(res) {
-    if(!res.ok) throw Error(`${res.status} ${res.statusText}`);
+    if(!res.ok) {
+      console.log('error:', res);
+      throw Error(`${res.status} ${res.statusText}`);
+    }
     return (
         res
             .text()

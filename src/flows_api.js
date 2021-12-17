@@ -136,11 +136,29 @@ export const API = {
     return handle_response(response, true);
   },
 
+  update_score: async (score, id, token) => {
+    let data = new URLSearchParams();
+    data.append('score', score);
+    data.append('pid', id);
+    let response = await fetch(
+      API_BASE + '/update_score',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Token': token,
+        },
+        body: data,
+      },
+    );
+    return handle_response(response, true);
+  },
+
   get_list: async (page, token, submode) => {
     let response = await fetch(
-      API_BASE + '/getlist?p=' + page 
-        + (window.config.no_c_post ? '&no_cw' : '')
-        + (submode ? '&by_c' : ''),
+      `${API_BASE}/getlist?p=${page}${
+        window.config.no_c_post ? '&no_cw' : ''
+      }&order_mode=${submode}`,
       {
         headers: {'User-Token': token},
       },
