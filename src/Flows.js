@@ -1257,7 +1257,7 @@ class SubFlow extends PureComponent {
           .then((json) => {
             if (page === 1 && json.data.length) {
               // update latest_post_id
-              let max_id = -1;
+              let max_id = LATEST_POST_ID || -1;
               json.data.forEach((x) => {
                 if (parseInt(x.pid, 10) > max_id) max_id = parseInt(x.pid, 10);
               });
