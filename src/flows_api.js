@@ -99,6 +99,25 @@ export const API = {
     return handle_response(response, true);
   },
 
+  block: async (type, id, token) => {
+    let data = new URLSearchParams([
+      ['type', type], ['id', id]
+    ]);
+    let response = await fetch(
+      API_BASE + '/block',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Token': token,
+        },
+        body: data,
+      },
+    );
+    return handle_response(response, true);
+  },
+
+
   del: async (type, id, note, token) => {
     let data = new URLSearchParams();
     data.append('type', type);

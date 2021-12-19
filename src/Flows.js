@@ -96,7 +96,10 @@ class Reply extends PureComponent {
   }
 
   render() {
-    const {info, color_picker, show_pid, do_filter_name, do_delete} = this.props;
+    const {
+      info, color_picker, show_pid, do_filter_name, do_delete,
+      do_report, do_block
+    } = this.props;
     const author = info.name,
       replyText = info.text;
     return (
@@ -127,19 +130,42 @@ class Reply extends PureComponent {
             <span className="box-header-name">{info.name}</span>
           )}
           {!!do_delete && !!info.can_del && (
-            <span
-              className="clickable"
-              onClick={() => {
-                do_delete('cid', info.cid);
-              }}
-            >
-              <span className="icon icon-trash" />
-            </span>
+            <>
+              <span
+                className="clickable"
+                onClick={() => {
+                  do_delete('cid', info.cid);
+                }}
+              >
+                <span className="icon icon-trash" />
+              </span>
+              &nbsp;
+            </>
           )}
+          {!!do_block && (
+            <>
+              <span
+                className="clickable"
+                onClick={do_block}
+              >
+                <span className="icon icon-block" />
+              </span>
+              &nbsp;
+            </>
+          )}
+          {!!do_report && (
+            <>
+              <span
+                className="clickable"
+                onClick={do_report}
+              >
+                <span className="icon icon-flag" />
+              </span>
+              &nbsp;
+            </>
+          )}
+          <Time stamp={info.timestamp} short={!do_report} />
           &nbsp;
-          <Time stamp={info.timestamp} short={false} />
-          &nbsp;
-          <code className="box-id">{'$' + info.cid}</code>
         </div>
         <div className="box-content">
           <HighlightedMarkdown
@@ -201,7 +227,7 @@ class FlowItem extends PureComponent {
     const {
       info, is_quote, cached, attention, can_del, do_filter_name, do_delete,
       do_edit_cw, do_edit_score, timestamp, img_clickable, color_picker,
-      show_pid, do_vote
+      show_pid, do_vote, do_block
     } = this.props;
     const { cw, hot_score } = this.state;
     return (
@@ -267,6 +293,14 @@ class FlowItem extends PureComponent {
                 }}
               >
                 <span className="icon icon-trash" />
+              </span>
+            )}
+            {!!do_block && (
+              <span
+                className="clickable"
+                onClick={do_block}
+              >
+                <span className="icon icon-block" />
               </span>
             )}
             &nbsp;
@@ -540,8 +574,8 @@ class FlowSidebar extends PureComponent {
       });
   }
 
-  report() {
-    let reason = prompt(`举报 #${this.state.info.pid} 的理由：`);
+  report(text = '') {
+    let reason = prompt(`举报 #${this.state.info.pid} 的理由：`, text);
     if (reason !== null) {
       API.report(this.state.info.pid, reason, this.props.token)
         .then((json) => {
@@ -551,6 +585,21 @@ class FlowSidebar extends PureComponent {
           alert('举报失败');
           console.error(e);
         });
+    }
+  }
+
+  block(name, type, id, on_complete) {
+    if (confirm(`确定拉黑${name}吗？后续将不会收到其发布的任何内容`)) {
+      API.block(type, id, this.props.token)
+       .then((json) => {
+         let data = json.data;
+         alert(`操作成功，其成为危险用户进度 ${data.curr}/${data.threshold}`)
+         !!on_complete && on_complete();
+       })
+      .catch((e) => {
+        alert('拉黑失败');
+        console.error(e)
+      });
     }
   }
 
@@ -674,6 +723,9 @@ class FlowSidebar extends PureComponent {
             do_edit_cw={this.make_do_edit_cw(this.props.token)}
             do_edit_score={this.make_do_edit_score(this.props.token)}
             do_vote={this.do_vote.bind(this)}
+            do_block={() => {this.block(
+                '洞主', 'post', this.state.info.pid, () => {window.location.reload();}
+            )}}
           />
         </ClickHandler>
       );
@@ -763,7 +815,7 @@ class FlowSidebar extends PureComponent {
               条回复被删除
             </div>
           )}
-        {replies_to_show.map((reply, i) => (
+        {replies_to_show.map((reply, i) => !reply.blocked && (
           <LazyLoad
             key={i}
             offset={1500}
@@ -789,6 +841,10 @@ class FlowSidebar extends PureComponent {
                     : null
                 }
                 do_delete={this.make_do_delete(this.props.token, this.load_replies.bind(this))}
+                do_block={() => {this.block(
+                  reply.name, 'comment', reply.cid, this.load_replies.bind(this)
+                )}}
+                do_report={() => {this.report(`评论区${reply.name}，评论id ${reply.cid}`)}}
               />
             </ClickHandler>
           </LazyLoad>
@@ -988,7 +1044,7 @@ class FlowItemRow extends PureComponent {
               <p>{this.state.reply_error}</p>
             </div>
           )}
-          {this.state.replies.slice(0, PREVIEW_REPLY_COUNT).map((reply) => (
+          {this.state.replies.slice(0, PREVIEW_REPLY_COUNT).map((reply) => !reply.blocked && (
             <Reply
               key={reply.cid}
               info={reply}
@@ -1159,7 +1215,7 @@ function FlowChunk(props) {
       {({ value: token }) => (
         <div className="flow-chunk">
           {!!props.title && <TitleLine text={props.title} />}
-          {props.list.map((info, ind) => (
+          {props.list.map((info, ind) => !info.blocked && (
             <LazyLoad
               key={info.pid}
               offset={500}
@@ -1232,7 +1288,7 @@ export class Flow extends PureComponent {
       <>
         <div className="aux-margin flow-submode-choice">
           {submode_names.map((name, idx) => (
-            <a 
+            <a
               key={idx}
               className={submode === idx ? 'choiced' : ''}
               onClick={this.set_submode.bind(this, idx)}
@@ -1241,7 +1297,7 @@ export class Flow extends PureComponent {
             </a>
           ))}
         </div>
-  
+
         <SubFlow
           key={this.state.subflow_render_key}
           show_sidebar={this.props.show_sidebar}
@@ -1447,7 +1503,7 @@ class SubFlow extends PureComponent {
       }));
     }
   }
-  
+
   on_scroll(event) {
     if (event.target === document) {
       const avail =
