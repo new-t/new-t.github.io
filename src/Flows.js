@@ -511,6 +511,10 @@ class FlowSidebar extends PureComponent {
   }
 
   do_vote(vote) {
+    this.setState({
+      loading_status: 'loading',
+      error_msg: null,
+    });
     API.add_vote(vote, this.state.info.pid, this.props.token)
       .then((json) => {
         if (json.code !== 0) return;
@@ -518,6 +522,7 @@ class FlowSidebar extends PureComponent {
         this.setState(
           (prev, props) => ({
             info: Object.assign({}, prev.info, { poll: json.data }),
+            loading_status: 'done',
           }),
           () => {
             this.syncState({
@@ -525,6 +530,13 @@ class FlowSidebar extends PureComponent {
             });
           },
         );
+      })
+      .catch((e) => {
+        console.error(e);
+        this.setState({
+          loading_status: 'done',
+          error_msg: '' + e,
+        });
       });
   }
 
@@ -739,7 +751,7 @@ class FlowSidebar extends PureComponent {
         {!this.state.rev && main_thread_elem}
         {!!this.state.error_msg && (
           <div className="box box-tip flow-item">
-            <p>回复加载失败</p>
+            <p>加载失败</p>
             <p>{this.state.error_msg}</p>
           </div>
         )}
