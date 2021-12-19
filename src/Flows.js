@@ -359,7 +359,7 @@ class FlowItem extends PureComponent {
                 onVote={do_vote || (() => {})}
                 customStyles={{'theme': 'cyan'}}
                 noStorage={true}
-                vote={info.poll.vote}
+                vote={localStorage['VOTE_RECORD:' + info.pid] || info.poll.vote}
               />
             </div>
           )}
@@ -511,17 +511,13 @@ class FlowSidebar extends PureComponent {
   }
 
   do_vote(vote) {
-    this.setState({
-      loading_status: 'loading',
-      error_msg: null,
-    });
     API.add_vote(vote, this.state.info.pid, this.props.token)
       .then((json) => {
         if (json.code !== 0) return;
+        localStorage['VOTE_RECORD:' + this.state.info.pid] = vote;
         this.setState(
           (prev, props) => ({
             info: Object.assign({}, prev.info, { poll: json.data }),
-            loading_status: 'done',
           }),
           () => {
             this.syncState({
