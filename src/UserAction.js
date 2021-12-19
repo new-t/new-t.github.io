@@ -284,10 +284,9 @@ export class ReplyForm extends Component {
       .then(get_json)
       .then((json) => {
         if (json.code !== 0) {
-          if (json.msg) alert(json.msg);
-          throw new Error(JSON.stringify(json));
+          throw new Error(json.msg);
         }
-        
+
         let saved_attentions = window.saved_attentions;
         if (!saved_attentions.includes(pid)) {
           saved_attentions.unshift(pid)
@@ -376,12 +375,15 @@ export class PostForm extends Component {
       loading_status: 'done',
       img_tip: null,
       preview: false,
+      has_poll: !!window.POLL_BACKUP,
+      poll_options: JSON.parse(window.POLL_BACKUP || '[""]'),
     };
     this.img_ref = React.createRef();
     this.area_ref = React.createRef();
     this.on_change_bound = this.on_change.bind(this);
     this.on_allow_search_change_bound = this.on_allow_search_change.bind(this);
     this.on_cw_change_bound = this.on_cw_change.bind(this);
+    this.on_poll_option_change_bound = this.on_poll_option_change.bind(this);
     this.on_img_change_bound = this.on_img_change.bind(this);
     this.color_picker = new ColorPicker();
   }
@@ -391,8 +393,10 @@ export class PostForm extends Component {
   }
 
   componentWillUnmount() {
-    window.CW_BACKUP = this.state.cw;
-    window.AS_BACKUP = this.state.allow_search;
+    const { cw, allow_search, has_poll, poll_options } = this.state;
+    window.CW_BACKUP = cw;
+    window.AS_BACKUP = allow_search;
+    window.POLL_BACKUP = has_poll ? JSON.stringify(poll_options) : null;
   }
 
   on_allow_search_change(event) {
@@ -413,13 +417,21 @@ export class PostForm extends Component {
     });
   }
 
-  do_post(text, img) {
+  do_post() {
     let data = new URLSearchParams();
+    const { cw, text, allow_search, has_poll, poll_options } = this.state;
     data.append('cw', this.state.cw);
     data.append('text', this.state.text);
     data.append('allow_search', this.state.allow_search ? '1' : '');
-    data.append('type', img ? 'image' : 'text');
-    if (img) data.append('data', img);
+    //data.append('type', img ? 'image' : 'text');
+    //if (img) data.append('data', img);
+    data.append('type', 'text')
+    if (has_poll) {
+      poll_options.forEach((opt) => {
+        if (opt)
+          data.append('poll_options', opt);
+      });
+    }
 
     fetch(API_BASE + '/dopost', {
       method: 'POST',
@@ -432,8 +444,7 @@ export class PostForm extends Component {
       .then(get_json)
       .then((json) => {
         if (json.code !== 0) {
-          if (json.msg) alert(json.msg);
-          throw new Error(JSON.stringify(json));
+          throw new Error(json.msg);
         }
 
         this.setState({
@@ -444,6 +455,7 @@ export class PostForm extends Component {
         this.area_ref.current.clear();
         this.props.on_complete();
         window.CW_BACKUP = '';
+        window.POLL_BACKUP = null;
       })
       .catch((e) => {
         console.error(e);
@@ -593,7 +605,7 @@ export class PostForm extends Component {
       this.setState({
         loading_status: 'loading',
       });
-      this.do_post(this.state.text, null);
+      this.do_post();
     }
   }
 
@@ -603,24 +615,26 @@ export class PostForm extends Component {
     });
   }
 
+  on_poll_option_change(event, idx) {
+    let poll_options = this.state.poll_options;
+    let text = event.target.value;
+    poll_options[idx] = text;
+    if (!text && poll_options.length > 1) {
+      poll_options.splice(idx, 1)
+    }
+    if (poll_options[poll_options.length - 1] && poll_options.length < 8) {
+      poll_options.push('')
+    }
+    this.setState({ poll_options: poll_options });
+  }
+
+
   render() {
+    const { has_poll, poll_options, preview, loading_status } = this.state;
     return (
       <form onSubmit={this.on_submit.bind(this)} className="post-form box">
         <div className="post-form-bar">
-          {/*
-          <label>
-            图片
-            <input
-              ref={this.img_ref}
-              type="file"
-              accept="image/*"
-              disabled={this.state.loading_status !== 'done'}
-              onChange={this.on_img_change_bound}
-            />
-          </label>
-          */}
-
-          {this.state.preview ? (
+          {preview ? (
             <button
               type="button"
               onClick={() => {
@@ -642,11 +656,11 @@ export class PostForm extends Component {
             </button>
           )}
 
-          {this.state.loading_status !== 'done' ? (
+          {loading_status !== 'done' ? (
             <button disabled="disabled">
               <span className="icon icon-loading" />
               &nbsp;
-              {this.state.loading_status === 'processing' ? '处理' : '上传'}
+              {loading_status === 'processing' ? '处理' : '上传'}
             </button>
           ) : (
             <button type="submit">
@@ -678,7 +692,7 @@ export class PostForm extends Component {
             {this.state.img_tip}
           </p>
         )}
-        {this.state.preview ? (
+        {preview ? (
           <div className="post-preview">
             <HighlightedMarkdown
               text={this.state.text}
@@ -705,6 +719,31 @@ export class PostForm extends Component {
             />
           </>
         )}
+        <button
+          type="button"
+          onClick={() => {
+            this.setState({ has_poll: !has_poll });
+          }}
+        >
+          {has_poll ? '取消' : '添加'}投票
+        </button>
+
+        {has_poll && (
+          <div className="post-form-poll-options">
+            <h6>投票选项</h6>
+            {poll_options.map( (option, idx) => (
+              <input
+                key={idx}
+                type="text"
+                value={option}
+                placeholder="输入以添加选项..."
+                onChange={(e) => this.on_poll_option_change_bound(e, idx)}
+                maxLength="32"
+              />
+            ))}
+          </div>
+        )}
+        <br /><br /><br />
         <p>
           <small>
             请遵守
@@ -716,7 +755,7 @@ export class PostForm extends Component {
         </p>
         <p>
           <small>
-            插入图片请使用图片外链，Markdown格式 ![](图片链接)， 支持动图，支持多图。推荐的图床： 
+            插入图片请使用图片外链，Markdown格式 ![](图片链接)， 支持动图，支持多图。推荐的图床：
             <a href="https://imgchr.com/" target="_blank">
               路过图床
             </a>

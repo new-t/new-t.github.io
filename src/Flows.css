@@ -198,6 +198,10 @@
     overflow-y: hidden;
 }
 
+.box-poll.disabled {
+  pointer-events: none;
+}
+
 .box-id {
     color: #666666;
 }

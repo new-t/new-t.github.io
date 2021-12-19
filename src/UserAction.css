@@ -116,3 +116,16 @@
   margin-bottom: 5px;
   padding: 2px;
 }
+
+.post-form-poll-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-form-poll-options input {
+  margin: 5px 0;
+}
+
+.post-form-poll-options h6 {
+  margin-bottom: 0;
+}

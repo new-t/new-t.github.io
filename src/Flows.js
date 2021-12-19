@@ -24,6 +24,7 @@ import { TokenCtx, ReplyForm } from './UserAction';
 import { API } from './flows_api';
 import { cache } from './cache';
 import { save_attentions } from './Attention'
+import Poll from 'react-polls';
 
 /*
 const IMAGE_BASE = 'https://thimg.yecdn.com/';
@@ -159,7 +160,7 @@ class FlowItem extends PureComponent {
     this.state = {
       hot_score: props.info.hot_score || 0,
       cw: props.info.cw || '',
-    }
+    };
   }
 
   copy_link(event) {
@@ -199,7 +200,8 @@ class FlowItem extends PureComponent {
   render() {
     const {
       info, is_quote, cached, attention, can_del, do_filter_name, do_delete,
-      do_edit_cw, do_edit_score, timestamp, img_clickable, color_picker, show_pid
+      do_edit_cw, do_edit_score, timestamp, img_clickable, color_picker,
+      show_pid, do_vote
     } = this.props;
     const { cw, hot_score } = this.state;
     return (
@@ -348,6 +350,19 @@ class FlowItem extends PureComponent {
             )}
             {/*{info.type==='audio' && <AudioWidget src={AUDIO_BASE+info.url} />}*/}
           </div>
+          { info.poll && (
+            <div className={!do_vote ? "box-poll disabled" : "box-poll"}>
+              <Poll
+                key={+new Date()}
+                question={""}
+                answers={info.poll.answers}
+                onVote={do_vote || (() => {})}
+                customStyles={{'theme': 'cyan'}}
+                noStorage={true}
+                vote={info.poll.vote}
+              />
+            </div>
+          )}
           {!!(attention && info.variant.latest_reply) && (
             <p className="box-footer">
               最新回复{' '}
@@ -458,21 +473,16 @@ class FlowSidebar extends PureComponent {
   }
 
   toggle_attention() {
-    this.setState({
-      loading_status: 'loading',
-    });
     const prev_info = this.state.info;
     const pid = prev_info.pid;
     API.set_attention(pid, !this.state.attention, this.props.token)
       .then((json) => {
         this.setState({
-          loading_status: 'done',
           attention: json.attention,
           info: Object.assign({}, prev_info, {
                   likenum: ''+json.likenum,
                 }),
         });
-        console.log(json);
 
         let saved_attentions = window.saved_attentions;
         if (json.attention && !saved_attentions.includes(pid)) {
@@ -497,6 +507,28 @@ class FlowSidebar extends PureComponent {
         });
         alert('设置关注失败\n' + e);
         console.error(e);
+      });
+  }
+
+  do_vote(vote) {
+    this.setState({
+      loading_status: 'loading',
+      error_msg: null,
+    });
+    API.add_vote(vote, this.state.info.pid, this.props.token)
+      .then((json) => {
+        if (json.code !== 0) return;
+        this.setState(
+          (prev, props) => ({
+            info: Object.assign({}, prev.info, { poll: json.data }),
+            loading_status: 'done',
+          }),
+          () => {
+            this.syncState({
+              info: this.state.info,
+            });
+          },
+        );
       });
   }
 
@@ -543,7 +575,6 @@ class FlowSidebar extends PureComponent {
 
   make_do_delete(token, on_complete=null) {
     const do_delete = (type, id) => {
-      console.log('del', type, id, token);
       let note = prompt(`将删除${type}=${id}, 备注：`, '(无)');
       if (note !== null) {
         API.del(type, id, note, token)
@@ -562,7 +593,6 @@ class FlowSidebar extends PureComponent {
 
   make_do_edit_cw(token) {
     const do_edit_cw = (cw, id) => {
-      console.log('edit cw', cw);
       API.update_cw(cw, id, token)
         .then((json) => {
           alert('已更新\n刷新列表显示新版本');
@@ -577,7 +607,6 @@ class FlowSidebar extends PureComponent {
 
   make_do_edit_score(token) {
     const do_edit_score = (score, id) => {
-      console.log('edit score', score);
       API.update_score(score, id, token)
         .then((json) => {
           console.log('已更新');
@@ -636,6 +665,7 @@ class FlowSidebar extends PureComponent {
             do_delete={this.make_do_delete(this.props.token, ()=>{window.location.reload();})}
             do_edit_cw={this.make_do_edit_cw(this.props.token)}
             do_edit_score={this.make_do_edit_score(this.props.token)}
+            do_vote={this.do_vote.bind(this)}
           />
         </ClickHandler>
       );

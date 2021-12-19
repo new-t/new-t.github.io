@@ -201,4 +201,23 @@ export const API = {
     );
     return handle_response(response);
   },
+
+  add_vote: async (vote, pid, token) => {
+    let data = new URLSearchParams([
+      ['vote', vote],
+      ['pid', pid]
+    ]);
+    let response = await fetch(
+      API_BASE + '/vote',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Token': token,
+        },
+        body: data,
+      },
+    );
+    return handle_response(response, true);
+  },
 };
