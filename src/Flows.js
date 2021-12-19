@@ -130,31 +130,22 @@ class Reply extends PureComponent {
             <span className="box-header-name">{info.name}</span>
           )}
           {!!do_delete && !!info.can_del && (
-            <>
-              <span
-                className="clickable"
-                onClick={() => {
-                  do_delete('cid', info.cid);
-                }}
-              >
-                <span className="icon icon-trash" />
-              </span>
-              &nbsp;
-            </>
+            <span
+              className="clickable"
+              onClick={() => {
+                do_delete('cid', info.cid);
+              }}
+            > 🗑️ </span>
           )}
           {!!do_block && (
-            <>
-              <span
-                className="clickable"
-                onClick={do_block}
-              >
-                <span className="icon icon-block" />
-              </span>
-              &nbsp;
-            </>
+            <span
+              className="clickable"
+              onClick={do_block}
+            > 🚫 </span>
           )}
           {!!do_report && (
             <>
+              &nbsp;
               <span
                 className="clickable"
                 onClick={do_report}
@@ -291,19 +282,14 @@ class FlowItem extends PureComponent {
                 onClick={() => {
                   do_delete('pid', info.pid);
                 }}
-              >
-                <span className="icon icon-trash" />
-              </span>
+              > 🗑️ </span>
             )}
             {!!do_block && (
               <span
                 className="clickable"
                 onClick={do_block}
-              >
-                <span className="icon icon-block" />
-              </span>
+              > 🚫 </span>
             )}
-            &nbsp;
             {info.cw !== null &&
               (!do_edit_cw || !info.can_del) && (
                 <span className="box-header-cw">{info.cw}</span>
