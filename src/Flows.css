@@ -343,3 +343,7 @@
   color: white;
   font-weight: bold;
 }
+
+.danger-info {
+  color: red;
+}

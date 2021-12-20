@@ -155,6 +155,12 @@ class Reply extends PureComponent {
               &nbsp;
             </>
           )}
+          {info.dangerous_user && (
+            <span className="danger-info"> {info.dangerous_user} </span>
+          )}
+          {info.blocked_count && (
+            <span className="danger-info"> {info.blocked_count} </span>
+          )}
           <Time stamp={info.timestamp} short={!do_report} />
           &nbsp;
         </div>
@@ -289,6 +295,12 @@ class FlowItem extends PureComponent {
                 className="clickable"
                 onClick={do_block}
               > 🚫 </span>
+            )}
+            {info.dangerous_user && (
+              <span className="danger-info"> {info.dangerous_user} </span>
+            )}
+            {info.blocked_count && (
+              <span className="danger-info"> {info.blocked_count} </span>
             )}
             {info.cw !== null &&
               (!do_edit_cw || !info.can_del) && (
