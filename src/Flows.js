@@ -1271,7 +1271,7 @@ export class Flow extends PureComponent {
       case('list'):
         return ['最新', '最近回复', '近期热门', '随机'];
       case('attention'):
-        return ['线上', '本地']
+        return ['线上关注', '本地收藏']
     }
     return []
   }
@@ -1480,19 +1480,46 @@ class SubFlow extends PureComponent {
                     ...window.saved_attentions,
                     ...json.data.map(post => post.pid)
                   ])
-                ).sort().reverse();
+                ).sort((a, b) => (b - a));
                 save_attentions();
               }
             })
             .catch(failed);
         } else if (this.props.submode === 1) {
-          this.setState({
-            title: 'Attention List: Local',
-            data: [],
-            export_text: `以下是浏览器本地保存的关注列表，将在下个版本提供直接展示\n\n#${
-              window.saved_attentions.join('\n#')
-            }`
-          });
+          const PERPAGE = 50;
+          let pids = window.saved_attentions.sort(
+            (a, b) => (b - a)
+          ).slice((page - 1) * PERPAGE, page * PERPAGE);
+          if (pids.length) {
+            API.get_multi(pids, this.props.token)
+              .then((json) => {
+                json.data.forEach((x) => {
+                  if (x.comments) {
+                    let comment_json = {
+                      code: 0,
+                      attention: x.attention,
+                      data: x.comments,
+                    };
+                    //console.log('My cache', comment_json, x.pid, x.reply)
+                    cache().put(x.pid, parseInt(x.reply, 10), comment_json);
+                  }
+                });
+                this.setState((prev, props) => ({
+                  chunks: {
+                    title: 'Attention List: Local',
+                    data: prev.chunks.data.concat(json.data),
+                  },
+                  loading_status: 'done',
+                }));
+              });
+          } else {
+            console.log('local attention finished');
+            this.setState({
+              loading_status: 'done',
+              mode: 'attention_finished'
+            });
+            return;
+          }
         }
       } else {
         console.log('nothing to load');

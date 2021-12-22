@@ -239,4 +239,16 @@ export const API = {
     );
     return handle_response(response, true);
   },
+
+  get_multi: async (pids, token) => {
+    let response = await fetch(
+      API_BASE + '/getmulti?' + pids.map(pid => `pids=${pid}`).join('&'),
+      {
+        headers: {
+          'User-Token': token,
+        },
+      },
+    );
+    return handle_response(response, true);
+  },
 };
