@@ -347,3 +347,24 @@
 .danger-info {
   color: red;
 }
+
+.box-poll li > div, .box-poll li > button {
+  height: 36px !important;
+}
+
+.box-poll li > div > div.styles_labels__2rz-F {
+  top: 50% !important;
+  transform: translateY(-50%);
+ }
+
+.box-poll span, .box-poll button {
+  font-size: 13px !important;
+  white-space: pre-line !important;
+
+}
+
+.box-poll button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
