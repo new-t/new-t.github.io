@@ -121,7 +121,7 @@ class ControlBar extends PureComponent {
               onClick={this.do_refresh_bound}
             >
               <span className="icon icon-refresh" />
-              <span className="control-btn-label">最新</span>
+              <span className="control-btn-label">刷新</span>
             </a>
             {!!token && (
               <a

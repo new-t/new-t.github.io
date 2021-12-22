@@ -396,6 +396,7 @@ export class PostForm extends Component {
     const { cw, allow_search, has_poll, poll_options } = this.state;
     window.CW_BACKUP = cw;
     window.AS_BACKUP = allow_search;
+    localStorage['DEFAULT_ALLOW_SEARCH'] = allow_search ? '1' : '';
     window.POLL_BACKUP = has_poll ? JSON.stringify(poll_options) : null;
   }
 

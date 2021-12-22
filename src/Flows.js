@@ -572,7 +572,8 @@ class FlowSidebar extends PureComponent {
       });
   }
 
-  report(text = '') {
+  report(event, text = '') {
+    console.log(text);
     let reason = prompt(`举报 #${this.state.info.pid} 的理由：`, text);
     if (reason !== null) {
       API.report(this.state.info.pid, reason, this.props.token)
@@ -842,7 +843,7 @@ class FlowSidebar extends PureComponent {
                 do_block={() => {this.block(
                   reply.name, 'comment', reply.cid, this.load_replies.bind(this)
                 )}}
-                do_report={() => {this.report(`评论区${reply.name}，评论id ${reply.cid}`)}}
+                do_report={(e) => {this.report(e, `评论区${reply.name}，评论id ${reply.cid}`)}}
               />
             </ClickHandler>
           </LazyLoad>
@@ -1257,8 +1258,11 @@ export class Flow extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      submode: this.props.mode == 'list' ? (window.config.by_c ? 1 : 0) : 0,
-      subflow_render_key: +new Date(),
+      submode: this.props.mode == 'list' ? (
+        window.LIST_SUBMOD_BACKUP !== undefined ? window.LIST_SUBMOD_BACKUP : (
+          (window.config.by_c ? 1 : 0)
+        )
+      ) : 0,
     }
   }
 
@@ -1273,9 +1277,10 @@ export class Flow extends PureComponent {
   }
 
   set_submode(submode) {
+    if (this.props.mode == 'list')
+      window.LIST_SUBMOD_BACKUP = submode;
     this.setState({
       submode: submode,
-      subflow_render_key: +new Date(),
     });
   }
 
@@ -1297,10 +1302,10 @@ export class Flow extends PureComponent {
         </div>
 
         <SubFlow
-          key={this.state.subflow_render_key}
+          key={submode}
           show_sidebar={this.props.show_sidebar}
           mode={this.props.mode}
-          submode={this.state.submode}
+          submode={submode}
           search_text={this.props.search_text}
           token={this.props.token}
         />

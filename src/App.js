@@ -20,6 +20,7 @@ class App extends Component {
     super(props);
     load_config();
     load_attentions();
+    window.AS_BACKUP = localStorage['DEFAULT_ALLOW_SEARCH'] ? true : false;
     listen_darkmode(
       { default: undefined, light: false, dark: true }[
         window.config.color_scheme
