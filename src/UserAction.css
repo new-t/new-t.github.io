@@ -35,12 +35,18 @@
 .post-form-bar {
     line-height: 2em;
     display: flex;
+    flex-wrap: wrap;
     margin-bottom: .5em;
 }
 
-.post-form-bar label {
-    flex: 1;
-    margin: 0 0.5rem; 
+.post-form-bar .checkbox-bar {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.post-form-bar .checkbox-bar label {
+    flex: 0 0 auto;
+    margin: 0 0.5rem;
 }
 
 .post-form-bar input[type=file] {
@@ -142,4 +148,9 @@
 
 .reply-form-buttons {
   display: flex;
+  flex: 0 0 2.5rem;
+}
+
+.update-title-btn {
+  margin-top: 6px;
 }

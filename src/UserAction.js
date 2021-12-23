@@ -152,7 +152,7 @@ export class LoginForm extends Component {
       .then((json) => {
         if (json.code === 0) {
           window.TITLE = title
-          alert('自定义头衔设置成功');
+          alert('专属头衔设置成功');
         }
       });
   }
@@ -206,7 +206,7 @@ export class LoginForm extends Component {
                     User Token仅用于开发bot，切勿告知他人。若怀疑被盗号请刷新Token(刷新功能即将上线)。
                   </p>
                   <p>
-                    自定义头衔： 
+                    专属头衔： 
                     <input
                       value={this.state.custom_title} 
                       onChange={(e) => {
@@ -215,11 +215,12 @@ export class LoginForm extends Component {
                       maxLength={10}
                     />
                     <button
+                      className="update-title-btn"
                       type="button"
                       onClick={(e) => {this.update_title(this.state.custom_title, token.value)}}
                     >提交</button>
                     <br />
-                    设置自定义头衔后，可在发言时选择使用。重置后需重新设置。临时用户如需保持头衔请使用相同后缀。
+                    设置专属头衔后，可在发言时选择使用。重置后需重新设置。临时用户如需保持头衔请使用相同后缀。
                   </p>
                 </div>
               ) : (
@@ -705,60 +706,62 @@ export class PostForm extends Component {
     return (
       <form onSubmit={this.on_submit.bind(this)} className="post-form box">
         <div className="post-form-bar">
-          {preview ? (
-            <button
-              type="button"
-              onClick={() => {
-                this.toggle_preview();
-              }}
-            >
-              <span className="icon icon-eye-blocked" />
-              &nbsp;编辑
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => {
-                this.toggle_preview();
-              }}
-            >
-              <span className="icon icon-eye" />
-              &nbsp;预览
-            </button>
-          )}
+          <div>
+            {preview ? (
+              <button
+                type="button"
+                onClick={() => {
+                  this.toggle_preview();
+                }}
+              >
+                <span className="icon icon-eye-blocked" />
+                &nbsp;编辑
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  this.toggle_preview();
+                }}
+              >
+                <span className="icon icon-eye" />
+                &nbsp;预览
+              </button>
+            )}
 
-          {loading_status !== 'done' ? (
-            <button disabled="disabled">
-              <span className="icon icon-loading" />
-              &nbsp;
-              {loading_status === 'processing' ? '处理' : '上传'}
-            </button>
-          ) : (
-            <button type="submit">
-              <span className="icon icon-send" />
-              &nbsp;发表
-            </button>
-          )}
-
-          <label>
-            <input
-              type="checkbox"
-              onChange={this.on_allow_search_change_bound}
-              checked={this.state.allow_search}
-            />
-            {' '}允许搜索
-          </label>
-          {window.TITLE && (
+            {loading_status !== 'done' ? (
+              <button disabled="disabled">
+                <span className="icon icon-loading" />
+                &nbsp;
+                {loading_status === 'processing' ? '处理' : '上传'}
+              </button>
+            ) : (
+              <button type="submit">
+                <span className="icon icon-send" />
+                &nbsp;发表
+              </button>
+            )}
+          </div>
+          <div className="checkbox-bar">
             <label>
               <input
                 type="checkbox"
-                onChange={this.on_use_title_change_bound}
-                checked={this.state.use_title}
+                onChange={this.on_allow_search_change_bound}
+                checked={this.state.allow_search}
               />
-              {' '}使用头衔
+              {' '}允许搜索
             </label>
-          )}
-
+            {window.TITLE && (
+              <label>
+                <input
+                  type="checkbox"
+                  onChange={this.on_use_title_change_bound}
+                  checked={this.state.use_title}
+                />
+                {' '}使用头衔
+              </label>
+            )}
+          </div>
         </div>
         {!!this.state.img_tip && (
           <p className="post-form-img-tip">
