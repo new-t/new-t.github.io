@@ -136,6 +136,27 @@ export function InfoSidebar(props) {
 }
 
 export class LoginForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      'custom_title': window.TITLE || ''
+    }
+  }
+
+  update_title(title, token) {
+    if (title === window.TITLE) {
+      alert('无变化');
+      return;
+    }
+    API.set_title(title, token)
+      .then((json) => {
+        if (json.code === 0) {
+          window.TITLE = title
+          alert('自定义头衔设置成功');
+        }
+      });
+  }
+
   copy_token(token) {
     if (copy(token)) alert('复制成功！\n请一定不要泄露哦');
   }
@@ -175,7 +196,7 @@ export class LoginForm extends Component {
                       查看系统日志
                     </a>
                     <br />
-                    举报记录、管理日志等都是公开的
+                    举报记录、管理日志等都是公开的。
                   </p>
                   <p>
                     <a onClick={this.copy_token.bind(this, token.value)}>
@@ -183,6 +204,22 @@ export class LoginForm extends Component {
                     </a>
                     <br />
                     User Token仅用于开发bot，切勿告知他人。若怀疑被盗号请刷新Token(刷新功能即将上线)。
+                  </p>
+                  <p>
+                    自定义头衔： 
+                    <input
+                      value={this.state.custom_title} 
+                      onChange={(e) => {
+                        this.setState({ custom_title: e.target.value})
+                      }}
+                      maxLength={10}
+                    />
+                    <button
+                      type="button"
+                      onClick={(e) => {this.update_title(this.state.custom_title, token.value)}}
+                    >提交</button>
+                    <br />
+                    设置自定义头衔后，可在发言时选择使用。重置后需重新设置。临时用户如需保持头衔请使用相同后缀。
                   </p>
                 </div>
               ) : (
@@ -220,8 +257,10 @@ export class ReplyForm extends Component {
       text: '',
       loading_status: 'done',
       preview: false,
+      use_title: false,
     };
     this.on_change_bound = this.on_change.bind(this);
+    this.on_use_title_change_bound = this.on_use_title_change.bind(this);
     this.area_ref = this.props.area_ref || React.createRef();
     this.global_keypress_handler_bound = this.global_keypress_handler.bind(
       this,
@@ -258,6 +297,12 @@ export class ReplyForm extends Component {
     });
   }
 
+  on_use_title_change(event) {
+    this.setState({
+      use_title: event.target.checked,
+    });
+  }
+
   on_submit(event) {
     if (event) event.preventDefault();
     if (this.state.loading_status === 'loading') return;
@@ -266,10 +311,13 @@ export class ReplyForm extends Component {
       loading_status: 'loading',
     });
 
-    let data = new URLSearchParams();
-    let pid = this.props.pid;
-    data.append('pid', pid);
-    data.append('text', this.state.text);
+    const { pid } = this.props;
+    const { text, use_title } = this.state;
+    let data = new URLSearchParams({
+      pid: pid,
+      text: text,
+      use_title: use_title ? '1' : '',
+    });
     fetch(
       API_BASE + '/docomment',
       {
@@ -339,27 +387,41 @@ export class ReplyForm extends Component {
             on_submit={this.on_submit.bind(this)}
           />
         )}
-        <button
-          type="button"
-          onClick={() => {
-            this.toggle_preview();
-          }}
-        >
-          {this.state.preview ? (
-            <span className="icon icon-eye-blocked" />
-          ) : (
-            <span className="icon icon-eye" />
+        <div className="reply-form-opt-box">
+          <div className="reply-form-buttons">
+            <button
+              type="button"
+              onClick={() => {
+              this.toggle_preview();
+              }}
+            >
+              {this.state.preview ? (
+                <span className="icon icon-eye-blocked" />
+              ) : (
+                <span className="icon icon-eye" />
+              )}
+            </button>
+            {this.state.loading_status === 'loading' ? (
+              <button disabled="disabled">
+                <span className="icon icon-loading" />
+              </button>
+            ) : (
+              <button type="submit">
+                <span className="icon icon-send" />
+              </button>
+            )}
+          </div>
+          {window.TITLE && (
+            <label>
+              <input
+                type="checkbox"
+                onChange={this.on_use_title_change_bound}
+                checked={this.state.use_title}
+              />
+              {' '}使用头衔
+            </label>
           )}
-        </button>
-        {this.state.loading_status === 'loading' ? (
-          <button disabled="disabled">
-            <span className="icon icon-loading" />
-          </button>
-        ) : (
-          <button type="submit">
-            <span className="icon icon-send" />
-          </button>
-        )}
+        </div>
       </form>
     );
   }
@@ -377,11 +439,13 @@ export class PostForm extends Component {
       preview: false,
       has_poll: !!window.POLL_BACKUP,
       poll_options: JSON.parse(window.POLL_BACKUP || '[""]'),
+      use_title: false,
     };
     this.img_ref = React.createRef();
     this.area_ref = React.createRef();
     this.on_change_bound = this.on_change.bind(this);
     this.on_allow_search_change_bound = this.on_allow_search_change.bind(this);
+    this.on_use_title_change_bound = this.on_use_title_change.bind(this);
     this.on_cw_change_bound = this.on_cw_change.bind(this);
     this.on_poll_option_change_bound = this.on_poll_option_change.bind(this);
     this.on_img_change_bound = this.on_img_change.bind(this);
@@ -406,6 +470,12 @@ export class PostForm extends Component {
     });
   }
 
+  on_use_title_change(event) {
+    this.setState({
+      use_title: event.target.checked,
+    });
+  }
+
   on_cw_change(event) {
     this.setState({
       cw: event.target.value,
@@ -419,14 +489,14 @@ export class PostForm extends Component {
   }
 
   do_post() {
-    let data = new URLSearchParams();
-    const { cw, text, allow_search, has_poll, poll_options } = this.state;
-    data.append('cw', this.state.cw);
-    data.append('text', this.state.text);
-    data.append('allow_search', this.state.allow_search ? '1' : '');
-    //data.append('type', img ? 'image' : 'text');
-    //if (img) data.append('data', img);
-    data.append('type', 'text')
+    const { cw, text, allow_search, use_title, has_poll, poll_options } = this.state;
+    let data = new URLSearchParams({
+      cw: cw,
+      text: text,
+      allow_search: allow_search ? '1' : '',
+      use_title: use_title ? '1' : '',
+      type: 'text'
+    });
     if (has_poll) {
       poll_options.forEach((opt) => {
         if (opt)
@@ -676,8 +746,18 @@ export class PostForm extends Component {
               onChange={this.on_allow_search_change_bound}
               checked={this.state.allow_search}
             />
-            允许被搜索
+            {' '}允许搜索
           </label>
+          {window.TITLE && (
+            <label>
+              <input
+                type="checkbox"
+                onChange={this.on_use_title_change_bound}
+                checked={this.state.use_title}
+              />
+              {' '}使用头衔
+            </label>
+          )}
 
         </div>
         {!!this.state.img_tip && (

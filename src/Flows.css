@@ -296,6 +296,11 @@
     padding: .1em .5em;
 }
 
+.box-header-name.author-title {
+    color: white;
+    background-color: #333;
+}
+
 .root-dark-mode .box-header-cw {
     background-color: #00a;
 }

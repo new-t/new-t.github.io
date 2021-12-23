@@ -129,6 +129,9 @@ class Reply extends PureComponent {
           {(
             <span className="box-header-name">{info.name}</span>
           )}
+          {info.author_title && (
+            <span className="box-header-name author-title">{`"${info.author_title}"`}</span>
+          )}
           {!!do_delete && !!info.can_del && (
             <span
               className="clickable"
@@ -282,6 +285,10 @@ class FlowItem extends PureComponent {
                 #{info.pid}
               </a>
             </code>
+            &nbsp;
+            {info.author_title && (
+              <span className="box-header-name author-title">{`"${info.author_title}"`}</span>
+            )}
             {!!do_delete && !!info.can_del && (
               <span
                 className="clickable"
@@ -1098,6 +1105,9 @@ class FlowItemRow extends PureComponent {
                 )}
                 <code className="box-id">#{this.props.info.pid}</code>
                 &nbsp;
+                {this.props.info.author_title && (
+                  <span className="box-header-name author-title">{`"${this.props.info.author_title}"`}</span>
+                )}
                 {this.props.info.cw !== null && (
                   <span className="box-header-cw">{this.props.info.cw}</span>
                 )}
@@ -1360,6 +1370,7 @@ class SubFlow extends PureComponent {
               });
               localStorage['_LATEST_POST_ID'] = '' + max_id;
             }
+            window.TITLE = json.custom_title;
             json.data.forEach((x) => {
               if (x.comments) {
                 let comment_json = {

@@ -129,3 +129,17 @@
 .post-form-poll-options h6 {
   margin-bottom: 0;
 }
+
+.reply-form-opt-box {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 6rem;
+}
+
+.reply-form-opt-box > label {
+  margin-left: 5px;
+}
+
+.reply-form-buttons {
+  display: flex;
+}

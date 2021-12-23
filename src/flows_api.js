@@ -251,4 +251,22 @@ export const API = {
     );
     return handle_response(response, true);
   },
+
+  set_title: async (title, token) => {
+    console.log('title: ', title);
+    let data = new URLSearchParams([['title', title]]);
+    let response = await fetch(
+      API_BASE + '/title',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Token': token,
+        },
+        body: data,
+      },
+    );
+    return handle_response(response, true);
+  },
+
 };
