@@ -289,6 +289,9 @@ class FlowItem extends PureComponent {
             {info.author_title && (
               <span className="box-header-name author-title">{`"${info.author_title}"`}</span>
             )}
+            {info.is_reported && (
+              <span className="danger-info"> R </span>
+            )}
             {!!do_delete && !!info.can_del && (
               <span
                 className="clickable"
