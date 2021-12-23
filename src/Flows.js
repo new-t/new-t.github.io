@@ -395,7 +395,7 @@ class FlowItem extends PureComponent {
           { info.poll && (
             <div className={!do_vote ? "box-poll disabled" : "box-poll"}>
               <Poll
-                key={+new Date()}
+                key={info.poll.vote || 'x'}
                 question={""}
                 answers={info.poll.answers}
                 onVote={do_vote || (() => {})}
@@ -657,18 +657,23 @@ class FlowSidebar extends PureComponent {
     return do_delete;
   }
 
-  make_do_edit_cw(token) {
-    const do_edit_cw = (cw, id) => {
-      API.update_cw(cw, id, token)
+  do_edit_cw(cw, id) {
+      API.update_cw(cw, id, this.props.token)
         .then((json) => {
-          alert('已更新\n刷新列表显示新版本');
+          this.setState({
+              info: Object.assign({}, this.state.info, { cw: cw }),
+          },
+          () => {
+            this.syncState({
+              info: this.state.info,
+            });
+          });
+          alert('已更新');
         })
         .catch((e) => {
             alert('更新失败\n' + e);
             console.error(e);
         });
-    }
-    return do_edit_cw;
   }
 
   make_do_edit_score(token) {
@@ -729,7 +734,7 @@ class FlowSidebar extends PureComponent {
               replies_cnt[DZ_NAME] > 1 ? this.set_filter_name.bind(this) : null
             }
             do_delete={this.make_do_delete(this.props.token, ()=>{window.location.reload();})}
-            do_edit_cw={this.make_do_edit_cw(this.props.token)}
+            do_edit_cw={this.do_edit_cw.bind(this)}
             do_edit_score={this.make_do_edit_score(this.props.token)}
             do_vote={this.do_vote.bind(this)}
             do_block={() => {this.block(
