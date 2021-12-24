@@ -17,7 +17,7 @@ const handle_response = async (response, notify = false) => {
   return json;
 };
 
-const parse_replies = (replies, color_picker) =>
+export const parse_replies = (replies, color_picker) =>
   replies
     .sort((a, b) => parseInt(a.cid, 10) - parseInt(b.cid, 10))
     .map((info) => {
@@ -185,15 +185,11 @@ export const API = {
     return handle_response(response);
   },
 
-  get_search: async (page, keyword, token) => {
+  get_search: async (page, keyword, token, submode) => {
     let response = await fetch(
-      API_BASE +
-        '/search?pagesize=' +
-        SEARCH_PAGESIZE +
-        '&page=' +
-        page +
-        '&keywords=' +
-        encodeURIComponent(keyword),
+      `${API_BASE}/search?search_mode=${submode}&page=${page}&keywords=${
+        encodeURIComponent(keyword)
+      }&pagesize=${SEARCH_PAGESIZE}`,
       {
         headers: {'User-Token': token},
       }

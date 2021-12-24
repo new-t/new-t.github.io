@@ -21,7 +21,7 @@ import {
 import './Flows.css';
 import LazyLoad, { forceCheck } from './react-lazyload/src';
 import { TokenCtx, ReplyForm } from './UserAction';
-import { API } from './flows_api';
+import { API, parse_replies } from './flows_api';
 import { cache } from './cache';
 import { save_attentions } from './Attention'
 import Poll from 'react-polls';
@@ -886,8 +886,9 @@ class FlowItemRow extends PureComponent {
       !props.search_param &&
       (window.config.whitelist_cw.indexOf('*')==-1 && window.config.whitelist_cw.indexOf(props.info.cw)==-1) &&
       props.mode !== 'attention' && props.mode !== 'attention_finished';
+    this.color_picker = new ColorPicker();
     this.state = {
-      replies: [],
+      replies: props.info.comments ? parse_replies(props.info.comments, this.color_picker) : [],
       reply_status: 'done',
       reply_error: null,
       info: Object.assign({}, props.info, { variant: {} }),
@@ -898,12 +899,12 @@ class FlowItemRow extends PureComponent {
         props.attention_override === null ? false : props.attention_override,
       cached: true, // default no display anything
     };
-    this.color_picker = new ColorPicker();
   }
 
   componentDidMount() {
     // cache from getlist, so always to this to update attention
-    if (true || parseInt(this.state.info.reply, 10)) {
+    if (!this.props.info.comments) {
+    //if (true || parseInt(this.state.info.reply, 10)) {
       this.load_replies(null, /*update_count=*/ false);
     }
   }
@@ -1234,7 +1235,7 @@ function FlowChunk(props) {
           {!!props.title && <TitleLine text={props.title} />}
           {props.list.map((info, ind) => !info.blocked && (
             <LazyLoad
-              key={info.pid}
+              key={info.key || info.pid}
               offset={500}
               height="15em"
               hiddenIfInvisible={false}
@@ -1275,12 +1276,12 @@ function FlowChunk(props) {
 export class Flow extends PureComponent {
   constructor(props) {
     super(props);
+    let submode = window[props.mode.toUpperCase() + '_SUBMODE_BACKUP'];
+    if (submode === undefined) {
+      submode = props.mode === 'list' ?  (window.config.by_c ? 1 : 0) : 0;
+    }
     this.state = {
-      submode: this.props.mode == 'list' ? (
-        window.LIST_SUBMOD_BACKUP !== undefined ? window.LIST_SUBMOD_BACKUP : (
-          (window.config.by_c ? 1 : 0)
-        )
-      ) : 0,
+      submode: submode,
     }
   }
 
@@ -1289,14 +1290,15 @@ export class Flow extends PureComponent {
       case('list'):
         return ['最新', '最近回复', '近期热门', '随机'];
       case('attention'):
-        return ['线上关注', '本地收藏']
+        return ['线上关注', '本地收藏'];
+      case('search'):
+        return ['Tag搜索', '全文搜索', '头衔']
     }
     return []
   }
 
   set_submode(submode) {
-    if (this.props.mode == 'list')
-      window.LIST_SUBMOD_BACKUP = submode;
+    window[this.props.mode.toUpperCase() + '_SUBMODE_BACKUP'] = submode;
     this.setState({
       submode: submode,
     });
@@ -1365,10 +1367,12 @@ class SubFlow extends PureComponent {
 
     if (page > this.state.loaded_pages + 1) throw new Error('bad page');
     if (page === this.state.loaded_pages + 1) {
+      const { mode, search_param } = this.state;
+      const { token, submode } = this.props;
       console.log('fetching page', page);
       cache();
-      if (this.state.mode === 'list') {
-        API.get_list(page, this.props.token, this.props.submode)
+      if (mode === 'list') {
+        API.get_list(page, token, submode)
           .then((json) => {
             if (page === 1 && json.data.length) {
               // update latest_post_id
@@ -1407,29 +1411,21 @@ class SubFlow extends PureComponent {
             }));
           })
           .catch(failed);
-      } else if (this.state.mode === 'search' && this.state.search_param) {
-        API.get_search(page, this.state.search_param, this.props.token)
+      } else if (mode === 'search' && search_param) {
+        API.get_search(page, search_param, token, submode)
           .then((json) => {
             const finished = json.data.length === 0;
             this.setState((prev, props) => ({
               chunks: {
-                title: 'Result for "' + this.state.search_param + '"',
-                data: prev.chunks.data.concat(
-                  json.data.filter(
-                    (x) =>
-                      prev.chunks.data.length === 0 ||
-                      !prev.chunks.data
-                        .slice(-100)
-                        .some((p) => p.pid === x.pid),
-                  ),
-                ),
+                title: 'Result for "' + search_param + '"',
+                data: prev.chunks.data.concat(json.data),
               },
               mode: finished ? 'search_finished' : 'search',
               loading_status: 'done',
             }));
           })
           .catch(failed);
-      } else if (this.state.mode === 'single') {
+      } else if (mode === 'single') {
         const pid = parseInt(this.state.search_param.substr(1), 10);
         API.get_single(pid, this.props.token)
           .then((json) => {
@@ -1454,7 +1450,7 @@ class SubFlow extends PureComponent {
             });
           })
           .catch(failed);
-      } else if (this.state.mode === 'attention') {
+      } else if (mode === 'attention') {
         let use_search = !!this.state.search_param;
         let use_regex = use_search && !!this.state.search_param.match(/\/.+\//);
         let regex_search = /.+/;
