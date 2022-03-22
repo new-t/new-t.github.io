@@ -1,7 +1,12 @@
 export function get_json(res) {
     if(!res.ok) {
-      console.log('error:', res);
-      throw Error(`${res.status} ${res.statusText}`);
+      return (
+        res.text().then((t) => {
+          console.log('error:', res);
+          t = t.length < 100 ? t : '';
+          throw Error(`${res.status} ${res.statusText} ${t}`);
+        })
+      );
     }
     return (
         res

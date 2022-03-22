@@ -895,8 +895,7 @@ class FlowItemRow extends PureComponent {
       hidden: window.config.block_words_v2.some((word) =>
           props.info.text.includes(word),
         ) && !props.info.can_del || this.needFold,
-      attention:
-        props.attention_override === null ? false : props.attention_override,
+      attention: props.info.attention,
       cached: true, // default no display anything
     };
   }
@@ -1258,9 +1257,6 @@ function FlowChunk(props) {
                   mode={props.mode}
                   show_sidebar={props.show_sidebar}
                   token={token}
-                  attention_override={
-                    props.mode === 'attention_finished' ? true : null
-                  }
                   deletion_detect={props.deletion_detect}
                   search_param={props.search_param}
                 />
@@ -1357,11 +1353,10 @@ class SubFlow extends PureComponent {
   load_page(page) {
     const failed = (err) => {
       console.error(err);
-      console.log(err.to_string);
       this.setState((prev, props) => ({
         loaded_pages: prev.loaded_pages - 1,
         loading_status: 'failed',
-        error_msg: prev.loaded_pages > 1 ? '找不到更多了' : '' + err,
+        error_msg: '' + err,
       }));
     };
 
@@ -1526,7 +1521,8 @@ class SubFlow extends PureComponent {
                   },
                   loading_status: 'done',
                 }));
-              });
+              })
+              .catch(failed);
           } else {
             console.log('local attention finished');
             this.setState({
