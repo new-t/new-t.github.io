@@ -98,7 +98,7 @@ class Reply extends PureComponent {
   render() {
     const {
       info, color_picker, show_pid, do_filter_name, do_delete,
-      do_report, do_block
+      do_report, do_block, search_param
     } = this.props;
     const author = info.name,
       replyText = info.text;
@@ -173,6 +173,7 @@ class Reply extends PureComponent {
             text={replyText}
             color_picker={color_picker}
             show_pid={show_pid}
+            search_param={search_param}
           />
         </div>
       </div>
@@ -227,7 +228,7 @@ class FlowItem extends PureComponent {
     const {
       info, is_quote, cached, attention, can_del, do_filter_name, do_delete,
       do_edit_cw, do_edit_score, timestamp, img_clickable, color_picker,
-      show_pid, do_vote, do_block
+      show_pid, do_vote, do_block, search_param
     } = this.props;
     const { cw, hot_score } = this.state;
     return (
@@ -358,39 +359,8 @@ class FlowItem extends PureComponent {
               text={info.text}
               color_picker={color_picker}
               show_pid={show_pid}
+              search_param={search_param}
             />
-            {info.type === 'image' && (
-              <p className="img">
-                {img_clickable ? (
-                  <a
-                    className="no-underline"
-                    href={IMAGE_BASE + info.url}
-                    target="_blank"
-                  >
-                    <img
-                      src={IMAGE_BASE + info.url}
-                      onError={(e) => {
-                        if (e.target.src === IMAGE_BASE + info.url) {
-                          e.target.src = IMAGE_BAK_BASE + info.url;
-                        }
-                      }}
-                      alt={IMAGE_BASE + info.url}
-                    />
-                  </a>
-                ) : (
-                  <img
-                    src={IMAGE_BASE + info.url}
-                    onError={(e) => {
-                      if (e.target.src === IMAGE_BASE + info.url) {
-                        e.target.src = IMAGE_BAK_BASE + info.url;
-                      }
-                    }}
-                    alt={IMAGE_BASE + info.url}
-                  />
-                )}
-              </p>
-            )}
-            {/*{info.type==='audio' && <AudioWidget src={AUDIO_BASE+info.url} />}*/}
           </div>
           { info.poll && (
             <div className={!do_vote ? "box-poll disabled" : "box-poll"}>
@@ -726,6 +696,7 @@ class FlowSidebar extends PureComponent {
             img_clickable={true}
             color_picker={this.color_picker}
             show_pid={show_pid}
+            search_param={this.props.search_param}
             replies={this.state.replies}
             set_variant={(variant) => {
               this.set_variant(null, variant);
@@ -846,6 +817,7 @@ class FlowSidebar extends PureComponent {
                 info={reply}
                 color_picker={this.color_picker}
                 show_pid={show_pid}
+                search_param={this.props.search_param}
                 set_variant={(variant) => {
                   this.set_variant(reply.cid, variant);
                 }}
@@ -967,6 +939,7 @@ class FlowItemRow extends PureComponent {
       <FlowSidebar
         key={+new Date()}
         info={this.state.info}
+        search_param={this.props.search_param}
         replies={this.state.replies}
         attention={this.state.attention}
         sync_state={this.setState.bind(this)}
@@ -979,50 +952,41 @@ class FlowItemRow extends PureComponent {
   }
 
   render() {
-    let show_pid = load_single_meta(this.props.show_sidebar, this.props.token, [
+    const {show_sidebar, token, search_param, is_quote } = this.props;
+    let show_pid = load_single_meta(show_sidebar, token, [
       this.state.info.pid,
     ]);
 
     let hl_rules = [
-      ['url_pid', URL_PID_RE],
-      ['url', URL_RE],
       ['pid', PID_RE],
-      ['nickname', NICKNAME_RE],
-      ['tag', TAG_RE],
     ];
-    if (this.props.search_param) {
-      hl_rules.push([
-        'search',
-        !!this.props.search_param.match(/\/.+\//)
-          ? build_highlight_re(this.props.search_param, ' ', 'gi', true) // Use regex
-          : build_highlight_re(this.props.search_param, ' ', 'gi'), // Don't use regex
-      ]);
-    }
     let parts = split_text(this.state.info.text, hl_rules);
 
     //console.log('hl:', parts,this.state.info.pid);
 
     let quote_id = null;
-    if (!this.props.is_quote)
+    if (!is_quote)
       for (let [mode, content] of parts) {
         content = content.length > 0 ? content.substring(1) : content;
         if (
           mode === 'pid' &&
           QUOTE_BLACKLIST.indexOf(content) === -1 &&
           parseInt(content) < parseInt(this.state.info.pid)
-        )
-          if (quote_id === null) quote_id = parseInt(content);
-          else {
-            quote_id = null;
-            break;
-          }
+        ) {
+            if (quote_id === null)
+              quote_id = parseInt(content);
+            else {
+              quote_id = null;
+              break;
+            }
+        }
       }
 
     let res = (
       <div
         className={
           'flow-item-row flow-item-row-with-prompt' +
-          (this.props.is_quote ? ' flow-item-row-quote' : '')
+          (is_quote ? ' flow-item-row-quote' : '')
         }
         onClick={(event) => {
           if (!CLICKABLE_TAGS[event.target.tagName.toLowerCase()])
@@ -1030,7 +994,6 @@ class FlowItemRow extends PureComponent {
         }}
       >
         <FlowItem
-          parts={parts}
           info={this.state.info}
           attention={this.state.attention}
           img_clickable={false}
@@ -1039,6 +1002,7 @@ class FlowItemRow extends PureComponent {
           show_pid={show_pid}
           replies={this.state.replies}
           cached={this.state.cached}
+          search_param={search_param}
         />
         <div className="flow-reply-row">
           {this.state.reply_status === 'loading' && (
@@ -1064,6 +1028,7 @@ class FlowItemRow extends PureComponent {
               info={reply}
               color_picker={this.color_picker}
               show_pid={show_pid}
+              search_param={search_param}
             />
           ))}
           {this.state.replies.length > PREVIEW_REPLY_COUNT && (

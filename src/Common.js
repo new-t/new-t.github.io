@@ -68,52 +68,7 @@ function normalize_url(url) {
   return /^https?:\/\//.test(url) ? url : 'http://' + url;
 }
 
-/*
-export class HighlightedText extends PureComponent {
-  render() {
-    return (
-      <pre>
-        {this.props.parts.map((part, idx) => {
-          let [rule, p] = part;
-          return (
-            <span key={idx}>
-              {rule === 'url_pid' ? (
-                <span className="url-pid-link" title={p}>
-                  /##
-                </span>
-              ) : rule === 'url' ? (
-                <a href={normalize_url(p)} target="_blank" rel="noopener">
-                  {p}
-                </a>
-              ) : rule === 'pid' ? (
-                <a
-                  href={'#' + p}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.props.show_pid(p.substring(1));
-                  }}
-                >
-                  {p}
-                </a>
-              ) : rule === 'nickname' ? (
-                <ColoredSpan colors={this.props.color_picker.get(p)}>
-                  {p}
-                </ColoredSpan>
-              ) : rule === 'search' ? (
-                <span className="search-query-highlight">{p}</span>
-              ) : (
-                p
-              )}
-            </span>
-          );
-        })}
-      </pre>
-    );
-  }
-}
-*/
-
-// props: text, show_pid, color_picker
+// props: text, show_pid, color_picker, search_param
 export class HighlightedMarkdown extends Component {
   render() {
     const props = this.props;
@@ -169,13 +124,21 @@ export class HighlightedMarkdown extends Component {
         },
         processNode(node, children, index) {
           const originalText = node.data;
-          const splitted = split_text(originalText, [
+          let rules = [
             ['url_pid', URL_PID_RE],
             ['url', URL_RE],
             ['pid', PID_RE],
             ['nickname', NICKNAME_RE],
-            ['tag', TAG_RE],
-          ]);
+            ['tag', TAG_RE]
+          ];
+          if (props.search_param) {
+            let search_kws = props.search_param.split(' ').filter(s => !!s);
+            rules.push([
+              'search',
+              new RegExp(`(${search_kws.map((s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join("|")})`, "g")
+            ]);
+          }
+          const splitted = split_text(originalText, rules);
 
           return (
             <React.Fragment key={index}>
