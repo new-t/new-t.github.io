@@ -71,9 +71,10 @@ export function gen_name(name_id) {
   if (name_id == 0)
     return '洞主';
 
-  let r = name_id - 1;
+  let r = name_id;
   let name = '';
   do {
+    r -= 1;
     name += ' ' + NAMES[r % 26];
     r = parseInt(r / 26);
   } while (r);
