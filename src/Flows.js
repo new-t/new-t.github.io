@@ -332,7 +332,7 @@ class FlowItem extends PureComponent {
             }
             <Time stamp={info.timestamp} short={!img_clickable} />
           </div>
-          {!!hot_score && (
+          {!!info.hot_score && (
             <span className="box-header">hot score: {info.hot_score}</span>
           )}
           <div className="box-content">
