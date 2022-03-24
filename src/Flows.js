@@ -185,7 +185,6 @@ class FlowItem extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      hot_score: props.info.hot_score || 0,
       cw: props.info.cw || '',
     };
   }
@@ -212,12 +211,6 @@ class FlowItem extends PureComponent {
     );
   }
 
-  on_hot_score_change(event) {
-    this.setState({
-      hot_score: event.target.value
-    });
-  }
-
   on_cw_change(event) {
     this.setState({
       cw: event.target.value,
@@ -227,10 +220,10 @@ class FlowItem extends PureComponent {
   render() {
     const {
       info, is_quote, cached, attention, can_del, do_filter_name, do_delete,
-      do_edit_cw, do_edit_score, timestamp, img_clickable, color_picker,
+      do_edit_cw, timestamp, img_clickable, color_picker,
       show_pid, do_vote, do_block, search_param
     } = this.props;
-    const { cw, hot_score } = this.state;
+    const { cw } = this.state;
     return (
       <div className={'flow-item' + (is_quote ? ' flow-item-quote' : '')}>
         {!!is_quote && (
@@ -339,21 +332,7 @@ class FlowItem extends PureComponent {
             }
             <Time stamp={info.timestamp} short={!img_clickable} />
           </div>
-          {info.hot_score !== undefined && (do_edit_score ? (
-            <>
-              <input
-                type="text"
-                value={hot_score}
-                onChange={this.on_hot_score_change.bind(this)}
-              />
-              <button type="button"
-                  onClick={(e)=>do_edit_score(hot_score, info.pid)}>
-                更新
-              </button>
-            </>
-          ) : (
-            <span className="box-header">hot score: {info.hot_score}</span>
-          ))}
+          <span className="box-header">hot score: {info.hot_score}</span>
           <div className="box-content">
             <HighlightedMarkdown
               text={info.text}
@@ -646,20 +625,6 @@ class FlowSidebar extends PureComponent {
         });
   }
 
-  make_do_edit_score(token) {
-    const do_edit_score = (score, id) => {
-      API.update_score(score, id, token)
-        .then((json) => {
-          console.log('已更新');
-        })
-        .catch((e) => {
-            alert('更新失败\n' + e);
-            console.error(e);
-        });
-    }
-    return do_edit_score;
-  }
-
   render() {
     if (this.state.loading_status === 'loading')
       return <p className="box box-tip">加载中……</p>;
@@ -706,7 +671,6 @@ class FlowSidebar extends PureComponent {
             }
             do_delete={this.make_do_delete(this.props.token, ()=>{window.location.reload();})}
             do_edit_cw={this.do_edit_cw.bind(this)}
-            do_edit_score={this.make_do_edit_score(this.props.token)}
             do_vote={this.do_vote.bind(this)}
             do_block={() => {this.block(
                 '洞主', 'post', this.state.info.pid, () => {window.location.reload();}
