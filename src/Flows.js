@@ -542,7 +542,7 @@ class FlowSidebar extends PureComponent {
           alert('举报成功');
         })
         .catch((e) => {
-          alert('举报失败');
+          alert('举报失败\n' + e);
           console.error(e);
         });
     }
@@ -557,7 +557,7 @@ class FlowSidebar extends PureComponent {
          !!on_complete && on_complete();
        })
       .catch((e) => {
-        alert('拉黑失败');
+        alert('拉黑失败\n' + e);
         console.error(e)
       });
     }

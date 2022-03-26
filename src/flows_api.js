@@ -10,9 +10,14 @@ const handle_response = async (response, notify = false) => {
   let json = await get_json(response);
   if (json.code !== 0) {
     if (json.msg) {
-      if (notify) alert(json.msg);
-      else throw new Error(json.msg);
-    } else throw new Error(JSON.stringify(json));
+      if (notify) {
+        alert(json.msg);
+      } else {
+        throw new Error(json.msg);
+      }
+    } else {
+      throw new Error(JSON.stringify(json));
+    }
   }
   return json;
 };
@@ -78,7 +83,7 @@ export const API = {
     );
     // Delete cache to update `attention` on next reload
     cache().delete(pid);
-    return handle_response(response, true);
+    return handle_response(response, false);
   },
 
   report: async (pid, reason, token) => {
@@ -96,7 +101,7 @@ export const API = {
         body: data,
       },
     );
-    return handle_response(response, true);
+    return handle_response(response, false);
   },
 
   block: async (type, id, token) => {
@@ -114,7 +119,7 @@ export const API = {
         body: data,
       },
     );
-    return handle_response(response, true);
+    return handle_response(response, false);
   },
 
 
@@ -134,7 +139,7 @@ export const API = {
         body: data,
       },
     );
-    return handle_response(response, true);
+    return handle_response(response, false);
   },
 
   update_cw: async (cw, id, token) => {
@@ -152,7 +157,7 @@ export const API = {
         body: data,
       },
     );
-    return handle_response(response, true);
+    return handle_response(response, false);
   },
 
   get_list: async (page, token, submode) => {

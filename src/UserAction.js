@@ -154,7 +154,7 @@ export class LoginForm extends Component {
           window.TITLE = title
           alert('专属头衔设置成功');
         }
-      });
+      }).catch(err => alert("设置头衔出错了:\n"+ err));
   }
 
   copy_token(token) {
