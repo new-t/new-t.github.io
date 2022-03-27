@@ -24,6 +24,15 @@ function escape_regex(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
+function is_video(s) {
+  try {
+    let url = new URL(s);
+    return url.pathname.endsWith('.mp4') || url.pathname.endsWith('.mov');
+  } catch (e) {
+    return false;
+  }
+}
+
 export function build_highlight_re(
   txt,
   split = ' ',
@@ -150,15 +159,20 @@ export class HighlightedMarkdown extends Component {
                         /##
                       </span>
                     ) : rule === 'url' ? (
-                      <a
-                        href={normalize_url(p)}
-                        className="ext-link"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {p}
-                        <span className="icon icon-new-tab" />
-                      </a>
+                      <>
+                        <a
+                          href={normalize_url(p)}
+                          className="ext-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {p}
+                          <span className="icon icon-new-tab" />
+                        </a>
+                        {is_video(p) && (
+                          <video className="ext-video" src={p} controls loop/>
+                        )}
+                      </>
                     ) : rule === 'pid' ? (
                       <a
                         href={'#' + p}
