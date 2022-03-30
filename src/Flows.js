@@ -226,7 +226,6 @@ class FlowItem extends PureComponent {
       do_filter_name,
       do_delete,
       do_edit_cw,
-      timestamp,
       img_clickable,
       color_picker,
       show_pid,
@@ -339,7 +338,7 @@ class FlowItem extends PureComponent {
               </div>
             )}
             {info.allow_search && <span> 📢 </span>}
-            <Time stamp={timestamp} short={!img_clickable} />
+            <Time stamp={info.timestamp} short={!img_clickable} />
           </div>
           {!!info.hot_score && (
             <span className="box-header">hot score: {info.hot_score}</span>
