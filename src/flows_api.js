@@ -27,7 +27,7 @@ export const parse_replies = (replies, color_picker) =>
     .sort((a, b) => parseInt(a.cid, 10) - parseInt(b.cid, 10))
     .map((info) => {
       info.name = gen_name(info.name_id);
-      info._display_color = color_picker.get(info.name);
+      info._display_color = color_picker.get(info.name, info.is_tmp);
       info.variant = {};
       return info;
     });

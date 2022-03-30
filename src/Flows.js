@@ -1,17 +1,9 @@
 import React, { PureComponent } from 'react';
 import copy from 'copy-to-clipboard';
 import { ColorPicker } from './color_picker';
-import {
-  split_text,
-  NICKNAME_RE,
-  PID_RE,
-  URL_RE,
-  URL_PID_RE,
-  TAG_RE,
-} from './text_splitter';
+import { split_text, PID_RE } from './text_splitter';
 import {
   format_time,
-  build_highlight_re,
   Time,
   TitleLine,
   ClickHandler,
@@ -136,6 +128,9 @@ class Reply extends PureComponent {
           {info.author_title && (
             <span className="box-header-name author-title">{`"${info.author_title}"`}</span>
           )}
+          {info.is_tmp && (
+            <span className="box-header-name tmp-title">临时账号</span>
+          )}
           {!!do_delete && !!info.can_del && (
             <span
               className="clickable"
@@ -240,6 +235,7 @@ class FlowItem extends PureComponent {
       search_param,
     } = this.props;
     const { cw } = this.state;
+    const _display_color = color_picker.get(DZ_NAME, info.is_tmp);
     return (
       <div className={'flow-item' + (is_quote ? ' flow-item-quote' : '')}>
         {!!is_quote && (
@@ -252,7 +248,13 @@ class FlowItem extends PureComponent {
             {/*</div>*/}
           </div>
         )}
-        <div className="box">
+        <div
+          className="box"
+          style={{
+            '--box-bgcolor-light': _display_color[0],
+            '--box-bgcolor-dark': _display_color[1],
+          }}
+        >
           {!!window.LATEST_POST_ID &&
             parseInt(info.pid, 10) > window.LATEST_POST_ID && (
               <div className="flow-item-dot" />
@@ -292,8 +294,11 @@ class FlowItem extends PureComponent {
             {info.author_title && (
               <span className="box-header-name author-title">{`"${info.author_title}"`}</span>
             )}
+            {info.is_tmp && (
+              <span className="box-header-name tmp-title">临时账号</span>
+            )}
             {info.is_reported && <span className="danger-info"> R </span>}
-            {!!do_delete && !!info.can_del && (
+            {!!do_delete && !!can_del && (
               <span
                 className="clickable"
                 onClick={() => {
@@ -316,10 +321,10 @@ class FlowItem extends PureComponent {
             {info.blocked_count && (
               <span className="danger-info"> {info.blocked_count} </span>
             )}
-            {info.cw !== null && (!do_edit_cw || !info.can_del) && (
+            {info.cw !== null && (!do_edit_cw || !can_del) && (
               <span className="box-header-cw">{info.cw}</span>
             )}
-            {!!do_edit_cw && !!info.can_del && (
+            {!!do_edit_cw && !!can_del && (
               <div className="box-header-cw-edit clickable">
                 <input
                   type="text"
@@ -334,7 +339,7 @@ class FlowItem extends PureComponent {
               </div>
             )}
             {info.allow_search && <span> 📢 </span>}
-            <Time stamp={info.timestamp} short={!img_clickable} />
+            <Time stamp={timestamp} short={!img_clickable} />
           </div>
           {!!info.hot_score && (
             <span className="box-header">hot score: {info.hot_score}</span>
@@ -1080,6 +1085,9 @@ class FlowItemRow extends PureComponent {
                   &nbsp;
                   {this.props.info.author_title && (
                     <span className="box-header-name author-title">{`"${this.props.info.author_title}"`}</span>
+                  )}
+                  {this.props.info.is_tmp && (
+                    <span className="box-header-name tmp-title">临时账号</span>
                   )}
                   {this.props.info.cw !== null && (
                     <span className="box-header-cw">{this.props.info.cw}</span>

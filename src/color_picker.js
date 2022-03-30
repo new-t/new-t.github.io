@@ -8,9 +8,10 @@ export class ColorPicker {
     this.current_h = Math.random();
   }
 
-  get(name) {
+  get(name, is_tmp = false) {
     name = name.toLowerCase();
-    if (name === '洞主') return ['hsl(0,0%,97%)', 'hsl(0,0%,16%)'];
+    if (is_tmp) return ['hsl(0, 0%, 80%)', 'hsl(0, 0%, 30%)'];
+    if (name === '洞主') return ['hsl(0, 0%, 97%)', 'hsl(0, 0%, 16%)'];
 
     if (!this.names[name]) {
       this.current_h += golden_ratio_conjugate;
