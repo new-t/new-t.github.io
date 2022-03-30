@@ -77,6 +77,10 @@ function normalize_url(url) {
   return /^https?:\/\//.test(url) ? url : 'http://' + url;
 }
 
+function stop_loading(e) {
+  e.target.parentNode.classList.remove('loading');
+}
+
 // props: text, show_pid, color_picker, search_param
 export class HighlightedMarkdown extends Component {
   render() {
@@ -96,12 +100,16 @@ export class HighlightedMarkdown extends Component {
         shouldProcessNode: (node) => node.name === 'img',
         processNode(node, index) {
           return (
-            <img
-              src={normalize_url(node.attribs.src)}
-              alt={node.alt}
-              className="ext-img"
-              referrerPolicy="no-referrer"
-            />
+            <span className="ext-img__warpper loading">
+              <img
+                src={normalize_url(node.attribs.src)}
+                alt={node.alt}
+                className="ext-img"
+                referrerPolicy="no-referrer"
+                onError={stop_loading}
+                onLoad={stop_loading}
+              />
+            </span>
           );
         },
       },
