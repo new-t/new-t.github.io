@@ -1,5 +1,7 @@
 export function load_attentions() {
-  window.saved_attentions = JSON.parse(localStorage['saved_attentions'] || '[]');
+  window.saved_attentions = JSON.parse(
+    localStorage['saved_attentions'] || '[]',
+  );
 }
 
 export function save_attentions() {

@@ -1,4 +1,4 @@
-import { get_json, gen_name} from './infrastructure/functions';
+import { get_json, gen_name } from './infrastructure/functions';
 import { API_BASE } from './Common';
 import { cache } from './cache';
 
@@ -35,14 +35,11 @@ export const parse_replies = (replies, color_picker) =>
 export const API = {
   load_replies: async (pid, token, color_picker, cache_version) => {
     pid = parseInt(pid);
-    let response = await fetch(
-      API_BASE + '/getcomment?pid=' + pid ,
-      {
-        headers: {
-          'User-Token': token,
-        }
-      }
-    );
+    let response = await fetch(API_BASE + '/getcomment?pid=' + pid, {
+      headers: {
+        'User-Token': token,
+      },
+    });
     let json = await handle_response(response);
     // Why delete then put ??
     //console.log('Put cache', json, pid, cache_version);
@@ -70,17 +67,14 @@ export const API = {
     let data = new URLSearchParams();
     data.append('pid', pid);
     data.append('switch', attention ? '1' : '0');
-    let response = await fetch(
-      API_BASE + '/attention',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Token': token,
-        },
-        body: data,
+    let response = await fetch(API_BASE + '/attention', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Token': token,
       },
-    );
+      body: data,
+    });
     // Delete cache to update `attention` on next reload
     cache().delete(pid);
     return handle_response(response, false);
@@ -90,55 +84,46 @@ export const API = {
     let data = new URLSearchParams();
     data.append('pid', pid);
     data.append('reason', reason);
-    let response = await fetch(
-      API_BASE + '/report',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Token': token,
-        },
-        body: data,
+    let response = await fetch(API_BASE + '/report', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Token': token,
       },
-    );
+      body: data,
+    });
     return handle_response(response, false);
   },
 
   block: async (type, id, token) => {
     let data = new URLSearchParams([
-      ['type', type], ['id', id]
+      ['type', type],
+      ['id', id],
     ]);
-    let response = await fetch(
-      API_BASE + '/block',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Token': token,
-        },
-        body: data,
+    let response = await fetch(API_BASE + '/block', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Token': token,
       },
-    );
+      body: data,
+    });
     return handle_response(response, false);
   },
-
 
   del: async (type, id, note, token) => {
     let data = new URLSearchParams();
     data.append('type', type);
     data.append('id', id);
     data.append('note', note);
-    let response = await fetch(
-      API_BASE + '/delete',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Token': token,
-        },
-        body: data,
+    let response = await fetch(API_BASE + '/delete', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Token': token,
       },
-    );
+      body: data,
+    });
     return handle_response(response, false);
   },
 
@@ -146,17 +131,14 @@ export const API = {
     let data = new URLSearchParams();
     data.append('cw', cw);
     data.append('pid', id);
-    let response = await fetch(
-      API_BASE + '/editcw',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Token': token,
-        },
-        body: data,
+    let response = await fetch(API_BASE + '/editcw', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Token': token,
       },
-    );
+      body: data,
+    });
     return handle_response(response, false);
   },
 
@@ -166,7 +148,7 @@ export const API = {
         window.config.no_c_post ? '&no_cw' : ''
       }&order_mode=${submode}`,
       {
-        headers: {'User-Token': token},
+        headers: { 'User-Token': token },
       },
     );
     return handle_response(response);
@@ -174,58 +156,49 @@ export const API = {
 
   get_search: async (page, keyword, token, submode) => {
     let response = await fetch(
-      `${API_BASE}/search?search_mode=${submode}&page=${page}&keywords=${
-        encodeURIComponent(keyword)
-      }&pagesize=${SEARCH_PAGESIZE}`,
+      `${API_BASE}/search?search_mode=${submode}&page=${page}&keywords=${encodeURIComponent(
+        keyword,
+      )}&pagesize=${SEARCH_PAGESIZE}`,
       {
-        headers: {'User-Token': token},
-      }
+        headers: { 'User-Token': token },
+      },
     );
     return handle_response(response);
   },
 
   get_single: async (pid, token) => {
-    let response = await fetch(
-      API_BASE + '/getone?pid=' + pid,
-      {
-        headers: {'User-Token': token},
-      }
-    );
+    let response = await fetch(API_BASE + '/getone?pid=' + pid, {
+      headers: { 'User-Token': token },
+    });
     return handle_response(response);
   },
 
   get_attention: async (token) => {
-    let response = await fetch(
-      API_BASE + '/getattention',
-      {
-        headers: {'User-Token': token},
-      }
-    );
+    let response = await fetch(API_BASE + '/getattention', {
+      headers: { 'User-Token': token },
+    });
     return handle_response(response);
   },
 
   add_vote: async (vote, pid, token) => {
     let data = new URLSearchParams([
       ['vote', vote],
-      ['pid', pid]
+      ['pid', pid],
     ]);
-    let response = await fetch(
-      API_BASE + '/vote',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Token': token,
-        },
-        body: data,
+    let response = await fetch(API_BASE + '/vote', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Token': token,
       },
-    );
+      body: data,
+    });
     return handle_response(response, true);
   },
 
   get_multi: async (pids, token) => {
     let response = await fetch(
-      API_BASE + '/getmulti?' + pids.map(pid => `pids=${pid}`).join('&'),
+      API_BASE + '/getmulti?' + pids.map((pid) => `pids=${pid}`).join('&'),
       {
         headers: {
           'User-Token': token,
@@ -238,18 +211,14 @@ export const API = {
   set_title: async (title, token) => {
     console.log('title: ', title);
     let data = new URLSearchParams([['title', title]]);
-    let response = await fetch(
-      API_BASE + '/title',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Token': token,
-        },
-        body: data,
+    let response = await fetch(API_BASE + '/title', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Token': token,
       },
-    );
+      body: data,
+    });
     return handle_response(response, true);
   },
-
 };

@@ -5,8 +5,7 @@ import './Config.css';
 const BUILTIN_IMGS = {
   'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/gbp.jpg':
     '怀旧背景（默认）',
-  'https://www.tsinghua.edu.cn/image/nav-bg.jpg':
-    '清华紫',
+  'https://www.tsinghua.edu.cn/image/nav-bg.jpg': '清华紫',
   'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/gbp.jpg':
     '寻觅繁星',
   'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/eriri.jpg':
@@ -25,7 +24,7 @@ const BUILTIN_IMGS = {
 
 const DEFAULT_CONFIG = {
   background_img:
-   '//cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/gbp.jpg',
+    '//cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/gbp.jpg',
   background_color: '#113366',
   pressure: false,
   easter_egg: true,
@@ -33,7 +32,7 @@ const DEFAULT_CONFIG = {
   no_c_post: false,
   by_c: false,
   block_words_v2: ['#天火', '#桃花石'],
-  whitelist_cw: []
+  whitelist_cw: [],
 };
 
 export function load_config() {
@@ -53,7 +52,9 @@ export function load_config() {
   });
 
   if (loaded_config['block_words']) {
-    config['block_words_v2'] = loaded_config['block_words'].concat(config['block_words_v2'])
+    config['block_words_v2'] = loaded_config['block_words'].concat(
+      config['block_words_v2'],
+    );
   }
 
   console.log('config loaded', config);
@@ -377,7 +378,9 @@ export class ConfigUI extends PureComponent {
             id="whitelist_cw"
             callback={this.save_changes_bound}
             name="展开指定的折叠警告"
-            description={'完全匹配的树洞不会被折叠，每行一个豁免词，也可使用一个星号("*")表示豁免所有'}
+            description={
+              '完全匹配的树洞不会被折叠，每行一个豁免词，也可使用一个星号("*")表示豁免所有'
+            }
             display={(array) => array.join('\n')}
             sift={(array) => array.filter((v) => v)}
             parse={(string) => string.split('\n')}

@@ -1,183 +1,193 @@
 .sidebar-shadow {
-    will-change: opacity;
-    opacity: 0;
-    background-color: black;
-    pointer-events: none;
-    transition: opacity 150ms ease-out;
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 20;
+  will-change: opacity;
+  opacity: 0;
+  background-color: black;
+  pointer-events: none;
+  transition: opacity 150ms ease-out;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 20;
 }
 .sidebar-on .sidebar-shadow {
-    opacity: .3;
-    pointer-events: initial;
+  opacity: 0.3;
+  pointer-events: initial;
 }
 .sidebar-on .sidebar-shadow:active {
-    opacity: .5;
-    transition: unset;
+  opacity: 0.5;
+  transition: unset;
 }
 
 .root-dark-mode .sidebar-on .sidebar-shadow {
-    opacity: .65;
+  opacity: 0.65;
 }
 .root-dark-mode .sidebar-on .sidebar-shadow:active {
-    opacity: .8;
+  opacity: 0.8;
 }
 
 .sidebar {
-    user-select: text;
-    position: fixed;
-    top: 0;
-    /* think twice before you use 100vh
+  user-select: text;
+  position: fixed;
+  top: 0;
+  /* think twice before you use 100vh
     https://dev.to/peiche/100vh-behavior-on-chrome-2hm8
     */
-    height: 100%;
-    background-color: rgba(255,255,255,.7);
-    overflow-y: auto;
-    padding-top: 3em;
-    /* padding-bottom: 1em; */ /* move to sidebar-content */
-    backdrop-filter: blur(5px);
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  overflow-y: auto;
+  padding-top: 3em;
+  /* padding-bottom: 1em; */ /* move to sidebar-content */
+  backdrop-filter: blur(5px);
 }
 
 .sidebar-content {
-    backdrop-filter: blur(0px); /* fix scroll performance issues */
+  backdrop-filter: blur(0px); /* fix scroll performance issues */
 }
 
 .root-dark-mode .sidebar {
-    background-color: hsla(0,0%,5%,.4);
+  background-color: hsla(0, 0%, 5%, 0.4);
 }
 
-.sidebar, .sidebar-title {
-    left: 700px;
-    will-change: opacity, transform;
-    z-index: 21;
-    width: calc(100% - 700px);
+.sidebar,
+.sidebar-title {
+  left: 700px;
+  will-change: opacity, transform;
+  z-index: 21;
+  width: calc(100% - 700px);
 }
 
-.sidebar-on .sidebar, .sidebar-on .sidebar-title {
-    animation: sidebar-fadein .15s cubic-bezier(0.15, 0.4, 0.6, 1);
+.sidebar-on .sidebar,
+.sidebar-on .sidebar-title {
+  animation: sidebar-fadein 0.15s cubic-bezier(0.15, 0.4, 0.6, 1);
 }
-.sidebar-off .sidebar, .sidebar-off .sidebar-title {
-    visibility: hidden;
-    pointer-events: none;
-    backdrop-filter: none;
-    animation: sidebar-fadeout .2s cubic-bezier(0.15, 0.4, 0.6, 1);
+.sidebar-off .sidebar,
+.sidebar-off .sidebar-title {
+  visibility: hidden;
+  pointer-events: none;
+  backdrop-filter: none;
+  animation: sidebar-fadeout 0.2s cubic-bezier(0.15, 0.4, 0.6, 1);
 }
 .sidebar-container {
-    animation: sidebar-initial .25s linear; /* skip initial animation */
+  animation: sidebar-initial 0.25s linear; /* skip initial animation */
 }
 
 @keyframes sidebar-fadeout {
-    from {
-        visibility: visible;
-        opacity: 1;
-        transform: none;
-        backdrop-filter: none;
-    }
-    to {
-        visibility: visible;
-        opacity: 0;
-        transform: translateX(40vw);
-        backdrop-filter: none;
-    }
+  from {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    backdrop-filter: none;
+  }
+  to {
+    visibility: visible;
+    opacity: 0;
+    transform: translateX(40vw);
+    backdrop-filter: none;
+  }
 }
 @keyframes sidebar-fadein {
-    from {
-        opacity: 0;
-        transform: translateX(40vw);
-        backdrop-filter: none;
-    }
-    to {
-        opacity: 1;
-        transform: none;
-        backdrop-filter: none;
-    }
+  from {
+    opacity: 0;
+    transform: translateX(40vw);
+    backdrop-filter: none;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    backdrop-filter: none;
+  }
 }
 @keyframes sidebar-initial {
-    from {opacity: 0;}
-    to {opacity: 0;}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 .sidebar-title {
-    text-shadow: 0 0 3px white;
-    font-weight: bold;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    line-height: 3em;
-    padding-left: .5em;
-    background-color: rgba(255,255,255,.6);
-    pointer-events: none;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 3px 5px rgba(0,0,0,.2);
+  text-shadow: 0 0 3px white;
+  font-weight: bold;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  line-height: 3em;
+  padding-left: 0.5em;
+  background-color: rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
 
 .root-dark-mode .sidebar-title {
-    background-color: hsla(0,0%,18%,.6);
-    color: var(--foreground-dark);
-    text-shadow: 0 0 3px black;
+  background-color: hsla(0, 0%, 18%, 0.6);
+  color: var(--foreground-dark);
+  text-shadow: 0 0 3px black;
 }
 
 .sidebar-title a {
-    pointer-events: initial;
+  pointer-events: initial;
 }
-
 
 /* move all padding to sidebar-content - the scrolling div (overflow-y: auto) */
 /* .sidebar, */
 .sidebar-content,
 .sidebar-title {
-    padding-left: 1em;
-    padding-right: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
 }
 
 .sidebar-content {
-    padding-bottom: 1em;
+  padding-bottom: 1em;
 }
 
 @media screen and (max-width: 1300px) {
-    .sidebar, .sidebar-title {
-        left: calc(100% - 550px);
-        width: 550px;/*
+  .sidebar,
+  .sidebar-title {
+    left: calc(100% - 550px);
+    width: 550px; /*
         padding-left: .5em;
         padding-right: .5em; */
-    }
-    .sidebar-content, .sidebar-title {
-        padding-left: .5em;
-        padding-right: .5em;
-    }
+  }
+  .sidebar-content,
+  .sidebar-title {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
 }
 @media screen and (max-width: 580px) {
-    .sidebar, .sidebar-title {
-        left: 27px;
-        width: calc(100% - 27px);
-        /* padding-left: .25em;
+  .sidebar,
+  .sidebar-title {
+    left: 27px;
+    width: calc(100% - 27px);
+    /* padding-left: .25em;
         padding-right: .25em; */
-    }
-    .sidebar-content, .sidebar-title {
-        padding-left: .25em;
-        padding-right: .25em;
-    }
+  }
+  .sidebar-content,
+  .sidebar-title {
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+  }
 }
 
 .sidebar-flow-item {
-    display: block;
+  display: block;
 }
 .sidebar-flow-item .box {
-    width: 100%;
+  width: 100%;
 }
 
 .sidebar-content-show {
-    height: 100%;
-    overflow-y: auto;
+  height: 100%;
+  overflow-y: auto;
 }
 
-.sidebar-content-hide{
-    /* will make lazyload working correctly */
-    height: 0;
-    padding: 0;
-    overflow-y: scroll;
+.sidebar-content-hide {
+  /* will make lazyload working correctly */
+  height: 0;
+  padding: 0;
+  overflow-y: scroll;
 }

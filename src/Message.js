@@ -11,7 +11,7 @@ export class MessageViewer extends PureComponent {
       loading_status: 'idle',
       msg: [],
     };
-    this.input_suf_ref=React.createRef();
+    this.input_suf_ref = React.createRef();
   }
 
   componentDidMount() {
@@ -25,12 +25,9 @@ export class MessageViewer extends PureComponent {
         loading_status: 'loading',
       },
       () => {
-        fetch(
-            API_BASE + '/systemlog',
-            {
-              headers: {'User-Token': this.props.token},
-            }
-        )
+        fetch(API_BASE + '/systemlog', {
+          headers: { 'User-Token': this.props.token },
+        })
           .then(get_json)
           .then((json) => {
             this.setState({
@@ -53,10 +50,9 @@ export class MessageViewer extends PureComponent {
   }
 
   do_set_token() {
-    if (this.state.loading_status==='loading')
-      return;
+    if (this.state.loading_status === 'loading') return;
     if (!this.input_suf_ref.current.value) {
-      alert("不建议后缀为空");
+      alert('不建议后缀为空');
       return;
     }
     let tt = this.state.tmp_token + '_' + this.input_suf_ref.current.value;
@@ -65,7 +61,7 @@ export class MessageViewer extends PureComponent {
     alert('已登录为临时用户，过期后需注销重新登陆');
     window.location.reload();
   }
-  
+
   render() {
     if (this.state.loading_status === 'loading')
       return <p className="box box-tip">加载中……</p>;
@@ -84,20 +80,29 @@ export class MessageViewer extends PureComponent {
     else if (this.state.loading_status === 'done')
       return (
         <>
-          <br/>
+          <br />
           <p>
             最近一次重置 <Time stamp={this.state.start_time} short={false} />
           </p>
           <p>
             随机盐 <b>{this.state.salt}</b>
           </p>
-          <br/>
-          <div> 
-            <p>15分钟临时token:</p> 
+          <br />
+          <div>
+            <p>15分钟临时token:</p>
             <div className="input-prepend">{this.state.tmp_token}_ </div>
-            <input type="text" className="input-suf" ref={this.input_suf_ref} placeholder="自定义后缀" maxLength={10}/>
-            <button type="button" disabled={this.state.loading_status==='loading'}
-              onClick={(e)=>this.do_set_token()}>
+            <input
+              type="text"
+              className="input-suf"
+              ref={this.input_suf_ref}
+              placeholder="自定义后缀"
+              maxLength={10}
+            />
+            <button
+              type="button"
+              disabled={this.state.loading_status === 'loading'}
+              onClick={(e) => this.do_set_token()}
+            >
               使用
             </button>
           </div>
@@ -105,8 +110,7 @@ export class MessageViewer extends PureComponent {
             <div className="box" key={msg.type + msg.timestamp}>
               <div className="box-header">
                 <Time stamp={msg.timestamp} short={false} />
-                &nbsp;
-                &nbsp;
+                &nbsp; &nbsp;
                 <b>{msg.type}</b>
                 &nbsp;
                 <span className="box-header-name">{msg.user}</span>
@@ -115,9 +119,9 @@ export class MessageViewer extends PureComponent {
                 <pre>{msg.detail}</pre>
               </div>
             </div>
-        ))}
+          ))}
         </>
-      )
+      );
     else return null;
   }
 }

@@ -100,9 +100,12 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (window.location.protocol === 'http:' &&
-        window.location.hostname !== '127.0.0.1' && !window.location.hostname.endsWith('localhost')) {
-      window.location.protocol = 'https:';  // 因为CDN的原因先在前端做下https跳转
+    if (
+      window.location.protocol === 'http:' &&
+      window.location.hostname !== '127.0.0.1' &&
+      !window.location.hostname.endsWith('localhost')
+    ) {
+      window.location.protocol = 'https:'; // 因为CDN的原因先在前端做下https跳转
       return;
     }
     let arg = window.location.search;
@@ -110,7 +113,10 @@ class App extends Component {
     if (arg.startsWith('?token=')) {
       let token = arg.substr(7);
       if (token.endsWith(encodeURI('_任意自定义后缀'))) {
-        let tmp_token_suf = localStorage['TOKEN_SUF'] || prompt('设置一个你专属的临时token后缀吧') || Math.random();
+        let tmp_token_suf =
+          localStorage['TOKEN_SUF'] ||
+          prompt('设置一个你专属的临时token后缀吧') ||
+          Math.random();
         localStorage['TOKEN_SUF'] = tmp_token_suf;
         token = `${token.split('_')[0]}_${tmp_token_suf}`;
       }

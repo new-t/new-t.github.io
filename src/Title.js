@@ -36,10 +36,11 @@ class ControlBar extends PureComponent {
       );
     }
 
-    window.addEventListener("hashchange",
+    window.addEventListener(
+      'hashchange',
       () => {
         let text = decodeURIComponent(window.location.hash).substr(1);
-        if(text && text[0]!='#') {
+        if (text && text[0] != '#') {
           console.log('search', text);
           this.setState(
             {
@@ -51,7 +52,7 @@ class ControlBar extends PureComponent {
           );
         }
       },
-      false
+      false,
     );
   }
 
@@ -136,7 +137,10 @@ class ControlBar extends PureComponent {
               className="control-search"
               value={this.state.search_text}
               placeholder={
-                this.props.mode === 'attention' ? '在关注列表中搜索' : '关键词 / tag / #树洞号'}
+                this.props.mode === 'attention'
+                  ? '在关注列表中搜索'
+                  : '关键词 / tag / #树洞号'
+              }
               onChange={this.on_change_bound}
               onKeyPress={this.on_keypress_bound}
             />

@@ -1,7 +1,6 @@
 @font-face {
   font-family: 'icomoon';
-  src:
-    url('icomoon.ttf?8qh3rt') format('truetype'),
+  src: url('icomoon.ttf?8qh3rt') format('truetype'),
     url('icomoon.woff?8qh3rt') format('woff'),
     url('icomoon.svg?8qh3rt#icomoon') format('svg');
   font-weight: normal;
@@ -19,7 +18,7 @@
   font-variant: normal;
   text-transform: none;
   line-height: 1;
-  vertical-align: -.0625em;
+  vertical-align: -0.0625em;
 
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
@@ -27,84 +26,84 @@
 }
 
 .icon-send:before {
-  content: "\e900";
+  content: '\e900';
 }
 .icon-textfile:before {
-  content: "\e926";
+  content: '\e926';
 }
 .icon-history:before {
-  content: "\e94d";
+  content: '\e94d';
 }
 .icon-reply:before {
-  content: "\e96b";
+  content: '\e96b';
 }
 .icon-quote:before {
-  content: "\e977";
+  content: '\e977';
 }
 .icon-loading:before {
-  content: "\e979";
+  content: '\e979';
 }
 .icon-login:before {
-  content: "\e98d";
+  content: '\e98d';
 }
 .icon-settings:before {
-  content: "\e994";
+  content: '\e994';
 }
 .icon-stats:before {
-  content: "\e99b";
+  content: '\e99b';
 }
 .icon-locate:before {
-  content: "\e9b3";
+  content: '\e9b3';
 }
 .icon-upload:before {
-  content: "\e9c3";
+  content: '\e9c3';
 }
 .icon-flag:before {
-  content: "\e9cc";
+  content: '\e9cc';
 }
 .icon-attention:before {
-  content: "\e9d3";
+  content: '\e9d3';
 }
 .icon-star:before {
-  content: "\e9d7";
+  content: '\e9d7';
 }
 .icon-star-ok:before {
-  content: "\e9d9";
+  content: '\e9d9';
 }
 .icon-plus:before {
-  content: "\ea0a";
+  content: '\ea0a';
 }
 .icon-about:before {
-  content: "\ea0c";
+  content: '\ea0c';
 }
 .icon-close:before {
-  content: "\ea0d";
+  content: '\ea0d';
 }
 .icon-logout:before {
-  content: "\ea14";
+  content: '\ea14';
 }
 .icon-refresh:before {
-  content: "\ea2e";
+  content: '\ea2e';
 }
 .icon-forward:before {
-  content: "\ea42";
+  content: '\ea42';
 }
 .icon-back:before {
-  content: "\ea44";
+  content: '\ea44';
 }
 .icon-order-rev:before {
-  content: "\ea46";
+  content: '\ea46';
   font-size: 1.2em;
 }
 .icon-github:before {
-  content: "\eab0";
+  content: '\eab0';
 }
 .icon-new-tab:before {
-  content: "\ea7e";
+  content: '\ea7e';
 }
 .icon-eye:before {
-  content: "\e9ce";
+  content: '\e9ce';
 }
 .icon-eye-blocked:before {
-  content: "\e9d1";
+  content: '\e9d1';
 }

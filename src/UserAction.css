@@ -1,120 +1,119 @@
 .login-form p {
-    margin: 1em 0;
-    text-align: center;
+  margin: 1em 0;
+  text-align: center;
 }
 .login-form button {
-    min-width: 6rem;
+  min-width: 6rem;
 }
 
 .reply-form {
-    display: flex;
+  display: flex;
 }
 .reply-sticky {
-    position: sticky;
-    bottom: 0;
+  position: sticky;
+  bottom: 0;
 }
 
 .reply-form textarea {
-    resize: vertical;
-    flex: 1;
-    min-height: 2em;
-    height: 4em;
+  resize: vertical;
+  flex: 1;
+  min-height: 2em;
+  height: 4em;
 }
 
 .reply-form button {
-    flex: 0 0 3em;
-    margin-right: 0;
+  flex: 0 0 3em;
+  margin-right: 0;
 }
 
 .reply-preview {
-    flex: 1;
-    min-height: 2em;
+  flex: 1;
+  min-height: 2em;
 }
 
-
 .post-form-bar {
-    line-height: 2em;
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: .5em;
+  line-height: 2em;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0.5em;
 }
 
 .post-form-bar .checkbox-bar {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .post-form-bar .checkbox-bar label {
-    flex: 0 0 auto;
-    margin: 0 0.5rem;
+  flex: 0 0 auto;
+  margin: 0 0.5rem;
 }
 
-.post-form-bar input[type=file] {
-    border: 0;
-    padding: 0 0 0 .5em;
+.post-form-bar input[type='file'] {
+  border: 0;
+  padding: 0 0 0 0.5em;
 }
 
 @media screen and (max-width: 580px) {
-    .post-form-bar input[type=file] {
-        width: 120px;
-    }
+  .post-form-bar input[type='file'] {
+    width: 120px;
+  }
 }
 
 @media screen and (max-width: 320px) {
-    .post-form-bar input[type=file] {
-        width: 100px;
-    }
+  .post-form-bar input[type='file'] {
+    width: 100px;
+  }
 }
 
 .post-form-bar button {
-    flex: 0 0 6em;
-    margin-right: 0;
+  flex: 0 0 6em;
+  margin-right: 0;
 }
 
 @media screen and (max-width: 580px) {
-    .post-form-bar button {
-        flex: 0 0 4.5em;
-        margin-right: 0;
-    }
+  .post-form-bar button {
+    flex: 0 0 4.5em;
+    margin-right: 0;
+  }
 }
 
 .post-form-img-tip {
-    font-size: small;
-    margin-top: -.5em;
-    margin-bottom: .5em;
+  font-size: small;
+  margin-top: -0.5em;
+  margin-bottom: 0.5em;
 }
 
 .post-form textarea {
-    resize: vertical;
-    width: 100%;
-    min-height: 5em;
-    height: 20em;
+  resize: vertical;
+  width: 100%;
+  min-height: 5em;
+  height: 20em;
 }
 
 .post-preview {
-    width: 100%;
-    min-height: 5em;
+  width: 100%;
+  min-height: 5em;
 }
 
 .life-info-table {
-    width: 100%;
-    margin: auto;
+  width: 100%;
+  margin: auto;
 }
 @media screen and (min-width: 375px) {
-    .life-info-table {
-        width: 315px;
-    }
+  .life-info-table {
+    width: 315px;
+  }
 }
 .life-info-table td {
-    padding: .25em;
+  padding: 0.25em;
 }
 .life-info-table td:nth-child(1) {
-    font-weight: bold;
-    text-align: right;
+  font-weight: bold;
+  text-align: right;
 }
 
 .life-info-error a {
-    --var-link-color: hsl(25,100%,45%);
+  --var-link-color: hsl(25, 100%, 45%);
 }
 
 .spoiler-input {

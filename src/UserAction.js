@@ -12,11 +12,8 @@ import { ConfigUI } from './Config';
 import fixOrientation from 'fix-orientation';
 import copy from 'copy-to-clipboard';
 import { cache } from './cache';
-import {
-  API,
-  get_json,
-} from './flows_api';
-import { save_attentions } from './Attention'
+import { API, get_json } from './flows_api';
+import { save_attentions } from './Attention';
 
 import './UserAction.css';
 
@@ -57,7 +54,9 @@ export function InfoSidebar(props) {
           <span className="icon icon-textfile" />
           <label>树洞规范（试行）</label>
         </a>
-        <p><em>强烈建议开始使用前先看一遍所有设置选项</em></p>
+        <p>
+          <em>强烈建议开始使用前先看一遍所有设置选项</em>
+        </p>
       </div>
       <div className="box help-desc-box">
         <p>
@@ -87,15 +86,18 @@ export function InfoSidebar(props) {
       </div>
       <div className="box help-desc-box">
         <p>意见反馈请加tag #意见反馈 或到github后端的issue区。</p>
-        <p>新T树洞强烈期待有其他更多树洞的出现，一起分布式互联，构建清华树洞族。详情见 关于 中的描述。</p>
-        <p>联系我们：<a href={"mailto:"+EMAIL}>{EMAIL}</a> 。</p>
+        <p>
+          新T树洞强烈期待有其他更多树洞的出现，一起分布式互联，构建清华树洞族。详情见
+          关于 中的描述。
+        </p>
+        <p>
+          联系我们：<a href={'mailto:' + EMAIL}>{EMAIL}</a> 。
+        </p>
       </div>
       <div className="box help-desc-box">
         <p>
           新T树洞 网页版 by @hole_thu，基于
-          <a href="https://www.gnu.org/licenses/agpl-3.0.html"
-            target="_blank"
-          >
+          <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank">
             AGPLv3
           </a>
           协议在{' '}
@@ -121,7 +123,8 @@ export function InfoSidebar(props) {
           >
             T大树洞网页版 by @thuhole
           </a>
-          、         <a href="https://reactjs.org/" target="_blank" rel="noopener">
+          、{' '}
+          <a href="https://reactjs.org/" target="_blank" rel="noopener">
             React
           </a>
           、
@@ -139,8 +142,8 @@ export class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      'custom_title': window.TITLE || ''
-    }
+      custom_title: window.TITLE || '',
+    };
   }
 
   update_title(title, token) {
@@ -151,10 +154,11 @@ export class LoginForm extends Component {
     API.set_title(title, token)
       .then((json) => {
         if (json.code === 0) {
-          window.TITLE = title
+          window.TITLE = title;
           alert('专属头衔设置成功');
         }
-      }).catch(err => alert("设置头衔出错了:\n"+ err));
+      })
+      .catch((err) => alert('设置头衔出错了:\n' + err));
   }
 
   copy_token(token) {
@@ -203,22 +207,27 @@ export class LoginForm extends Component {
                       复制 User Token
                     </a>
                     <br />
-                    User Token仅用于开发bot，切勿告知他人。若怀疑被盗号请刷新Token(刷新功能即将上线)。
+                    User
+                    Token仅用于开发bot，切勿告知他人。若怀疑被盗号请刷新Token(刷新功能即将上线)。
                   </p>
                   <p>
-                    专属头衔： 
+                    专属头衔：
                     <input
-                      value={this.state.custom_title} 
+                      value={this.state.custom_title}
                       onChange={(e) => {
-                        this.setState({ custom_title: e.target.value})
+                        this.setState({ custom_title: e.target.value });
                       }}
                       maxLength={10}
                     />
                     <button
                       className="update-title-btn"
                       type="button"
-                      onClick={(e) => {this.update_title(this.state.custom_title, token.value)}}
-                    >提交</button>
+                      onClick={(e) => {
+                        this.update_title(this.state.custom_title, token.value);
+                      }}
+                    >
+                      提交
+                    </button>
                     <br />
                     设置专属头衔后，可在发言时选择使用。重置后需重新设置。临时用户如需保持头衔请使用相同后缀。
                   </p>
@@ -319,17 +328,14 @@ export class ReplyForm extends Component {
       text: text,
       use_title: use_title ? '1' : '',
     });
-    fetch(
-      API_BASE + '/docomment',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Token': this.props.token,
-        },
-        body: data,
+    fetch(API_BASE + '/docomment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Token': this.props.token,
       },
-    )
+      body: data,
+    })
       .then(get_json)
       .then((json) => {
         if (json.code !== 0) {
@@ -338,7 +344,7 @@ export class ReplyForm extends Component {
 
         let saved_attentions = window.saved_attentions;
         if (!saved_attentions.includes(pid)) {
-          saved_attentions.unshift(pid)
+          saved_attentions.unshift(pid);
           window.saved_attentions = saved_attentions;
           save_attentions();
         }
@@ -393,7 +399,7 @@ export class ReplyForm extends Component {
             <button
               type="button"
               onClick={() => {
-              this.toggle_preview();
+                this.toggle_preview();
               }}
             >
               {this.state.preview ? (
@@ -418,8 +424,8 @@ export class ReplyForm extends Component {
                 type="checkbox"
                 onChange={this.on_use_title_change_bound}
                 checked={this.state.use_title}
-              />
-              {' '}使用头衔
+              />{' '}
+              使用头衔
             </label>
           )}
         </div>
@@ -490,18 +496,24 @@ export class PostForm extends Component {
   }
 
   do_post() {
-    const { cw, text, allow_search, use_title, has_poll, poll_options } = this.state;
+    const {
+      cw,
+      text,
+      allow_search,
+      use_title,
+      has_poll,
+      poll_options,
+    } = this.state;
     let data = new URLSearchParams({
       cw: cw,
       text: text,
       allow_search: allow_search ? '1' : '',
       use_title: use_title ? '1' : '',
-      type: 'text'
+      type: 'text',
     });
     if (has_poll) {
       poll_options.forEach((opt) => {
-        if (opt)
-          data.append('poll_options', opt);
+        if (opt) data.append('poll_options', opt);
       });
     }
 
@@ -692,14 +704,13 @@ export class PostForm extends Component {
     let text = event.target.value;
     poll_options[idx] = text;
     if (!text && poll_options.length > 1) {
-      poll_options.splice(idx, 1)
+      poll_options.splice(idx, 1);
     }
     if (poll_options[poll_options.length - 1] && poll_options.length < 8) {
-      poll_options.push('')
+      poll_options.push('');
     }
     this.setState({ poll_options: poll_options });
   }
-
 
   render() {
     const { has_poll, poll_options, preview, loading_status } = this.state;
@@ -748,8 +759,8 @@ export class PostForm extends Component {
                 type="checkbox"
                 onChange={this.on_allow_search_change_bound}
                 checked={this.state.allow_search}
-              />
-              {' '}允许搜索
+              />{' '}
+              允许搜索
             </label>
             {window.TITLE && (
               <label>
@@ -757,8 +768,8 @@ export class PostForm extends Component {
                   type="checkbox"
                   onChange={this.on_use_title_change_bound}
                   checked={this.state.use_title}
-                />
-                {' '}使用头衔
+                />{' '}
+                使用头衔
               </label>
             )}
           </div>
@@ -815,7 +826,7 @@ export class PostForm extends Component {
         {has_poll && (
           <div className="post-form-poll-options">
             <h6>投票选项</h6>
-            {poll_options.map( (option, idx) => (
+            {poll_options.map((option, idx) => (
               <input
                 key={idx}
                 type="text"
@@ -827,7 +838,9 @@ export class PostForm extends Component {
             ))}
           </div>
         )}
-        <br /><br /><br />
+        <br />
+        <br />
+        <br />
         <p>
           <small>
             请遵守
@@ -839,7 +852,8 @@ export class PostForm extends Component {
         </p>
         <p>
           <small>
-            插入图片请使用图片外链，Markdown格式 ![](图片链接)， 支持动图，支持多图。推荐的图床：
+            插入图片请使用图片外链，Markdown格式 ![](图片链接)，
+            支持动图，支持多图。推荐的图床：
             <a href="https://imgchr.com/" target="_blank">
               路过图床
             </a>
@@ -848,7 +862,10 @@ export class PostForm extends Component {
               sm.ms
             </a>
             、
-            <a href="https://bbs.pku.edu.cn/v2/post-read.php?bid=154&threadid=3743" target="_blank">
+            <a
+              href="https://bbs.pku.edu.cn/v2/post-read.php?bid=154&threadid=3743"
+              target="_blank"
+            >
               未名BBS
             </a>
             、

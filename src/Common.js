@@ -138,13 +138,18 @@ export class HighlightedMarkdown extends Component {
             ['url', URL_RE],
             ['pid', PID_RE],
             ['nickname', NICKNAME_RE],
-            ['tag', TAG_RE]
+            ['tag', TAG_RE],
           ];
           if (props.search_param) {
-            let search_kws = props.search_param.split(' ').filter(s => !!s);
+            let search_kws = props.search_param.split(' ').filter((s) => !!s);
             rules.push([
               'search',
-              new RegExp(`(${search_kws.map((s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join("|")})`, "g")
+              new RegExp(
+                `(${search_kws
+                  .map((s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+                  .join('|')})`,
+                'g',
+              ),
             ]);
           }
           const splitted = split_text(originalText, rules);
@@ -170,7 +175,7 @@ export class HighlightedMarkdown extends Component {
                           <span className="icon icon-new-tab" />
                         </a>
                         {is_video(p) && (
-                          <video className="ext-video" src={p} controls loop/>
+                          <video className="ext-video" src={p} controls loop />
                         )}
                       </>
                     ) : rule === 'pid' ? (
@@ -190,11 +195,7 @@ export class HighlightedMarkdown extends Component {
                     ) : rule === 'search' ? (
                       <span className="search-query-highlight">{p}</span>
                     ) : rule === 'tag' ? (
-                      <a
-                        href={p}
-                      >
-                        {p}
-                      </a>
+                      <a href={p}>{p}</a>
                     ) : (
                       p
                     )}

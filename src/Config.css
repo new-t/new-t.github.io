@@ -1,31 +1,31 @@
 .config-ui-header {
-    text-align: center;
-    top: 1em;
-    position: sticky;
+  text-align: center;
+  top: 1em;
+  position: sticky;
 }
 
 .config-description {
-    font-size: 0.75em;
+  font-size: 0.75em;
 }
 
 .config-select {
-    height: 2em;
+  height: 2em;
 }
 
 .config-textarea {
-    margin-top: 0.5em;
-    width: 100%;
-    max-width: 100%;
-    min-width: 100%;
-    height: 7em;
-    min-height: 2em;
+  margin-top: 0.5em;
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  height: 7em;
+  min-height: 2em;
 }
 
 .bg-preview {
-    height: 18em;
-    width: 32em;
-    max-height: 60vh;
-    max-width: 100%;
-    margin: .5em auto 1em;
-    box-shadow: 0 1px 5px rgba(0,0,0,.4);
+  height: 18em;
+  width: 32em;
+  max-height: 60vh;
+  max-width: 100%;
+  margin: 0.5em auto 1em;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
 }
