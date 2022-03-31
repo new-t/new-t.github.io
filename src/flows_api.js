@@ -144,9 +144,7 @@ export const API = {
 
   get_list: async (page, token, submode) => {
     let response = await fetch(
-      `${API_BASE}/getlist?p=${page}${
-        window.config.no_c_post ? '&no_cw' : ''
-      }&order_mode=${submode}`,
+      `${API_BASE}/getlist?p=${page}&order_mode=${submode}`,
       {
         headers: { 'User-Token': token },
       },

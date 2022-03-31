@@ -9,18 +9,12 @@ import { MessageViewer } from './Message';
 import { LoginPopup } from './infrastructure/widgets';
 import { ColorPicker } from './color_picker';
 import { ConfigUI } from './Config';
-import fixOrientation from 'fix-orientation';
 import copy from 'copy-to-clipboard';
 import { cache } from './cache';
 import { API, get_json } from './flows_api';
 import { save_attentions } from './Attention';
 
 import './UserAction.css';
-
-const BASE64_RATE = 4 / 3;
-const MAX_IMG_DIAM = 8000;
-const MAX_IMG_PX = 5000000;
-const MAX_IMG_FILESIZE = 450000 * BASE64_RATE;
 
 const REPOSITORY = 'https://git.thu.monster/newthuhole/';
 const EMAIL = 'hole_thu@riseup.net';
@@ -442,20 +436,17 @@ export class PostForm extends Component {
       cw: window.CW_BACKUP || '',
       allow_search: window.AS_BACKUP || false,
       loading_status: 'done',
-      img_tip: null,
       preview: false,
       has_poll: !!window.POLL_BACKUP,
       poll_options: JSON.parse(window.POLL_BACKUP || '[""]'),
       use_title: false,
     };
-    this.img_ref = React.createRef();
     this.area_ref = React.createRef();
     this.on_change_bound = this.on_change.bind(this);
     this.on_allow_search_change_bound = this.on_allow_search_change.bind(this);
     this.on_use_title_change_bound = this.on_use_title_change.bind(this);
     this.on_cw_change_bound = this.on_cw_change.bind(this);
     this.on_poll_option_change_bound = this.on_poll_option_change.bind(this);
-    this.on_img_change_bound = this.on_img_change.bind(this);
     this.color_picker = new ColorPicker();
   }
 
@@ -550,141 +541,10 @@ export class PostForm extends Component {
       });
   }
 
-  proc_img(file) {
-    return new Promise((resolve, reject) => {
-      function return_url(url) {
-        const idx = url.indexOf(';base64,');
-        if (idx === -1) throw new Error('img not base64 encoded');
-
-        return url.substr(idx + 8);
-      }
-
-      let reader = new FileReader();
-      function on_got_img(url) {
-        const image = new Image();
-        image.onload = () => {
-          let width = image.width;
-          let height = image.height;
-          let compressed = false;
-
-          if (width > MAX_IMG_DIAM) {
-            height = (height * MAX_IMG_DIAM) / width;
-            width = MAX_IMG_DIAM;
-            compressed = true;
-          }
-          if (height > MAX_IMG_DIAM) {
-            width = (width * MAX_IMG_DIAM) / height;
-            height = MAX_IMG_DIAM;
-            compressed = true;
-          }
-          if (height * width > MAX_IMG_PX) {
-            let rate = Math.sqrt((height * width) / MAX_IMG_PX);
-            height /= rate;
-            width /= rate;
-            compressed = true;
-          }
-          console.log('chosen img size', width, height);
-
-          let canvas = document.createElement('canvas');
-          let ctx = canvas.getContext('2d');
-          canvas.width = width;
-          canvas.height = height;
-          ctx.drawImage(image, 0, 0, width, height);
-
-          let quality_l = 0.1,
-            quality_r = 0.9,
-            quality,
-            new_url;
-          while (quality_r - quality_l >= 0.03) {
-            quality = (quality_r + quality_l) / 2;
-            new_url = canvas.toDataURL('image/jpeg', quality);
-            console.log(
-              quality_l,
-              quality_r,
-              'trying quality',
-              quality,
-              'size',
-              new_url.length,
-            );
-            if (new_url.length <= MAX_IMG_FILESIZE) quality_l = quality;
-            else quality_r = quality;
-          }
-          if (quality_l >= 0.101) {
-            console.log('chosen img quality', quality);
-            resolve({
-              img: return_url(new_url),
-              quality: quality,
-              width: Math.round(width),
-              height: Math.round(height),
-              compressed: compressed,
-            });
-          } else {
-            reject('图片过大，无法上传');
-          }
-        };
-        image.src = url;
-      }
-      reader.onload = (event) => {
-        fixOrientation(event.target.result, {}, (fixed_dataurl) => {
-          on_got_img(fixed_dataurl);
-        });
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  on_img_change() {
-    if (this.img_ref.current && this.img_ref.current.files.length)
-      this.setState(
-        {
-          img_tip: '（正在处理图片……）',
-        },
-        () => {
-          this.proc_img(this.img_ref.current.files[0])
-            .then((d) => {
-              this.setState({
-                img_tip:
-                  `（${d.compressed ? '压缩到' : '尺寸'} ${d.width}*${
-                    d.height
-                  } / ` +
-                  `质量 ${Math.floor(d.quality * 100)}% / ${Math.floor(
-                    d.img.length / BASE64_RATE / 1000,
-                  )}KB）`,
-              });
-            })
-            .catch((e) => {
-              this.setState({
-                img_tip: `图片无效：${e}`,
-              });
-            });
-        },
-      );
-    else
-      this.setState({
-        img_tip: null,
-      });
-  }
-
   on_submit(event) {
     if (event) event.preventDefault();
     if (this.state.loading_status === 'loading') return;
     if (!this.state.text) return;
-    /*
-    if (this.img_ref.current.files.length) {
-      this.setState({
-        loading_status: 'processing',
-      });
-      this.proc_img(this.img_ref.current.files[0])
-        .then((d) => {
-          this.setState({
-            loading_status: 'loading',
-          });
-          this.do_post(this.state.text, d.img);
-        })
-        .catch((e) => {
-          alert(e);
-        });
-    } else */
     {
       this.setState({
         loading_status: 'loading',
@@ -710,6 +570,51 @@ export class PostForm extends Component {
       poll_options.push('');
     }
     this.setState({ poll_options: poll_options });
+  }
+
+  on_file_change(event) {
+    console.log(event);
+    let tar = event.target;
+    let f = event.target.files[0];
+    if (f) {
+      tar.setAttribute('disabled', 'disabled');
+      let data = new FormData();
+      data.append('file', f);
+
+      fetch(API_BASE + '/upload', {
+        method: 'POST',
+        headers: {
+          'User-Token': this.props.token,
+        },
+        body: data,
+      })
+        .then(get_json)
+        .then((json) => {
+          if (json.code !== 0) {
+            throw new Error(json.msg);
+          }
+          console.log(json);
+          let url =
+            (window.config.ipfs_gateway[0] || '<hash>(无ipfs网关)').replaceAll(
+              '<hash>',
+              json.data.hash,
+            ) + json.data.filename;
+          let new_text =
+            this.state.text +
+            '\n' +
+            (f.type.startsWith('image/') ? `![](${url})` : url);
+          this.setState({ text: new_text });
+          this.area_ref.current.set(new_text);
+          tar.removeAttribute('disabled');
+        })
+        .catch((e) => {
+          console.error(e);
+          alert('上传失败\n' + e);
+          tar.removeAttribute('disabled');
+        });
+
+      // event.target.value = null;
+    }
   }
 
   render() {
@@ -743,8 +648,7 @@ export class PostForm extends Component {
             {loading_status !== 'done' ? (
               <button disabled="disabled">
                 <span className="icon icon-loading" />
-                &nbsp;
-                {loading_status === 'processing' ? '处理' : '上传'}
+                &nbsp;上传
               </button>
             ) : (
               <button type="submit">
@@ -774,19 +678,6 @@ export class PostForm extends Component {
             )}
           </div>
         </div>
-        {!!this.state.img_tip && (
-          <p className="post-form-img-tip">
-            <a
-              onClick={() => {
-                this.img_ref.current.value = '';
-                this.on_img_change();
-              }}
-            >
-              删除图片
-            </a>
-            {this.state.img_tip}
-          </p>
-        )}
         {preview ? (
           <div className="post-preview">
             <HighlightedMarkdown
@@ -797,6 +688,13 @@ export class PostForm extends Component {
           </div>
         ) : (
           <>
+            <span>上传并插入文件: </span>
+            <input
+              className="file-input"
+              type="file"
+              name="file"
+              onChange={this.on_file_change.bind(this)}
+            />
             <input
               type="text"
               placeholder="折叠警告(留空表示不折叠)"
@@ -852,9 +750,8 @@ export class PostForm extends Component {
         </p>
         <p>
           <small>
-            插入图片请使用图片外链，Markdown格式 ![](图片链接)，
-            支持动图，支持多图。推荐的图床：
-            <a href="https://imgchr.com/" target="_blank">
+            首选ipfs网关可以在设置中修改，如效果不佳仍可使用图床，例如：
+            <a href="https://imgtu.com/" target="_blank">
               路过图床
             </a>
             、

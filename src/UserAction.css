@@ -48,9 +48,11 @@
   margin: 0 0.5rem;
 }
 
-.post-form-bar input[type='file'] {
-  border: 0;
-  padding: 0 0 0 0.5em;
+.post-form .file-input {
+  border: none;
+  width: 100px;
+  padding: 0 0 0.5em 0.5em;
+  color: transparent;
 }
 
 @media screen and (max-width: 580px) {
