@@ -222,7 +222,6 @@ class FlowItem extends PureComponent {
       is_quote,
       cached,
       attention,
-      can_del,
       do_filter_name,
       do_delete,
       do_edit_cw,
@@ -297,7 +296,7 @@ class FlowItem extends PureComponent {
               <span className="box-header-name tmp-title">临时账号</span>
             )}
             {info.is_reported && <span className="danger-info"> R </span>}
-            {!!do_delete && !!can_del && (
+            {!!do_delete && !!info.can_del && (
               <span
                 className="clickable"
                 onClick={() => {
@@ -320,10 +319,10 @@ class FlowItem extends PureComponent {
             {info.blocked_count && (
               <span className="danger-info"> {info.blocked_count} </span>
             )}
-            {info.cw !== null && (!do_edit_cw || !can_del) && (
+            {info.cw !== null && (!do_edit_cw || !info.can_del) && (
               <span className="box-header-cw">{info.cw}</span>
             )}
-            {!!do_edit_cw && !!can_del && (
+            {!!do_edit_cw && !!info.can_del && (
               <div className="box-header-cw-edit clickable">
                 <input
                   type="text"
