@@ -433,6 +433,9 @@ export class PostForm extends Component {
     super(props);
     this.state = {
       text: '',
+      upload_progress: '',
+      is_loading: false,
+      file_type: '',
       cw: window.CW_BACKUP || '',
       allow_search: window.AS_BACKUP || false,
       loading_status: 'done',
@@ -574,51 +577,87 @@ export class PostForm extends Component {
 
   on_file_change(event) {
     console.log(event);
-    let tar = event.target;
     let f = event.target.files[0];
     if (f) {
-      tar.setAttribute('disabled', 'disabled');
+      this.setState({ is_loading: true, file_type: f.type });
       let data = new FormData();
       data.append('file', f);
 
-      fetch(API_BASE + '/upload', {
-        method: 'POST',
-        headers: {
-          'User-Token': this.props.token,
-        },
-        body: data,
-      })
-        .then(get_json)
-        .then((json) => {
-          if (json.code !== 0) {
-            throw new Error(json.msg);
-          }
-          console.log(json);
-          let url =
-            (window.config.ipfs_gateway[0] || '<hash>(无ipfs网关)').replaceAll(
-              '<hash>',
-              json.data.hash,
-            ) + json.data.filename;
-          let new_text =
-            this.state.text +
-            '\n' +
-            (f.type.startsWith('image/') ? `![](${url})` : url);
-          this.setState({ text: new_text });
-          this.area_ref.current.set(new_text);
-          tar.removeAttribute('disabled');
-        })
-        .catch((e) => {
-          console.error(e);
-          alert('上传失败\n' + e);
-          tar.removeAttribute('disabled');
-        });
-
-      // event.target.value = null;
+      var xh = new XMLHttpRequest();
+      xh.upload.addEventListener(
+        'progress',
+        this.upload_progress.bind(this),
+        false,
+      );
+      xh.addEventListener('load', this.upload_complete.bind(this), false);
+      xh.addEventListener('error', this.upload_error.bind(this), false);
+      xh.addEventListener('abort', this.upload_abort.bind(this), false);
+      xh.open('POST', API_BASE + '/upload');
+      xh.setRequestHeader('User-Token', this.props.token);
+      xh.send(data);
     }
   }
 
+  update_text_after_upload(data) {
+    let url =
+      (window.config.ipfs_gateway[0] || '<hash>(无ipfs网关)').replaceAll(
+        '<hash>',
+        data.hash,
+      ) + data.filename;
+    let new_text =
+      this.state.text +
+      '\n' +
+      (this.state.file_type.startsWith('image/') ? `![](${url})` : url);
+    this.setState({ text: new_text });
+    this.area_ref.current.set(new_text);
+  }
+
+  upload_progress(event) {
+    console.log(event.loaded, event.total);
+    this.setState({
+      upload_progress: `${((event.loaded * 100) / event.total).toFixed(2)}%`,
+    });
+  }
+
+  upload_complete(event) {
+    try {
+      let j = JSON.parse(event.target.responseText);
+      if (j.code != 0) {
+        alert(j.msg);
+        throw new Error();
+      }
+      this.update_text_after_upload(j.data);
+      this.setState({ is_loading: false });
+    } catch (e) {
+      console.log(e);
+      this.upload_error(event);
+    }
+  }
+
+  upload_error(event) {
+    alert(
+      '上传失败\n' +
+        (event.target.responseText.length < 100
+          ? event.target.responseText
+          : event.target.status),
+    );
+    this.setState({ is_loading: false });
+  }
+
+  upload_abort(event) {
+    alert('上传已中断');
+    this.setState({ is_loading: false });
+  }
+
   render() {
-    const { has_poll, poll_options, preview, loading_status } = this.state;
+    const {
+      has_poll,
+      poll_options,
+      preview,
+      loading_status,
+      upload_progress,
+      is_loading,
+    } = this.state;
     return (
       <form onSubmit={this.on_submit.bind(this)} className="post-form box">
         <div className="post-form-bar">
@@ -694,7 +733,11 @@ export class PostForm extends Component {
               type="file"
               name="file"
               onChange={this.on_file_change.bind(this)}
+              disabled={is_loading}
             />
+            {is_loading && !!upload_progress && (
+              <small>上传中: {upload_progress}</small>
+            )}
             <input
               type="text"
               placeholder="折叠警告(留空表示不折叠)"
