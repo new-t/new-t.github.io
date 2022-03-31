@@ -580,8 +580,8 @@ export class PostForm extends Component {
     let f = event.target.files[0];
     if (f) {
       this.setState({ is_loading: true, file_type: f.type });
-      let data = new FormData();
-      data.append('file', f);
+      // let data = new FormData();
+      // data.append('file', f);
 
       var xh = new XMLHttpRequest();
       xh.upload.addEventListener(
@@ -594,7 +594,7 @@ export class PostForm extends Component {
       xh.addEventListener('abort', this.upload_abort.bind(this), false);
       xh.open('POST', API_BASE + '/upload');
       xh.setRequestHeader('User-Token', this.props.token);
-      xh.send(data);
+      xh.send(f);
     }
   }
 
