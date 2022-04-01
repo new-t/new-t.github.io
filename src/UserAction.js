@@ -433,8 +433,9 @@ export class PostForm extends Component {
     super(props);
     this.state = {
       text: '',
-      upload_progress: '',
+      upload_progress_text: '',
       is_loading: false,
+      file_name: '',
       file_type: '',
       cw: window.CW_BACKUP || '',
       allow_search: window.AS_BACKUP || false,
@@ -579,7 +580,8 @@ export class PostForm extends Component {
     console.log(event);
     let f = event.target.files[0];
     if (f) {
-      this.setState({ is_loading: true, file_type: f.type });
+      console.log(f);
+      this.setState({ is_loading: true, file_name: f.name, file_type: f.type });
       // let data = new FormData();
       // data.append('file', f);
 
@@ -599,15 +601,19 @@ export class PostForm extends Component {
   }
 
   update_text_after_upload(data) {
+    const { file_name, file_type } = this.state;
     let url =
       (window.config.ipfs_gateway[0] || '<hash>(无ipfs网关)').replaceAll(
         '<hash>',
         data.hash,
-      ) + data.filename;
+      ) +
+      `?filename=${encodeURIComponent(file_name)}&filetype=${encodeURIComponent(
+        file_type,
+      )}`;
     let new_text =
       this.state.text +
       '\n' +
-      (this.state.file_type.startsWith('image/') ? `![](${url})` : url);
+      (file_type.startsWith('image/') ? `![](${url})` : url);
     this.setState({ text: new_text });
     this.area_ref.current.set(new_text);
   }
@@ -615,7 +621,9 @@ export class PostForm extends Component {
   upload_progress(event) {
     console.log(event.loaded, event.total);
     this.setState({
-      upload_progress: `${((event.loaded * 100) / event.total).toFixed(2)}%`,
+      upload_progress_text: `${((event.loaded * 100) / event.total).toFixed(
+        2,
+      )}%`,
     });
   }
 
@@ -655,8 +663,9 @@ export class PostForm extends Component {
       poll_options,
       preview,
       loading_status,
-      upload_progress,
+      upload_progress_text,
       is_loading,
+      file_name,
     } = this.state;
     return (
       <form onSubmit={this.on_submit.bind(this)} className="post-form box">
@@ -735,8 +744,12 @@ export class PostForm extends Component {
               onChange={this.on_file_change.bind(this)}
               disabled={is_loading}
             />
-            {is_loading && !!upload_progress && (
-              <small>上传中: {upload_progress}</small>
+            {is_loading && (
+              <p>
+                <small>
+                  上传 <i>{file_name}</i> 中: {upload_progress_text}
+                </small>
+              </p>
             )}
             <input
               type="text"

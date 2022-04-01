@@ -27,7 +27,11 @@ function escape_regex(string) {
 function is_video(s) {
   try {
     let url = new URL(s);
-    return url.pathname.endsWith('.mp4') || url.pathname.endsWith('.mov');
+    return (
+      url.pathname.endsWith('.mp4') ||
+      url.pathname.endsWith('.mov') ||
+      (url.searchParams.get('filetype') || '').startsWith('video/')
+    );
   } catch (e) {
     return false;
   }
