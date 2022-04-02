@@ -99,7 +99,11 @@ class Reply extends PureComponent {
       search_param,
     } = this.props;
     const author = info.name,
-      replyText = info.text;
+      replyText = info.text,
+      has_block_words =
+        window.config.block_words_v3.some((word) => info.text.includes(word)) &&
+        !info.can_del;
+    this.color_picker = new ColorPicker();
     return (
       <div
         className={'flow-reply box'}
@@ -165,16 +169,19 @@ class Reply extends PureComponent {
           )}
           <Time stamp={info.timestamp} short={!do_report} />
           &nbsp;
+          {has_block_words && <span className="box-header-badge">已屏蔽</span>}
         </div>
-        <div className="box-content">
-          <HighlightedMarkdown
-            author={author}
-            text={replyText}
-            color_picker={color_picker}
-            show_pid={show_pid}
-            search_param={search_param}
-          />
-        </div>
+        {!has_block_words && (
+          <div className="box-content">
+            <HighlightedMarkdown
+              author={author}
+              text={replyText}
+              color_picker={color_picker}
+              show_pid={show_pid}
+              search_param={search_param}
+            />
+          </div>
+        )}
       </div>
     );
   }
@@ -850,11 +857,13 @@ class FlowItemRow extends PureComponent {
     super(props);
     this.needFold =
       props.info.cw &&
-      !props.search_param &&
       window.config.whitelist_cw.indexOf('*') == -1 &&
       window.config.whitelist_cw.indexOf(props.info.cw) == -1 &&
-      props.mode !== 'attention' &&
-      props.mode !== 'attention_finished';
+      props.mode === 'list';
+    this.has_block_words =
+      window.config.block_words_v3.some((word) =>
+        props.info.text.includes(word),
+      ) && !props.info.can_del;
     this.color_picker = new ColorPicker();
     this.state = {
       replies: props.info.comments
@@ -863,12 +872,6 @@ class FlowItemRow extends PureComponent {
       reply_status: 'done',
       reply_error: null,
       info: Object.assign({}, props.info, { variant: {} }),
-      hidden:
-        (window.config.block_words_v2.some((word) =>
-          props.info.text.includes(word),
-        ) &&
-          !props.info.can_del) ||
-        this.needFold,
       attention: props.info.attention,
       cached: true, // default no display anything
     };
@@ -954,7 +957,7 @@ class FlowItemRow extends PureComponent {
   }
 
   render() {
-    const { show_sidebar, token, search_param, is_quote } = this.props;
+    const { show_sidebar, token, search_param, is_quote, mode } = this.props;
     let show_pid = load_single_meta(show_sidebar, token, [this.state.info.pid]);
 
     let hl_rules = [['pid', PID_RE]];
@@ -1042,9 +1045,9 @@ class FlowItemRow extends PureComponent {
       </div>
     );
 
-    if (this.state.hidden) {
+    if (this.needFold || this.has_block_words) {
       return (
-        this.needFold && (
+        (!this.has_block_words || mode !== 'list') && (
           <div
             className="flow-item-row flow-item-row-with-prompt"
             onClick={(event) => {
