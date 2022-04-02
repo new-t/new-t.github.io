@@ -4,6 +4,7 @@ import {
   SafeTextarea,
   PromotionBar,
   HighlightedMarkdown,
+  test_ipfs,
 } from './Common';
 import { MessageViewer } from './Message';
 import { LoginPopup } from './infrastructure/widgets';
@@ -603,13 +604,14 @@ export class PostForm extends Component {
   update_text_after_upload(data) {
     const { file_name, file_type } = this.state;
     let url =
-      (window.config.ipfs_gateway[0] || '<hash>(无ipfs网关)').replaceAll(
+      (window.config.ipfs_gateway_list[0] || '<hash>(无ipfs网关)').replaceAll(
         '<hash>',
         data.hash,
       ) +
       `?filename=${encodeURIComponent(file_name)}&filetype=${encodeURIComponent(
         file_type,
       )}`;
+    test_ipfs(data.hash);
     let new_text =
       this.state.text +
       '\n' +

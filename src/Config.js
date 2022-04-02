@@ -31,7 +31,21 @@ const DEFAULT_CONFIG = {
   color_scheme: 'default',
   block_words_v2: ['#天火', '#桃花石'],
   whitelist_cw: [],
-  ipfs_gateway: ['https://<hash>.ipfs.dweb.link/'],
+  ipfs_gateway_list: [
+    'https://<hash>.ipfs.dweb.link/',
+    'https://<hash>.ipfs.hub.textile.io/',
+    'https://<hash>.ipfs.infura-ipfs.io/',
+    'https://ipfs.adatools.io/ipfs/<hash>',
+    'https://<hash>.ipfs.astyanax.io/',
+    'https://crustwebsites.net/ipfs/<hash>',
+    'https://gateway.pinata.cloud/ipfs/<hash>',
+    'https://ipfs.eth.aragon.network/ipfs/<hash>',
+    'https://ipfs.best-practice.se/ipfs/<hash>',
+    'https://gateway.ipfs.io/ipfs/<hash>',
+    'https://ipfs.fleek.co/ipfs/<hash>',
+    'https://cloudflare-ipfs.com/ipfs/<hash>',
+    'https://via0.com/ipfs/<hash>',
+  ],
 };
 
 export function load_config() {
@@ -59,9 +73,9 @@ export function load_config() {
   console.log('config loaded', config);
   window.config = config;
 }
-export function save_config() {
+export function save_config(need_load = true) {
   localStorage['hole_config'] = JSON.stringify(window.config);
-  load_config();
+  if (need_load) load_config();
 }
 
 export function bgimg_style(img, color) {
@@ -315,7 +329,7 @@ export class ConfigUI extends PureComponent {
     Object.keys(chg).forEach((key) => {
       window.config[key] = chg[key];
     });
-    save_config();
+    save_config(false);
   }
 
   reset_settings() {
@@ -386,10 +400,12 @@ export class ConfigUI extends PureComponent {
           />
           <hr />
           <ConfigTextArea
-            id="ipfs_gateway"
+            id="ipfs_gateway_list"
             callback={this.save_changes_bound}
-            name="默认ipfs网关"
-            description={'<hash>表示要替换的哈希值。只会使用第一行的。'}
+            name="候选ipfs网关"
+            description={
+              '<hash>表示要替换的哈希值。下次上传文件会使用第一行的，上传后根据速度调整。'
+            }
             display={(array) => array.join('\n')}
             sift={(array) => array.filter((v) => v)}
             parse={(string) => string.split('\n')}
