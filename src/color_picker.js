@@ -10,7 +10,7 @@ export class ColorPicker {
 
   get(name, is_tmp = false) {
     name = name.toLowerCase();
-    if (is_tmp) return ['hsl(0, 0%, 80%)', 'hsl(0, 0%, 30%)'];
+    if (is_tmp) return ['hsl(0, 0%, 86%)', 'hsl(0, 0%, 25%)'];
     if (name === '洞主') return ['hsl(0, 0%, 97%)', 'hsl(0, 0%, 16%)'];
 
     if (!this.names[name]) {
