@@ -787,7 +787,7 @@ class FlowSidebar extends PureComponent {
           )}
         {replies_to_show.map(
           (reply, i) =>
-            !reply.blocked && (
+            (reply.can_del || !reply.is_blocked) && (
               <LazyLoad
                 key={i}
                 offset={1500}
@@ -1026,7 +1026,7 @@ class FlowItemRow extends PureComponent {
             .slice(0, PREVIEW_REPLY_COUNT)
             .map(
               (reply) =>
-                !reply.blocked && (
+                (reply.can_del || !reply.is_blocked) && (
                   <Reply
                     key={reply.cid}
                     info={reply}
@@ -1209,7 +1209,7 @@ function FlowChunk(props) {
           {!!props.title && <TitleLine text={props.title} />}
           {props.list.map(
             (info, ind) =>
-              !info.blocked && (
+              (info.can_del || !info.is_blocked) && (
                 <LazyLoad
                   key={info.key || info.pid}
                   offset={500}
