@@ -128,6 +128,18 @@ export function InfoSidebar(props) {
           </a>
           等开源项目。
         </p>
+        <hr />
+        <p>
+          新T树洞 后端 by @hole_thu，基于
+          <a href="http://www.wtfpl.net/about/" target="_blank">
+            WTFPLv2
+          </a>
+          协议在{' '}
+          <a href={REPOSITORY} target="_blank">
+            Gitea
+          </a>{' '}
+          开源。
+        </p>
       </div>
     </div>
   );
