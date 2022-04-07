@@ -11,7 +11,7 @@ import {
   HighlightedMarkdown,
 } from './Common';
 import './Flows.css';
-import LazyLoad, { forceCheck } from './react-lazyload/src';
+import LazyLoad, { forceCheck } from 'react-lazyload';
 import { TokenCtx, ReplyForm } from './UserAction';
 import { API, parse_replies } from './flows_api';
 import { cache } from './cache';

@@ -2,13 +2,10 @@
 
 ## 获取源码
 
-`git clone --recurse-submodules https://git.thu.monster/newthuhole/hole_thu_frontend.git`
+`git clone https://git.thu.monster/newthuhole/hole_thu_frontend.git`
 
-注意,由于改造自P大树洞网页版额，包含了由xmcp维护的submodule
 
 ## 部署
-
-推荐使用yarn
 
 + 本地调试
 ```
@@ -18,6 +15,7 @@ yarn start
 
 + 打包部署
 ```
+export REACT_APP_BUILD_INFO="your version"
 yarn run build
 ```
 
