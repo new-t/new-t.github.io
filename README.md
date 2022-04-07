@@ -10,14 +10,21 @@
 
 推荐使用yarn
 
-+ 本地调试 `yarn start`
-+ 打包部署 `yarn run build`
++ 本地调试
+```
+yarn install
+yarn start
+```
 
++ 打包部署
+```
+yarn run build
+```
 
 ## 后端接口
 
 + /\_login
-+ /\+api/v1/...
++ /\_api/v1/...
 
 ## 问题反馈
 
@@ -40,6 +47,6 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Affero General Public License for more details.
-    
+
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
