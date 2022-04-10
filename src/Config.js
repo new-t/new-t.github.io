@@ -428,7 +428,7 @@ export class ConfigUI extends PureComponent {
           <p>
             新功能建议或问题反馈请在&nbsp;
             <a
-              href="https://git.thu.monster/newthuhole/hole_thu_backend/issues"
+              href="https://git.thu.monster/newthuhole/hole-backend-rust/issues"
               target="_blank"
             >
               Gitea

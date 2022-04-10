@@ -12,7 +12,7 @@ import { ColorPicker } from './color_picker';
 import { ConfigUI } from './Config';
 import copy from 'copy-to-clipboard';
 import { cache } from './cache';
-import { API, get_json } from './flows_api';
+import { get_json } from './flows_api';
 import { save_attentions } from './Attention';
 
 import './UserAction.css';
@@ -42,7 +42,7 @@ export function InfoSidebar(props) {
           }}
         >
           <span className="icon icon-settings" />
-          <label>设置</label>
+          <label>本地设置</label>
         </a>
         &nbsp;&nbsp;
         <a href="/policy.html" target="_blank">
@@ -150,6 +150,7 @@ export class LoginForm extends Component {
     super(props);
     this.state = {
       custom_title: window.TITLE || '',
+      auto_block_rank: window.AUTO_BLCOK || 2,
     };
   }
 
@@ -158,14 +159,41 @@ export class LoginForm extends Component {
       alert('无变化');
       return;
     }
-    API.set_title(title, token)
-      .then((json) => {
-        if (json.code === 0) {
-          window.TITLE = title;
-          alert('专属头衔设置成功');
+    let data = new FormData();
+    data.append('title', title);
+    fetch(API_BASE + '/title', {
+      method: 'POST',
+      headers: { 'User-Token': token },
+      body: data,
+    })
+      .then(get_json)
+      .then((j) => {
+        if (j.code !== 0) {
+          throw new Error(j.msg);
         }
+        window.TITLE = title;
+        alert('专属头衔设置成功');
       })
       .catch((err) => alert('设置头衔出错了:\n' + err));
+  }
+
+  update_auto_block(rank, token) {
+    let data = new FormData();
+    data.append('rank', rank);
+    fetch(API_BASE + '/auto_block', {
+      method: 'POST',
+      headers: { 'User-Token': token },
+      body: data,
+    })
+      .then(get_json)
+      .then((j) => {
+        if (j.code !== 0) {
+          throw new Error(j.msg);
+        }
+        window.AUTO_BLCOK = rank;
+        alert('设置自动拉黑阈值成功');
+      })
+      .catch((err) => alert('设置自动拉黑出错了:\n' + err));
   }
 
   copy_token(token) {
@@ -232,11 +260,47 @@ export class LoginForm extends Component {
                       onClick={(e) => {
                         this.update_title(this.state.custom_title, token.value);
                       }}
+                      disabled={!this.state.custom_title}
                     >
                       提交
                     </button>
                     <br />
                     设置专属头衔后，可在发言时选择使用。重置后需重新设置。临时用户如需保持头衔请使用相同后缀。
+                  </p>
+                  <p>
+                    自动拉黑阈值:
+                    <span style={{ display: 'inline-block', width: '3rem' }}>
+                      <b>{this.state.auto_block_rank * 5}</b>
+                    </span>
+                    <input
+                      value={this.state.auto_block_rank}
+                      type="range"
+                      min="1"
+                      max="10"
+                      list="autoBlock"
+                      onChange={(e) => {
+                        this.setState({ auto_block_rank: e.target.value });
+                      }}
+                    />
+                    <button
+                      className="update-title-btn"
+                      type="button"
+                      onClick={(e) => {
+                        this.update_auto_block(
+                          this.state.auto_block_rank,
+                          token.value,
+                        );
+                      }}
+                    >
+                      提交
+                    </button>
+                    <datalist id="autoBlock">
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </datalist>
+                    <br />
+                    自动不展示被拉黑次数较多用户发布的内容，包括自己。对每个洞及其评论的可见性会有1小时缓存，频繁修改无效。
                   </p>
                 </div>
               ) : (

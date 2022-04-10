@@ -566,7 +566,7 @@ class FlowSidebar extends PureComponent {
       API.block(type, id, this.props.token)
         .then((json) => {
           let data = json.data;
-          alert(`操作成功，其成为危险用户进度 ${data.curr}/${data.threshold}`);
+          alert(`操作成功，当前拉黑数 ${data.curr}`);
           !!on_complete && on_complete();
         })
         .catch((e) => {
@@ -1355,6 +1355,7 @@ class SubFlow extends PureComponent {
               localStorage['_LATEST_POST_ID'] = '' + max_id;
             }
             window.TITLE = json.custom_title;
+            window.AUTO_BLCOK = json.auto_block_rank;
             json.data.forEach((x) => {
               if (x.comments) {
                 let comment_json = {
