@@ -58,7 +58,8 @@
 }
 
 .ext-img,
-.ext-video {
+.ext-video,
+.ext-audio {
   max-width: 100%;
   max-height: 2000px;
   display: block;

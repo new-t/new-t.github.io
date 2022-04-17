@@ -35,6 +35,18 @@ function is_video(s) {
   }
 }
 
+function is_audio(s) {
+  try {
+    let url = new URL(s);
+    return (
+      url.pathname.endsWith('.mp3') ||
+      (url.searchParams.get('filetype') || '').startsWith('audio/')
+    );
+  } catch (e) {
+    return false;
+  }
+}
+
 export function build_highlight_re(
   txt,
   split = ' ',
@@ -185,7 +197,10 @@ export class HighlightedMarkdown extends Component {
                           <span className="icon icon-new-tab" />
                         </a>
                         {is_video(p) && (
-                          <video className="ext-video" src={p} controls loop />
+                          <video className="ext-video" src={p} controls />
+                        )}
+                        {is_audio(p) && (
+                          <audio className="ext-audio" src={p} controls />
                         )}
                       </>
                     ) : rule === 'pid' ? (
