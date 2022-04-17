@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ipfs资源获取</title>
+</head>
+<body>
+</body>
+<script>
+    let hash = window.location.hash.substr(1);
+    if (hash) {
+        console.log(hash);
+        let loaded_config = JSON.parse(localStorage['hole_config'] || '{}');
+        let ipfs_list = loaded_config.ipfs_gateway_list || [];
+        console.log(ipfs_list);
+        ipfs_list.forEach((patt, idx) => {
+            let url = patt.replaceAll("<hash>", hash);
+            var p = document.createElement('p');
+            p.id = idx;
+            p.appendChild(document.createTextNode(`${url}: 测试中...`));
+            document.body.appendChild(p);
+            fetch(url)
+              .then(resp => {
+                  if (resp.ok) {
+                    window.location = url;
+                  } else {
+                      throw Error(resp.status);
+                  }
+              })
+              .catch(error => {
+                  console.error(url, error);
+                  document.getElementById(idx).innerHTML = `${url}: 获取数据失败, ${error}`;
+              })
+        })
+    }
+</script>
+</html>

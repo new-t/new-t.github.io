@@ -691,7 +691,8 @@ export class PostForm extends Component {
     let new_text =
       this.state.text +
       '\n' +
-      (file_type.startsWith('image/') ? `![](${url})` : url);
+      (file_type.startsWith('image/') ? `![](${url})` : url) +
+      ` [加载失败请点击此](${window.location.origin}/ipfs.html#${data.hash})\n\n---\n`;
     this.setState({ text: new_text });
     this.area_ref.current.set(new_text);
   }
