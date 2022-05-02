@@ -82,7 +82,9 @@ class LoginPopupSelf extends Component {
             <b>通过第三方验证登陆新T树洞</b>
           </p>
           <p>
-            <a href="/_login?p=cs" target="_blank">
+            <a href={(process.env.REACT_APP_BACKEND || '/') + "_login?p=cs"} target="_blank"
+              referrerPolicy="origin"
+            >
               <span className="icon icon-login" />
               &nbsp;闭社
             </a>

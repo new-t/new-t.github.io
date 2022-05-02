@@ -24,7 +24,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "echo 'skipped react-scripts test --env=jsdom'",
-    "predeploy": "REACT_APP_BUILD_INFO=autodeploy-$(TZ=Asia/Shanghai date +\"%y%m%d_%H:%M:%S\") react-scripts build",
+    "predeploy": "react-scripts build",
     "deploy": "gh-pages -d build",
     "eject": "react-scripts eject",
     "lint": "eslint --fix src/*.js"
