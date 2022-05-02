@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "copy-to-clipboard": "^3.3.1",
-    "gh-pages": "^3.0.0",
+    "gh-pages": "^3.2.3",
     "highlight.js": "^10.1.1",
     "html-to-react": "^1.4.3",
     "load-script": "^1.0.0",
@@ -13,19 +13,19 @@
     "pressure": "^2.1.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.0",
+    "react-lazyload": "^3.2.0",
+    "react-polls": "^1.2.0",
     "react-scripts": "^3.4.1",
     "react-timeago": "^4.4.0",
     "typescript": "^4.0.2",
-    "workbox-sw": "^5.1.3",
-    "react-polls": "^1.2.0",
-    "react-lazyload": "^3.2.0"
+    "workbox-sw": "^5.1.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "echo 'skipped react-scripts test --env=jsdom'",
-    "predeploy": "",
-    "deploy": "gh-pages -b $DEPLOY_BRANCH -d build -m $(TZ=Asia/Shanghai date +\"%y%m%d%H%M%S\")",
+    "predeploy": "REACT_APP_BUILD_INFO=autodeploy-$(TZ=Asia/Shanghai date +\"%y%m%d_%H:%M:%S\") react-scripts build",
+    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject",
     "lint": "eslint --fix src/*.js"
   },

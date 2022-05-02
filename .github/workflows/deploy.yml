@@ -1,0 +1,24 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - 'src'
+
+jobs:
+  gh_pages:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+      - name: "Install Dependencies"
+        run: yarn
+      - name: Deploy with gh-pages
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          yarn deploy -- -u "github-actions-bot <support+actions@github.com>"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+  
