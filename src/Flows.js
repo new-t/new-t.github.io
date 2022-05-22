@@ -200,20 +200,11 @@ class FlowItem extends PureComponent {
     copy(
       `${event.target.href}${
         this.props.info.cw ? ' 【' + this.props.info.cw + '】' : ''
-      }\n` +
-        `${this.props.info.text}${
-          this.props.info.type === 'image'
-            ? ' [图片]'
-            : this.props.info.type === 'audio'
-            ? ' [语音]'
-            : ''
-        }\n` +
+      }\n\n${this.props.info.text}\n` +
         `（${format_time(new Date(this.props.info.timestamp * 1000))} ${
           this.props.info.likenum
-        }关注 ${this.props.info.reply}回复）\n` +
-        this.props.replies
-          .map((r) => (r.cw ? '【' + r.cw + '】' : '') + r.text)
-          .join('\n'),
+        }关注 ${this.props.info.reply}回复）\n\n` +
+        this.props.replies.map((r) => `【${r.name}】\n${r.text}\n`).join('\n'),
     );
   }
 
