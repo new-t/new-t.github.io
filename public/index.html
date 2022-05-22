@@ -42,6 +42,28 @@ function force_reload() {
       window.location.reload(true);
     }, 200);
   }
+
+  let token;
+  if (window.location.hash.startsWith('###token=')) {
+    token = window.location.hash.substr(9);
+    window.location.hash = '';
+  }
+
+  if (window.location.search.startsWith('?token')) {
+    token = window.location.search.substr(7);
+    window.location.search = '';
+  }
+  if (token) {
+      if (token.endsWith(encodeURI('_任意自定义后缀'))) {
+        let tmp_token_suf =
+          localStorage['TOKEN_SUF'] ||
+          prompt('设置一个你专属的临时token后缀吧') ||
+          Math.random();
+        localStorage['TOKEN_SUF'] = tmp_token_suf;
+        token = `${token.split('_')[0]}_${tmp_token_suf}`;
+      }
+      localStorage['TOKEN'] = token;
+  }
 </script>
 
 <body>
