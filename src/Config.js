@@ -29,7 +29,8 @@ const DEFAULT_CONFIG = {
   pressure: false,
   easter_egg: true,
   color_scheme: 'default',
-  block_words_v3: ['蜘蛛'],
+  block_tmp: false,
+  block_words_v3: ['🕷️'],
   whitelist_cw: [],
   ipfs_gateway_list: [
     'https://<hash>.ipfs.dweb.link/',
@@ -373,10 +374,13 @@ export class ConfigUI extends PureComponent {
             callback={this.save_changes_bound}
           />
           <hr />
-          {/* <ConfigBlockWords
-            id="block-words"
+          <ConfigSwitch
             callback={this.save_changes_bound}
-          /> */}
+            id="block_tmp"
+            name="屏蔽临时帐号"
+            description="屏蔽所有临时帐号的发言"
+          />
+          <hr />
           <ConfigTextArea
             id="block_words_v3"
             callback={this.save_changes_bound}

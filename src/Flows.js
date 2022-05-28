@@ -32,6 +32,14 @@ window.LATEST_POST_ID = parseInt(localStorage['_LATEST_POST_ID'], 10) || 0;
 
 const DZ_NAME = '洞主';
 
+function check_block(info) {
+  return (
+    ((window.config.block_tmp && info.is_tmp) ||
+      window.config.block_words_v3.some((word) => info.text.includes(word))) &&
+    !info.can_del
+  );
+}
+
 function load_single_meta(show_sidebar, token) {
   return async (pid, replace = false) => {
     let color_picker = new ColorPicker();
@@ -100,9 +108,7 @@ class Reply extends PureComponent {
     } = this.props;
     const author = info.name,
       replyText = info.text,
-      has_block_words =
-        window.config.block_words_v3.some((word) => info.text.includes(word)) &&
-        !info.can_del;
+      has_block_words = check_block(info);
     this.color_picker = new ColorPicker();
     return (
       <div
@@ -851,10 +857,7 @@ class FlowItemRow extends PureComponent {
       window.config.whitelist_cw.indexOf('*') == -1 &&
       window.config.whitelist_cw.indexOf(props.info.cw) == -1 &&
       props.mode === 'list';
-    this.has_block_words =
-      window.config.block_words_v3.some((word) =>
-        props.info.text.includes(word),
-      ) && !props.info.can_del;
+    this.has_block_words = check_block(props.info);
     this.color_picker = new ColorPicker();
     this.state = {
       replies: props.info.comments
