@@ -35,7 +35,7 @@ const DZ_NAME = '洞主';
 function check_block(info) {
   return (
     ((window.config.block_tmp && info.is_tmp) ||
-      window.config.block_words_v3.some((word) => info.text.includes(word))) &&
+      window.config.block_words_v4.some((word) => info.text.includes(word))) &&
     !info.can_del
   );
 }

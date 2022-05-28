@@ -29,8 +29,8 @@ const DEFAULT_CONFIG = {
   pressure: false,
   easter_egg: true,
   color_scheme: 'default',
-  block_tmp: false,
-  block_words_v3: ['🕷️'],
+  block_tmp: true,
+  block_words_v4: ['🕷️', '[系统自动代发]'],
   whitelist_cw: [],
   ipfs_gateway_list: [
     'https://<hash>.ipfs.dweb.link/',
@@ -65,9 +65,9 @@ export function load_config() {
     if (config[key] !== undefined) config[key] = loaded_config[key];
   });
 
-  if (loaded_config['block_words_v2']) {
-    config['block_words_v3'] = loaded_config['block_words_v2'].concat(
-      config['block_words_v3'],
+  if (loaded_config['block_words_v3']) {
+    config['block_words_v4'] = loaded_config['block_words_v3'].concat(
+      config['block_words_v4'],
     );
   }
 
@@ -382,7 +382,7 @@ export class ConfigUI extends PureComponent {
           />
           <hr />
           <ConfigTextArea
-            id="block_words_v3"
+            id="block_words_v4"
             callback={this.save_changes_bound}
             name="设置屏蔽词"
             description={'包含屏蔽词的树洞会被折叠，每行写一个屏蔽词'}
