@@ -37,7 +37,9 @@ function check_block(info) {
     ((window.config.block_tmp && info.is_tmp) ||
       window.config.block_words_v4.some((word) => info.text.includes(word)) ||
       (info.cw &&
-        window.config.block_words_v4.some((word) => info.cw.includes(word)))) &&
+        window.config.block_words_v4
+          .concat(window.config.block_cw)
+          .some((word) => info.cw.includes(word)))) &&
     !info.can_del
   );
 }

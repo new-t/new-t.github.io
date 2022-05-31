@@ -30,6 +30,7 @@ const DEFAULT_CONFIG = {
   easter_egg: true,
   color_scheme: 'default',
   block_tmp: true,
+  block_cw: ['xxg', 'zzxg'],
   block_words_v4: ['🕷️', '[系统自动代发]'],
   whitelist_cw: [],
   ipfs_gateway_list: [
@@ -382,10 +383,22 @@ export class ConfigUI extends PureComponent {
           />
           <hr />
           <ConfigTextArea
+            id="block_cw"
+            callback={this.save_changes_bound}
+            name="设置屏蔽的折叠警告"
+            description={
+              '折叠警告包含屏蔽词的树洞会不显示而非折叠，每行一个屏蔽词'
+            }
+            display={(array) => array.join('\n')}
+            sift={(array) => array.filter((v) => v)}
+            parse={(string) => string.split('\n')}
+          />
+          <hr />
+          <ConfigTextArea
             id="block_words_v4"
             callback={this.save_changes_bound}
             name="设置屏蔽词"
-            description={'包含屏蔽词的树洞会被折叠，每行写一个屏蔽词'}
+            description={'包含屏蔽词的树洞会不被显示，每行一个屏蔽词'}
             display={(array) => array.join('\n')}
             sift={(array) => array.filter((v) => v)}
             parse={(string) => string.split('\n')}
