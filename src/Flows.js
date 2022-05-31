@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState } from 'react';
 import copy from 'copy-to-clipboard';
 import { ColorPicker } from './color_picker';
 import { split_text, PID_RE } from './text_splitter';
@@ -1317,7 +1317,7 @@ class SubFlow extends PureComponent {
         title: '',
         data: [],
       },
-      export_text: '',
+      local_attention_text: null,
       loading_status: 'done',
       error_msg: null,
     };
@@ -1549,49 +1549,38 @@ class SubFlow extends PureComponent {
   gen_export() {
     this.setState({
       can_export: false,
-      export_text:
-        '以下是你关注的洞及摘要，复制保存到本地吧。\n\n' +
-        this.state.chunks.data
-          .map(
-            (p) =>
-              `#${p.pid}: ${this.trunc_string(
-                p.text.replaceAll('\n', ' '),
-                50,
-              )}`,
-          )
-          .join('\n\n'),
+      local_attention_text: JSON.parse(localStorage['saved_attentions'] || '[]')
+        .map((pid) => `#${pid}`)
+        .join(' '),
     });
   }
 
   render() {
     const should_deletion_detect = localStorage['DELETION_DETECT'] === 'on';
+    const { mode, chunks, local_attention_text, search_param } = this.state;
     return (
       <div className="flow-container">
-        {this.state.mode === 'attention_finished' && this.props.submode == 0 && (
-          <button
-            className="export-btn"
-            type="button"
-            onClick={this.gen_export.bind(this)}
-          >
-            导出
-          </button>
-        )}
+        {mode === 'attention' &&
+          this.props.submode === 1 &&
+          local_attention_text === null && (
+            <button
+              className="export-btn"
+              type="button"
+              onClick={this.gen_export.bind(this)}
+            >
+              导出/导入
+            </button>
+          )}
 
-        {this.state.export_text && (
-          <div className="box">
-            <textarea
-              className="export-textarea"
-              value={this.state.export_text}
-              readOnly
-            />
-          </div>
+        {local_attention_text && (
+          <LocalAttentionEditer init_text={local_attention_text} />
         )}
 
         <FlowChunk
-          title={this.state.chunks.title}
-          list={this.state.chunks.data}
-          mode={this.state.mode}
-          search_param={this.state.search_param || null}
+          title={chunks.title}
+          list={chunks.data}
+          mode={mode}
+          search_param={search_param || null}
           show_sidebar={this.props.show_sidebar}
           deletion_detect={should_deletion_detect}
         />
@@ -1626,4 +1615,32 @@ class SubFlow extends PureComponent {
       </div>
     );
   }
+}
+
+function LocalAttentionEditer(props) {
+  const [text, setText] = useState(props.init_text);
+  const PID_RE = /#(\d+)/g;
+
+  const save = () => {
+    let pids = [...text.matchAll(PID_RE)]
+      .map((m) => parseInt(m[1]))
+      .sort((a, b) => b - a);
+    console.log(pids);
+    window.saved_attentions = pids;
+    save_attentions();
+    setText(pids.map((pid) => `#${pid}`).join(' '));
+  };
+
+  return (
+    <div className="box">
+      <textarea
+        className="export-textarea"
+        value={text}
+        onChange={(event) => setText(event.target.value)}
+      />
+      <button className="export-btn" type="button" onClick={save}>
+        保存
+      </button>
+    </div>
+  );
 }
