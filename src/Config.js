@@ -35,18 +35,13 @@ const DEFAULT_CONFIG = {
   whitelist_cw: [],
   ipfs_gateway_list: [
     'https://<hash>.ipfs.dweb.link/',
-    'https://<hash>.ipfs.hub.textile.io/',
     'https://<hash>.ipfs.infura-ipfs.io/',
-    'https://ipfs.adatools.io/ipfs/<hash>',
-    'https://<hash>.ipfs.astyanax.io/',
-    'https://crustwebsites.net/ipfs/<hash>',
     'https://gateway.pinata.cloud/ipfs/<hash>',
     'https://ipfs.eth.aragon.network/ipfs/<hash>',
-    'https://ipfs.best-practice.se/ipfs/<hash>',
     'https://gateway.ipfs.io/ipfs/<hash>',
     'https://ipfs.fleek.co/ipfs/<hash>',
     'https://cloudflare-ipfs.com/ipfs/<hash>',
-    'https://via0.com/ipfs/<hash>',
+    'https://ipfs.2read.net/ipfs/<hash>',
   ],
 };
 
