@@ -1,4 +1,4 @@
-网页版 新T树洞：[https://hole.thu.monster](https://hole.thu.monster)
+网页版 新T树洞 https://thuhollow.github.io/
 
 ## 获取源码
 
@@ -12,7 +12,7 @@
 yarn install
 yarn start
 ```
-
+ 
 + 打包部署
 ```
 export REACT_APP_BUILD_INFO="your version"
