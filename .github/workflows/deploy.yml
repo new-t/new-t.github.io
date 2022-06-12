@@ -3,7 +3,7 @@ name: Auto Deploy
 on:
   push:
     branches:
-      - 'src'
+      - 'master'
 
 jobs:
   gh_pages:
