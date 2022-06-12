@@ -2,7 +2,7 @@
 
 ## 获取源码
 
-`git clone https://git.thu.monster/newthuhole/hole_thu_frontend.git`
+`git clone https://github.com/thuhollow/thuhollow.github.io.git`
 
 
 ## 部署
@@ -12,7 +12,7 @@
 yarn install
 yarn start
 ```
- 
+
 + 打包部署
 ```
 export REACT_APP_BUILD_INFO="your version"
