@@ -550,8 +550,9 @@ class FlowSidebar extends PureComponent {
   report(event, text = '') {
     console.log(text);
     let reason = prompt(`举报 #${this.state.info.pid} 的理由：`, text);
+    let should_hide = confirm('是否认为此洞应该被删除或隐藏？');
     if (reason !== null) {
-      API.report(this.state.info.pid, reason, this.props.token)
+      API.report(this.state.info.pid, reason, should_hide, this.props.token)
         .then((json) => {
           alert('举报成功');
         })

@@ -80,10 +80,14 @@ export const API = {
     return handle_response(response, false);
   },
 
-  report: async (pid, reason, token) => {
-    let data = new URLSearchParams();
-    data.append('pid', pid);
-    data.append('reason', reason);
+  report: async (pid, reason, should_hide, token) => {
+    let data = new URLSearchParams([
+      ['pid', pid],
+      ['reason', reason],
+    ]);
+    if (should_hide) {
+      data.append('should_hide', 1);
+    }
     let response = await fetch(API_BASE + '/report', {
       method: 'POST',
       headers: {
