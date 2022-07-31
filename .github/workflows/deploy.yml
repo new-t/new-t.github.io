@@ -27,5 +27,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           REACT_APP_BACKEND: "https://api.hole-thu-qwertyuiop.xyz/"
+          REACT_APP_STORAGE: "https://file.hole-thu-qwertyuiop.xyz/"
           REACT_APP_BUILD_INFO: version-${{steps.date.outputs.date}}
           COMMIT_MESSAGE: "Build for: ${{ github.event.head_commit.message }}"
