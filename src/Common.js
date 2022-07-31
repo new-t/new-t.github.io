@@ -147,10 +147,7 @@ export class HighlightedMarkdown extends Component {
       {
         shouldProcessNode(node) {
           return (
-            node.type === 'text' &&
-            (!node.parent ||
-              !node.parent.attribs ||
-              node.parent.attribs['encoding'] !== 'application/x-tex')
+            node.type === 'text' && node.parent && node.parent.name === 'p'
           ); // pid, nickname, search
         },
         processNode(node, children, index) {
