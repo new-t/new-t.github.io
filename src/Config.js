@@ -33,16 +33,6 @@ const DEFAULT_CONFIG = {
   block_cw: ['xxg', 'zzxg'],
   block_words_v4: ['🕷️', '[系统自动代发]'],
   whitelist_cw: [],
-  ipfs_gateway_list: [
-    'https://<hash>.ipfs.dweb.link/',
-    'https://<hash>.ipfs.infura-ipfs.io/',
-    'https://gateway.pinata.cloud/ipfs/<hash>',
-    'https://ipfs.eth.aragon.network/ipfs/<hash>',
-    'https://gateway.ipfs.io/ipfs/<hash>',
-    'https://ipfs.fleek.co/ipfs/<hash>',
-    'https://cloudflare-ipfs.com/ipfs/<hash>',
-    'https://ipfs.2read.net/ipfs/<hash>',
-  ],
 };
 
 export function load_config() {
@@ -70,6 +60,7 @@ export function load_config() {
   console.log('config loaded', config);
   window.config = config;
 }
+
 export function save_config(need_load = true) {
   localStorage['hole_config'] = JSON.stringify(window.config);
   if (need_load) load_config();
@@ -405,18 +396,6 @@ export class ConfigUI extends PureComponent {
             name="展开指定的折叠警告"
             description={
               '完全匹配的树洞不会被折叠，每行一个豁免词，也可使用一个星号("*")表示豁免所有'
-            }
-            display={(array) => array.join('\n')}
-            sift={(array) => array.filter((v) => v)}
-            parse={(string) => string.split('\n')}
-          />
-          <hr />
-          <ConfigTextArea
-            id="ipfs_gateway_list"
-            callback={this.save_changes_bound}
-            name="候选ipfs网关"
-            description={
-              '<hash>表示要替换的哈希值。下次上传文件会使用第一行的，上传后根据速度调整。'
             }
             display={(array) => array.join('\n')}
             sift={(array) => array.filter((v) => v)}

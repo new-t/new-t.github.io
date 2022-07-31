@@ -10,13 +10,13 @@ import {
   TAG_RE,
   split_text,
 } from './text_splitter';
-import { save_config } from './Config';
 import renderMd from './Markdown';
 
 export { format_time, Time, TitleLine };
 
 export const API_BASE = `${process.env.REACT_APP_BACKEND || '/'}_api/v1`;
 export const API_BASE_2 = `${process.env.REACT_APP_BACKEND || '/'}_api/v2`;
+export const STORAGE_BASE = `${process.env.REACT_APP_STORAGE || ''}`;
 
 // https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 function escape_regex(string) {
@@ -428,30 +428,4 @@ export class ClickHandler extends PureComponent {
       </div>
     );
   }
-}
-
-export function test_ipfs(hash) {
-  let key = 'testing_' + hash;
-  window[key] = { curr: 0 };
-  window.config.ipfs_gateway_list.forEach((url) => {
-    fetch(url.replaceAll('<hash>', hash), { method: 'HEAD' })
-      .then((res) => {
-        if (res.ok) {
-          console.log(url, 'success!');
-          if (window[key]) {
-            window[key].curr += 1;
-            window[key][url] = window[key].curr;
-            let list = window.config.ipfs_gateway_list;
-            list.sort(
-              (x, y) => (window[key][x] || 9999) - (window[key][y] || 999),
-            );
-            window.config.ipfs_gateway_list = list;
-            save_config(false);
-          }
-        }
-      })
-      .catch((e) => {
-        console.log(url, 'fail!');
-      });
-  });
 }

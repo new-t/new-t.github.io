@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {
   API_BASE,
   API_BASE_2,
+  STORAGE_BASE,
   SafeTextarea,
   PromotionBar,
   HighlightedMarkdown,
-  test_ipfs,
 } from './Common';
 import { MessageViewer } from './Message';
 import { LoginPopup } from './infrastructure/widgets';
@@ -671,7 +671,7 @@ export class PostForm extends Component {
       xh.addEventListener('load', this.upload_complete.bind(this), false);
       xh.addEventListener('error', this.upload_error.bind(this), false);
       xh.addEventListener('abort', this.upload_abort.bind(this), false);
-      xh.open('POST', API_BASE + '/upload');
+      xh.open('POST', API_BASE_2 + '/upload');
       xh.setRequestHeader('User-Token', this.props.token);
       xh.send(f);
     }
@@ -679,20 +679,13 @@ export class PostForm extends Component {
 
   update_text_after_upload(data) {
     const { file_name, file_type } = this.state;
-    let url =
-      (window.config.ipfs_gateway_list[0] || '<hash>(无ipfs网关)').replaceAll(
-        '<hash>',
-        data.hash,
-      ) +
-      `?filename=${encodeURIComponent(file_name)}&filetype=${encodeURIComponent(
-        file_type,
-      )}`;
-    test_ipfs(data.hash);
+    let url = `${STORAGE_BASE}/${data.path}?filename=${encodeURIComponent(
+      file_name,
+    )}&filetype=${encodeURIComponent(file_type)}`;
     let new_text =
       this.state.text +
       '\n' +
-      (file_type.startsWith('image/') ? `![](${url})` : url) +
-      ` [加载失败请点击此](${window.location.origin}/ipfs.html#${data.hash})\n\n---\n`;
+      (file_type.startsWith('image/') ? `![](${url})` : url);
     this.setState({ text: new_text });
     this.area_ref.current.set(new_text);
   }
@@ -884,28 +877,7 @@ export class PostForm extends Component {
           </small>
         </p>
         <p>
-          <small>
-            首选ipfs网关可以在设置中修改，如效果不佳仍可使用图床，例如：
-            <a href="https://imgtu.com/" target="_blank">
-              路过图床
-            </a>
-            、
-            <a href="https://sm.ms/" target="_blank">
-              sm.ms
-            </a>
-            、
-            <a
-              href="https://bbs.pku.edu.cn/v2/post-read.php?bid=154&threadid=3743"
-              target="_blank"
-            >
-              未名BBS
-            </a>
-            、
-            <a href="https://zhuanlan.zhihu.com/write" target="_blank">
-              知乎
-            </a>
-            。
-          </small>
+          <small>上传文件限制200M，保留至少一个月。也可使用第三方图床。</small>
         </p>
       </form>
     );
