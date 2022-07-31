@@ -157,8 +157,8 @@ export class HighlightedMarkdown extends Component {
             ['url_pid', URL_PID_RE],
             ['url', URL_RE],
             ['pid', PID_RE],
-            ['nickname', NICKNAME_RE],
             ['tag', TAG_RE],
+            ['nickname', NICKNAME_RE],
           ];
           if (props.search_param) {
             let search_kws = props.search_param.split(' ').filter((s) => !!s);
@@ -180,8 +180,15 @@ export class HighlightedMarkdown extends Component {
                 return (
                   <span key={idx}>
                     {rule === 'url_pid' ? (
-                      <span className="url-pid-link" title={p}>
-                        /##
+                      <span
+                        className="url-pid-link"
+                        title={p}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          props.show_pid(p.split('##')[1]);
+                        }}
+                      >
+                        {p}
                       </span>
                     ) : rule === 'url' ? (
                       <>
