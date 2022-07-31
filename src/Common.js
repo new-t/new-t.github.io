@@ -120,7 +120,11 @@ export class HighlightedMarkdown extends Component {
                 src={normalize_url(node.attribs.src)}
                 alt={node.alt}
                 className="ext-img"
-                referrerPolicy="no-referrer"
+                referrerPolicy={
+                  STORAGE_BASE && node.attribs.src.startsWith(STORAGE_BASE)
+                    ? 'origin'
+                    : 'no-referrer'
+                }
                 onError={stop_loading}
                 onLoad={stop_loading}
               />
@@ -135,7 +139,12 @@ export class HighlightedMarkdown extends Component {
             <a
               href={normalize_url(node.attribs.href)}
               target="_blank"
-              rel="noopenner noreferrer"
+              rel="noopenner"
+              referrerPolicy={
+                STORAGE_BASE && node.attribs.href.startsWith(STORAGE_BASE)
+                  ? 'origin'
+                  : 'no-referrer'
+              }
               className="ext-link"
               key={index}
             >
@@ -196,11 +205,21 @@ export class HighlightedMarkdown extends Component {
                           href={normalize_url(p)}
                           className="ext-link"
                           target="_blank"
-                          rel="noopener noreferrer"
+                          rel="noopener"
+                          referrerPolicy={
+                            STORAGE_BASE && p.startsWith(STORAGE_BASE)
+                              ? 'origin'
+                              : 'no-referrer'
+                          }
                         >
                           {p}
                           <span className="icon icon-new-tab" />
                         </a>
+
+                        {/*
+                          这里对referrer暂时没有比较好的办法
+                          如果使用ifrmae对fireofx可行在chomre上很容易变成下载
+                        */}
                         {is_video(p) && (
                           <video className="ext-video" src={p} controls />
                         )}
