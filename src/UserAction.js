@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   API_BASE,
+  API_BASE_2,
   SafeTextarea,
   PromotionBar,
   HighlightedMarkdown,
@@ -395,11 +396,10 @@ export class ReplyForm extends Component {
     const { pid } = this.props;
     const { text, use_title } = this.state;
     let data = new URLSearchParams({
-      pid: pid,
       text: text,
       use_title: use_title ? '1' : '',
     });
-    fetch(API_BASE + '/docomment', {
+    fetch(`${API_BASE_2}/post/${pid}/comment`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
