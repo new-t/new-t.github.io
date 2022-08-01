@@ -679,7 +679,7 @@ export class PostForm extends Component {
 
   update_text_after_upload(data) {
     const { file_name, file_type } = this.state;
-    let url = `${STORAGE_BASE}/${data.path}?filename=${encodeURIComponent(
+    let url = `${STORAGE_BASE}${data.path}?filename=${encodeURIComponent(
       file_name,
     )}&filetype=${encodeURIComponent(file_type)}`;
     let new_text =

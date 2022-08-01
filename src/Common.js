@@ -16,7 +16,7 @@ export { format_time, Time, TitleLine };
 
 export const API_BASE = `${process.env.REACT_APP_BACKEND || '/'}_api/v1`;
 export const API_BASE_2 = `${process.env.REACT_APP_BACKEND || '/'}_api/v2`;
-export const STORAGE_BASE = `${process.env.REACT_APP_STORAGE || ''}`;
+export const STORAGE_BASE = `${process.env.REACT_APP_STORAGE || '/'}`;
 
 // https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 function escape_regex(string) {
