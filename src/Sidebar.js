@@ -52,13 +52,13 @@ export class Sidebar extends PureComponent {
         />
         <div className="sidebar">{contents}</div>
         <div className="sidebar-title">
-          <a className="no-underline" onClick={this.do_close_bound}>
+          <a href="###" className="no-underline" onClick={this.do_close_bound}>
             &nbsp;
             <span className="icon icon-close" />
             &nbsp;
           </a>
           {this.props.stack.length > 2 && (
-            <a className="no-underline" onClick={this.do_back_bound}>
+            <a href="###" className="no-underline" onClick={this.do_back_bound}>
               &nbsp;
               <span className="icon icon-back" />
               &nbsp;

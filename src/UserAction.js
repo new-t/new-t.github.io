@@ -38,6 +38,7 @@ export function InfoSidebar(props) {
         </a>
         &nbsp;&nbsp;
         <a
+          href="###"
           onClick={() => {
             props.show_sidebar('设置', <ConfigUI />);
           }}
@@ -57,6 +58,7 @@ export function InfoSidebar(props) {
       <div className="box help-desc-box">
         <p>
           <a
+            href="###"
             onClick={() => {
               if ('serviceWorker' in navigator) {
                 navigator.serviceWorker
@@ -226,6 +228,7 @@ export class LoginForm extends Component {
                   </p>
                   <p>
                     <a
+                      href="###"
                       onClick={() => {
                         this.props.show_sidebar(
                           '系统日志',
@@ -239,7 +242,10 @@ export class LoginForm extends Component {
                     举报记录、管理日志等都是公开的。
                   </p>
                   <p>
-                    <a onClick={this.copy_token.bind(this, token.value)}>
+                    <a
+                      href="###"
+                      onClick={this.copy_token.bind(this, token.value)}
+                    >
                       复制 User Token
                     </a>
                     <br />
@@ -344,9 +350,8 @@ export class ReplyForm extends Component {
     this.on_change_bound = this.on_change.bind(this);
     this.on_use_title_change_bound = this.on_use_title_change.bind(this);
     this.area_ref = this.props.area_ref || React.createRef();
-    this.global_keypress_handler_bound = this.global_keypress_handler.bind(
-      this,
-    );
+    this.global_keypress_handler_bound =
+      this.global_keypress_handler.bind(this);
     this.color_picker = new ColorPicker();
   }
 
@@ -568,14 +573,8 @@ export class PostForm extends Component {
   }
 
   do_post() {
-    const {
-      cw,
-      text,
-      allow_search,
-      use_title,
-      has_poll,
-      poll_options,
-    } = this.state;
+    const { cw, text, allow_search, use_title, has_poll, poll_options } =
+      this.state;
     let data = new URLSearchParams({
       cw: cw,
       text: text,
@@ -626,12 +625,10 @@ export class PostForm extends Component {
     if (event) event.preventDefault();
     if (this.state.loading_status === 'loading') return;
     if (!this.state.text) return;
-    {
-      this.setState({
-        loading_status: 'loading',
-      });
-      this.do_post();
-    }
+    this.setState({
+      loading_status: 'loading',
+    });
+    this.do_post();
   }
 
   toggle_preview() {
@@ -702,7 +699,7 @@ export class PostForm extends Component {
   upload_complete(event) {
     try {
       let j = JSON.parse(event.target.responseText);
-      if (j.code != 0) {
+      if (j.code !== 0) {
         alert(j.msg);
         throw new Error();
       }

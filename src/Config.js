@@ -6,8 +6,6 @@ const BUILTIN_IMGS = {
   'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/gbp.jpg':
     '怀旧背景（默认）',
   'https://www.tsinghua.edu.cn/image/nav-bg.jpg': '清华紫',
-  'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/gbp.jpg':
-    '寻觅繁星',
   'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/eriri.jpg':
     '平成著名画师',
   'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/yurucamp.jpg':
@@ -334,12 +332,16 @@ export class ConfigUI extends PureComponent {
         <div className="box config-ui-header">
           <p>
             这些功能仍在测试，可能不稳定（
-            <a onClick={this.reset_settings.bind(this)}>全部重置</a>）
+            <a href="###" onClick={this.reset_settings.bind(this)}>
+              全部重置
+            </a>
+            ）
           </p>
           <p>
             <b>
               部分设置修改后需要{' '}
               <a
+                href="###"
                 onClick={() => {
                   window.location.reload();
                 }}

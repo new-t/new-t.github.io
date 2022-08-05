@@ -68,7 +68,7 @@
 
 .ext-img__warpper.loading {
   min-height: 100px;
-  background: url('/static/loading.gif') center no-repeat;
+  background: url('images/loading.gif') center no-repeat;
   background-size: 25px 25px;
   display: block;
 }

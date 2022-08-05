@@ -128,7 +128,7 @@ class App extends Component {
                   <div className="box box-tip">
                     <LoginPopup token_callback={token.set_value}>
                       {(do_popup) => (
-                        <a onClick={do_popup}>
+                        <a href="###" onClick={do_popup}>
                           <span className="icon icon-login" />
                           &nbsp;登录到 新T树洞
                         </a>

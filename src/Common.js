@@ -379,6 +379,7 @@ export function PromotionBar(props) {
         &nbsp; 把网页版树洞{' '}
         <b>
           <a
+            href="###"
             onClick={() => {
               if (pwa_prompt_event) pwa_prompt_event.prompt();
             }}

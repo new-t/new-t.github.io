@@ -26,6 +26,7 @@ class ControlBar extends PureComponent {
       let text = decodeURIComponent(window.location.hash).substr(1);
       if (text.lastIndexOf('?') !== -1)
         text = text.substr(0, text.lastIndexOf('?')); // fuck wechat '#param?nsukey=...'
+      if (text === '##') return;
       this.setState(
         {
           search_text: text,
@@ -40,7 +41,7 @@ class ControlBar extends PureComponent {
       'hashchange',
       () => {
         let text = decodeURIComponent(window.location.hash).substr(1);
-        if (text && text[0] != '#') {
+        if (text && text[0] !== '#') {
           console.log('search', text);
           this.setState(
             {
@@ -118,6 +119,7 @@ class ControlBar extends PureComponent {
         {({ value: token }) => (
           <div className="control-bar">
             <a
+              href="###"
               className="no-underline control-btn"
               onClick={this.do_refresh_bound}
             >
@@ -126,6 +128,7 @@ class ControlBar extends PureComponent {
             </a>
             {!!token && (
               <a
+                href="###"
                 className="no-underline control-btn"
                 onClick={this.do_attention_bound}
               >
@@ -145,6 +148,7 @@ class ControlBar extends PureComponent {
               onKeyPress={this.on_keypress_bound}
             />
             <a
+              href="###"
               className="no-underline control-btn"
               onClick={() => {
                 this.props.show_sidebar(
@@ -160,6 +164,7 @@ class ControlBar extends PureComponent {
             </a>
             {!!token && (
               <a
+                href="###"
                 className="no-underline control-btn"
                 onClick={() => {
                   this.props.show_sidebar(

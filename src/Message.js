@@ -69,6 +69,7 @@ export class MessageViewer extends PureComponent {
       return (
         <div className="box box-tip">
           <a
+            href="###"
             onClick={() => {
               this.load();
             }}

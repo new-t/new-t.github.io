@@ -1,5 +1,5 @@
 import MarkdownIt from 'markdown-it';
-import MarkdownItKaTeX from 'markdown-it-katex';
+import MarkdownItKaTeX from '@traptitech/markdown-it-katex';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
 import './Markdown.css';
@@ -30,4 +30,6 @@ let md = new MarkdownIt({
   errorColor: '#aa0000',
 });
 
-export default (text) => md.render(text);
+export default function renderMarkdown(text) {
+  return md.render(text);
+}

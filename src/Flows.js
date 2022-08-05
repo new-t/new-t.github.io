@@ -82,7 +82,10 @@ function load_single_meta(show_sidebar, token) {
         title_elem,
         <div className="box box-tip">
           <p>
-            <a onClick={() => load_single_meta(show_sidebar, token)(pid, true)}>
+            <a
+              href="###"
+              onClick={() => load_single_meta(show_sidebar, token)(pid, true)}
+            >
               重新加载
             </a>
           </p>
@@ -95,10 +98,6 @@ function load_single_meta(show_sidebar, token) {
 }
 
 class Reply extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {
       info,
@@ -550,7 +549,7 @@ class FlowSidebar extends PureComponent {
   report(event, text = '') {
     console.log(text);
     let reason = prompt(`举报 #${this.state.info.pid} 的理由：`, text);
-    let should_hide = confirm('是否认为此洞应该被删除或隐藏？');
+    let should_hide = window.confirm('是否认为此洞应该被删除或隐藏？');
     if (reason !== null) {
       API.report(this.state.info.pid, reason, should_hide, this.props.token)
         .then((json) => {
@@ -564,7 +563,7 @@ class FlowSidebar extends PureComponent {
   }
 
   block(name, type, id, on_complete) {
-    if (confirm(`确定拉黑${name}吗？后续将不会收到其发布的任何内容`)) {
+    if (window.confirm(`确定拉黑${name}吗？后续将不会收到其发布的任何内容`)) {
       API.block(type, id, this.props.token)
         .then((json) => {
           let data = json.data;
@@ -707,21 +706,21 @@ class FlowSidebar extends PureComponent {
         <div className="box box-tip">
           {!!this.props.token && (
             <span>
-              <a onClick={this.report.bind(this)}>
+              <a href="###" onClick={this.report.bind(this)}>
                 <span className="icon icon-flag" />
                 <label>举报</label>
               </a>
               &nbsp;&nbsp;
             </span>
           )}
-          <a onClick={this.load_replies.bind(this)}>
+          <a href="###" onClick={this.load_replies.bind(this)}>
             <span className="icon icon-refresh" />
             <label>刷新</label>
           </a>
           {(this.state.replies.length >= 1 || this.state.rev) && (
             <span>
               &nbsp;&nbsp;
-              <a onClick={this.toggle_rev.bind(this)}>
+              <a href="###" onClick={this.toggle_rev.bind(this)}>
                 <span className="icon icon-order-rev" />
                 <label>{this.state.rev ? '还原' : '逆序'}</label>
               </a>
@@ -731,6 +730,7 @@ class FlowSidebar extends PureComponent {
             <span>
               &nbsp;&nbsp;
               <a
+                href="###"
                 onClick={() => {
                   this.toggle_attention();
                 }}
@@ -755,6 +755,7 @@ class FlowSidebar extends PureComponent {
             <p>
               <span style={{ float: 'left' }}>
                 <a
+                  href="###"
                   onClick={() => {
                     this.set_filter_name(null);
                   }}
@@ -859,8 +860,8 @@ class FlowItemRow extends PureComponent {
     super(props);
     this.needFold =
       props.info.cw &&
-      window.config.whitelist_cw.indexOf('*') == -1 &&
-      window.config.whitelist_cw.indexOf(props.info.cw) == -1 &&
+      window.config.whitelist_cw.indexOf('*') === -1 &&
+      window.config.whitelist_cw.indexOf(props.info.cw) === -1 &&
       props.mode === 'list';
     this.has_block_words = check_block(props.info);
     this.color_picker = new ColorPicker();
@@ -1011,6 +1012,7 @@ class FlowItemRow extends PureComponent {
             <div className="box box-tip">
               <p>
                 <a
+                  href="###"
                   onClick={() => {
                     this.load_replies();
                   }}
@@ -1179,7 +1181,9 @@ class FlowItemQuote extends PureComponent {
         <div className="aux-margin">
           <div className="box box-tip">
             <p>
-              <a onClick={this.load.bind(this)}>重新加载</a>
+              <a href="###" onClick={this.load.bind(this)}>
+                重新加载
+              </a>
             </p>
             <p>{this.state.error_msg}</p>
           </div>
@@ -1266,8 +1270,9 @@ export class Flow extends PureComponent {
         return ['线上关注', '本地收藏'];
       case 'search':
         return ['Tag搜索', '全文搜索', '头衔'];
+      default:
+        return [];
     }
-    return [];
   }
 
   set_submode(submode) {
@@ -1285,6 +1290,7 @@ export class Flow extends PureComponent {
         <div className="aux-margin flow-submode-choice">
           {submode_names.map((name, idx) => (
             <a
+              href="###"
               key={idx}
               className={submode === idx ? 'choiced' : ''}
               onClick={this.set_submode.bind(this, idx)}
@@ -1590,6 +1596,7 @@ class SubFlow extends PureComponent {
             <div className="box box-tip">
               <p>
                 <a
+                  href="###"
                   onClick={() => {
                     this.load_page(this.state.loaded_pages + 1);
                   }}
