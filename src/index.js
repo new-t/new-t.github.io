@@ -3,11 +3,11 @@ import './index.css';
 import './fonts_7/icomoon.css';
 import App from './App';
 //import {elevate} from './infrastructure/elevator';
-import registerServiceWorker from './registerServiceWorker';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 //elevate();
 const container = document.getElementById('root');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
 root.render(<App tab="home" />);
 
-registerServiceWorker();
+serviceWorkerRegistration.register();

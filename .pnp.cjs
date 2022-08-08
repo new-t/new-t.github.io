@@ -55,7 +55,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-lazyload", "virtual:d489c25e2ebeea07458b58e50f8ccfb31c1a2205a90b069d1097b87c37e4691c13f2247338ffb59360c079762786d6bbbc895d4b6a241f03e5878297f15a38ca#npm:3.2.0"],\
             ["react-polls", "virtual:d489c25e2ebeea07458b58e50f8ccfb31c1a2205a90b069d1097b87c37e4691c13f2247338ffb59360c079762786d6bbbc895d4b6a241f03e5878297f15a38ca#npm:1.2.0"],\
             ["react-scripts", "virtual:d489c25e2ebeea07458b58e50f8ccfb31c1a2205a90b069d1097b87c37e4691c13f2247338ffb59360c079762786d6bbbc895d4b6a241f03e5878297f15a38ca#npm:5.0.1"],\
-            ["react-timeago", "virtual:d489c25e2ebeea07458b58e50f8ccfb31c1a2205a90b069d1097b87c37e4691c13f2247338ffb59360c079762786d6bbbc895d4b6a241f03e5878297f15a38ca#npm:7.1.0"]\
+            ["react-timeago", "virtual:d489c25e2ebeea07458b58e50f8ccfb31c1a2205a90b069d1097b87c37e4691c13f2247338ffb59360c079762786d6bbbc895d4b6a241f03e5878297f15a38ca#npm:7.1.0"],\
+            ["workbox-background-sync", "npm:6.5.4"],\
+            ["workbox-broadcast-update", "npm:6.5.4"],\
+            ["workbox-cacheable-response", "npm:6.5.4"],\
+            ["workbox-core", "npm:6.5.4"],\
+            ["workbox-expiration", "npm:6.5.4"],\
+            ["workbox-google-analytics", "npm:6.5.4"],\
+            ["workbox-navigation-preload", "npm:6.5.4"],\
+            ["workbox-precaching", "npm:6.5.4"],\
+            ["workbox-range-requests", "npm:6.5.4"],\
+            ["workbox-routing", "npm:6.5.4"],\
+            ["workbox-strategies", "npm:6.5.4"],\
+            ["workbox-streams", "npm:6.5.4"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -16989,7 +17001,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-lazyload", "virtual:d489c25e2ebeea07458b58e50f8ccfb31c1a2205a90b069d1097b87c37e4691c13f2247338ffb59360c079762786d6bbbc895d4b6a241f03e5878297f15a38ca#npm:3.2.0"],\
             ["react-polls", "virtual:d489c25e2ebeea07458b58e50f8ccfb31c1a2205a90b069d1097b87c37e4691c13f2247338ffb59360c079762786d6bbbc895d4b6a241f03e5878297f15a38ca#npm:1.2.0"],\
             ["react-scripts", "virtual:d489c25e2ebeea07458b58e50f8ccfb31c1a2205a90b069d1097b87c37e4691c13f2247338ffb59360c079762786d6bbbc895d4b6a241f03e5878297f15a38ca#npm:5.0.1"],\
-            ["react-timeago", "virtual:d489c25e2ebeea07458b58e50f8ccfb31c1a2205a90b069d1097b87c37e4691c13f2247338ffb59360c079762786d6bbbc895d4b6a241f03e5878297f15a38ca#npm:7.1.0"]\
+            ["react-timeago", "virtual:d489c25e2ebeea07458b58e50f8ccfb31c1a2205a90b069d1097b87c37e4691c13f2247338ffb59360c079762786d6bbbc895d4b6a241f03e5878297f15a38ca#npm:7.1.0"],\
+            ["workbox-background-sync", "npm:6.5.4"],\
+            ["workbox-broadcast-update", "npm:6.5.4"],\
+            ["workbox-cacheable-response", "npm:6.5.4"],\
+            ["workbox-core", "npm:6.5.4"],\
+            ["workbox-expiration", "npm:6.5.4"],\
+            ["workbox-google-analytics", "npm:6.5.4"],\
+            ["workbox-navigation-preload", "npm:6.5.4"],\
+            ["workbox-precaching", "npm:6.5.4"],\
+            ["workbox-range-requests", "npm:6.5.4"],\
+            ["workbox-routing", "npm:6.5.4"],\
+            ["workbox-strategies", "npm:6.5.4"],\
+            ["workbox-streams", "npm:6.5.4"]\
           ],\
           "linkType": "SOFT"\
         }]\
