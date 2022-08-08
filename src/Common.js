@@ -283,7 +283,7 @@ export class SafeTextarea extends Component {
     };
     this.on_change_bound = this.on_change.bind(this);
     this.on_keydown_bound = this.on_keydown.bind(this);
-    this.clear = this.clear.bind(this);
+    this.clear_and_then = this.clear_and_then.bind(this);
     this.area_ref = React.createRef();
     this.change_callback = props.on_change || (() => {});
     this.submit_callback = props.on_submit || (() => {});
@@ -311,6 +311,7 @@ export class SafeTextarea extends Component {
     });
     this.change_callback(event.target.value);
   }
+
   on_keydown(event) {
     if (event.key === 'Enter' && event.ctrlKey && !event.altKey) {
       event.preventDefault();
@@ -318,20 +319,26 @@ export class SafeTextarea extends Component {
     }
   }
 
-  clear() {
-    this.setState({
-      text: '',
-    });
+  clear_and_then(callback = null) {
+    this.setState(
+      {
+        text: '',
+      },
+      callback,
+    );
   }
+
   set(text) {
     this.change_callback(text);
     this.setState({
       text: text,
     });
   }
+
   get() {
     return this.state.text;
   }
+
   focus() {
     this.area_ref.current.focus();
   }

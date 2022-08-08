@@ -425,13 +425,16 @@ export class ReplyForm extends Component {
           save_attentions();
         }
 
-        this.setState({
-          loading_status: 'done',
-          text: '',
-          preview: false,
-        });
-        this.area_ref.current.clear();
-        this.props.on_complete();
+        this.setState(
+          {
+            loading_status: 'done',
+            text: '',
+            preview: false,
+          },
+          () => {
+            this.area_ref.current.clear_and_then(this.props.on_complete);
+          },
+        );
       })
       .catch((e) => {
         console.error(e);
@@ -602,15 +605,18 @@ export class PostForm extends Component {
           throw new Error(json.msg);
         }
 
-        this.setState({
-          loading_status: 'done',
-          text: '',
-          preview: false,
-        });
-        this.area_ref.current.clear();
-        this.props.on_complete();
         window.CW_BACKUP = '';
         window.POLL_BACKUP = null;
+        this.setState(
+          {
+            loading_status: 'done',
+            text: '',
+            preview: false,
+          },
+          () => {
+            this.area_ref.current.clear_and_then(this.props.on_complete);
+          },
+        );
       })
       .catch((e) => {
         console.error(e);
