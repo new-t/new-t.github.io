@@ -10550,7 +10550,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.8.1":
+"prop-types@npm:15.8.1, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -10578,7 +10578,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"punycode@npm:^2.1.0, punycode@npm:^2.1.1":
+"punycode@npm:2.1.1, punycode@npm:^2.1.0, punycode@npm:^2.1.1":
   version: 2.1.1
   resolution: "punycode@npm:2.1.1"
   checksum: 823bf443c6dd14f669984dea25757b37993f67e8d94698996064035edd43bed8a5a17a9f12e439c2b35df1078c6bec05a6c86e336209eb1061e8025c481168e8
@@ -12684,6 +12684,7 @@ __metadata:
     copy-to-clipboard: ^3.3.1
     eslint: 8.21.0
     eslint-config-prettier: ^8.5.0
+    eslint-config-react-app: ^7.0.1
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-react: 7.30.1
     gh-pages: ^4.0.0
@@ -12694,6 +12695,8 @@ __metadata:
     markdown-it: ^13.0.0
     pressure: ^2.1.2
     prettier: ^2.7.1
+    prop-types: 15.8.1
+    punycode: 2.1.1
     react: ^18.2.0
     react-dom: ^18.2.0
     react-lazyload: ^3.2.0
