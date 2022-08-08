@@ -21,6 +21,7 @@ jobs:
         run: echo "::set-output name=date::$(date --rfc-3339=date)"
       - name: Deploy with gh-pages
         run: |
+          yarn build
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           yarn deploy -u "github-actions-bot <support+actions@github.com>" -m "$COMMIT_MESSAGE"
         env:
