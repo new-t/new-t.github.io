@@ -19,15 +19,17 @@ jobs:
       - name: "Get current date"
         id: "date"
         run: echo "::set-output name=date::$(date --rfc-3339=date)"
-      - name: Deploy with gh-pages
+      - name: "Build"
+        run: yarn build
+        env:
+          REACT_APP_BACKEND: "https://api.hole-thu-qwertyuiop.xyz/"
+          REACT_APP_STORAGE: "https://file.hole-thu-qwertyuiop.xyz/"
+          REACT_APP_BUILD_INFO: "v-${{steps.date.outputs.date}}"
+      - name: "Deploy with gh-pages"
         run: |
-          yarn build
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           yarn deploy -u "github-actions-bot <support+actions@github.com>" -m "$COMMIT_MESSAGE"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-          REACT_APP_BACKEND: "https://api.hole-thu-qwertyuiop.xyz/"
-          REACT_APP_STORAGE: "https://file.hole-thu-qwertyuiop.xyz/"
-          REACT_APP_BUILD_INFO: version-${{steps.date.outputs.date}}
-          COMMIT_MESSAGE: "Build for: ${{ github.event.head_commit.message }}"
+          COMMIT_MESSAGE: "Build for [${{ github.event.head_commit.message }}]"
