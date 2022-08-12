@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Time, API_BASE } from './Common';
+import { Time, get_api_base } from './Common';
 import { get_json } from './infrastructure/functions';
 
 import './Message.css';
@@ -25,7 +25,7 @@ export class MessageViewer extends PureComponent {
         loading_status: 'loading',
       },
       () => {
-        fetch(API_BASE + '/systemlog', {
+        fetch(get_api_base() + '/systemlog', {
           headers: { 'User-Token': this.props.token },
         })
           .then(get_json)

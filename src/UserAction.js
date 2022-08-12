@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
-  API_BASE,
-  API_BASE_2,
+  get_api_base,
+  get_api_base_2,
   STORAGE_BASE,
   SafeTextarea,
   PromotionBar,
@@ -164,7 +164,7 @@ export class LoginForm extends Component {
     }
     let data = new FormData();
     data.append('title', title);
-    fetch(API_BASE + '/title', {
+    fetch(get_api_base() + '/title', {
       method: 'POST',
       headers: { 'User-Token': token },
       body: data,
@@ -183,7 +183,7 @@ export class LoginForm extends Component {
   update_auto_block(rank, token) {
     let data = new FormData();
     data.append('rank', rank);
-    fetch(API_BASE + '/auto_block', {
+    fetch(get_api_base() + '/auto_block', {
       method: 'POST',
       headers: { 'User-Token': token },
       body: data,
@@ -404,7 +404,7 @@ export class ReplyForm extends Component {
       text: text,
       use_title: use_title ? '1' : '',
     });
-    fetch(`${API_BASE_2}/post/${pid}/comment`, {
+    fetch(`${get_api_base_2()}/post/${pid}/comment`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -591,7 +591,7 @@ export class PostForm extends Component {
       });
     }
 
-    fetch(API_BASE + '/dopost', {
+    fetch(get_api_base() + '/dopost', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -674,7 +674,7 @@ export class PostForm extends Component {
       xh.addEventListener('load', this.upload_complete.bind(this), false);
       xh.addEventListener('error', this.upload_error.bind(this), false);
       xh.addEventListener('abort', this.upload_abort.bind(this), false);
-      xh.open('POST', API_BASE_2 + '/upload');
+      xh.open('POST', get_api_base_2() + '/upload');
       xh.setRequestHeader('User-Token', this.props.token);
       xh.send(f);
     }
