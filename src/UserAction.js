@@ -61,22 +61,27 @@ export function InfoSidebar(props) {
             href="###"
             onClick={() => {
               if ('serviceWorker' in navigator) {
-                navigator.serviceWorker
-                  .getRegistrations()
-                  .then((registrations) => {
-                    for (let registration of registrations) {
-                      console.log('unregister', registration);
-                      registration.unregister();
-                    }
-                  });
+                navigator.serviceWorker.ready.then((serviceWorker) => {
+                  const waitingServiceWorker = serviceWorker.waiting;
+                  if (waitingServiceWorker) {
+                    cache().clear();
+                    waitingServiceWorker.addEventListener(
+                      'statechange',
+                      (event) => {
+                        if (event.target.state === 'activated') {
+                          window.location.reload();
+                        }
+                      },
+                    );
+                    waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
+                  } else {
+                    alert('没有已下载的更新');
+                  }
+                });
               }
-              cache().clear();
-              setTimeout(() => {
-                window.location.reload(true);
-              }, 200);
             }}
           >
-            强制检查更新
+            立即更新
           </a>
           （当前版本：【{process.env.REACT_APP_BUILD_INFO || '---'}{' '}
           {process.env.NODE_ENV}】 会自动在后台检查更新并在下次访问时更新）

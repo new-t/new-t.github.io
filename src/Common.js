@@ -14,6 +14,9 @@ import renderMd from './Markdown';
 
 export { format_time, Time, TitleLine };
 
+const pushServerPublicKey =
+  'BLM6zZy2CWlsfQ9KsALDgrjPXBf8E3cJ7qQ5vZipN_IjOfeDXFjeYb_zRLzwglyiwr9QpVL9Lt1TS_sZKewJYuY';
+
 export const STORAGE_BASE = `${process.env.REACT_APP_STORAGE || '/'}`;
 
 export function get_api_base() {
@@ -22,6 +25,22 @@ export function get_api_base() {
 
 export function get_api_base_2() {
   return `${window.BACKEND}_api/v2`;
+}
+
+export async function get_push_subscription() {
+  if (!('serviceWorker' in navigator)) return;
+  let serviceWorker = await navigator.serviceWorker.ready;
+  if (!('pushManager' in serviceWorker)) return;
+  let subscription = await serviceWorker.pushManager.getSubscription();
+  //subscription.unsubscribe();
+  if (!subscription) {
+    subscription = await serviceWorker.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: pushServerPublicKey,
+    });
+  }
+  console.log('subscription:', JSON.stringify(subscription));
+  return subscription;
 }
 
 // https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex

@@ -71,3 +71,28 @@ self.addEventListener('message', (event) => {
 });
 
 // Any other custom service worker logic can go here.
+function receivePushNotification(event) {
+  console.log('[Service Worker] Push Received.');
+
+  const { title, pid, text } = event.data.json();
+
+  const options = {
+    data: `${self.location.origin}/##${pid}`,
+    body: text,
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+}
+
+function openPushNotification(event) {
+  console.log(
+    '[Service Worker] Notification click Received.',
+    event.notification.data,
+  );
+
+  event.notification.close();
+  event.waitUntil(self.clients.openWindow(event.notification.data));
+}
+
+self.addEventListener('push', receivePushNotification);
+self.addEventListener('notificationclick', openPushNotification);

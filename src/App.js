@@ -39,21 +39,24 @@ class App extends Component {
 
     window.BACKEND =
       localStorage['BACKEND'] || process.env.REACT_APP_BACKEND || '/';
-    setTimeout(() => {
-      fetch('https://api.github.com/users/hole-thu')
-        .then((resp) => resp.json())
-        .then((data) => {
-          let x = data.bio;
-          let len = x.length;
-          let address = atob(
-            Array.from({ length: len }, (_, i) => x[(i * 38) % len])
-              .join('')
-              .split('|')[0],
-          );
-          window.BACKEND = `https://${address}/`;
-          localStorage['BACKEND'] = window.BACKEND;
-        });
-    }, 12345);
+
+    if (process.env.NODE_ENV === 'production') {
+      setTimeout(() => {
+        fetch('https://api.github.com/users/hole-thu')
+          .then((resp) => resp.json())
+          .then((data) => {
+            let x = data.bio;
+            let len = x.length;
+            let address = atob(
+              Array.from({ length: len }, (_, i) => x[(i * 38) % len])
+                .join('')
+                .split('|')[0],
+            );
+            window.BACKEND = `https://${address}/`;
+            localStorage['BACKEND'] = window.BACKEND;
+          });
+      }, 12345);
+    }
   }
 
   static is_darkmode() {

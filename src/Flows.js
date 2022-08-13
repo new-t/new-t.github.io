@@ -9,6 +9,7 @@ import {
   ClickHandler,
   ColoredSpan,
   HighlightedMarkdown,
+  get_push_subscription,
 } from './Common';
 import './Flows.css';
 import LazyLoad, { forceCheck } from 'react-lazyload';
@@ -746,6 +747,29 @@ class FlowSidebar extends PureComponent {
                     <label>未关注</label>
                   </span>
                 )}
+              </a>
+            </span>
+          )}
+          {!!this.props.token && !!this.state.attention && (
+            <span>
+              <a
+                href="###"
+                style={{ display: 'none' }}
+                onClick={() => {
+                  console.log('set notifi');
+                  get_push_subscription().then((sc) => {
+                    if (!sc) return;
+                    fetch('/_test', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(sc),
+                    });
+                  });
+                }}
+              >
+                <span className="icon icon-star">提醒</span>
               </a>
             </span>
           )}
