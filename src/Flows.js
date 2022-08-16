@@ -517,6 +517,27 @@ class FlowSidebar extends PureComponent {
       });
   }
 
+  toggle_notification() {
+    console.log('set notifi');
+    get_push_subscription().then((sc) => {
+      if (!sc) {
+        alert('浏览器不支持消息推送，或无法连接到推送服务');
+        return;
+      }
+      let sc_data = JSON.parse(JSON.stringify(sc));
+      API.set_notification(
+        this.state.info.pid,
+        true,
+        sc_data.endpoint,
+        sc_data.keys.auth,
+        sc_data.keys.p256dh,
+        this.props.token,
+      ).then((json) => {
+        // TODO
+      });
+    });
+  }
+
   do_vote(vote) {
     this.setState({
       loading_status: 'loading',
@@ -730,12 +751,7 @@ class FlowSidebar extends PureComponent {
           {!!this.props.token && (
             <span>
               &nbsp;&nbsp;
-              <a
-                href="###"
-                onClick={() => {
-                  this.toggle_attention();
-                }}
-              >
+              <a href="###" onClick={() => this.toggle_attention()}>
                 {this.state.attention ? (
                   <span>
                     <span className="icon icon-star-ok" />
@@ -752,24 +768,12 @@ class FlowSidebar extends PureComponent {
           )}
           {!!this.props.token && !!this.state.attention && (
             <span>
-              <a
-                href="###"
-                style={{ display: 'none' }}
-                onClick={() => {
-                  console.log('set notifi');
-                  get_push_subscription().then((sc) => {
-                    if (!sc) return;
-                    fetch('/_test', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify(sc),
-                    });
-                  });
-                }}
-              >
-                <span className="icon icon-star">提醒</span>
+              &nbsp;&nbsp;
+              <a href="###" onClick={() => this.toggle_notification()}>
+                <span>
+                  <span className="icon icon-star" />
+                  <label>提醒</label>
+                </span>
               </a>
             </span>
           )}

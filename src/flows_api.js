@@ -1,5 +1,5 @@
 import { get_json, gen_name } from './infrastructure/functions';
-import { get_api_base } from './Common';
+import { get_api_base, get_api_base_2 } from './Common';
 import { cache } from './cache';
 
 export { get_json };
@@ -78,6 +78,26 @@ export const API = {
     // Delete cache to update `attention` on next reload
     cache().delete(pid);
     return handle_response(response, false);
+  },
+
+  set_notification: async (pid, enable, endpoint, auth, p256dh, token) => {
+    let data = new URLSearchParams([
+      ['enable', enable],
+      ['endpoint', endpoint],
+      ['auth', auth],
+      ['p256dh', p256dh],
+    ]);
+
+    let response = await fetch(`${get_api_base_2()}/post/${pid}/notification`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Token': token,
+      },
+      body: data,
+    });
+
+    return handle_response(response, true);
   },
 
   report: async (pid, reason, should_hide, token) => {
