@@ -767,7 +767,7 @@ class FlowSidebar extends PureComponent {
             </span>
           )}
           {!!this.props.token && !!this.state.attention && (
-            <span>
+            <span style={{ display: 'none' }}>
               &nbsp;&nbsp;
               <a href="###" onClick={() => this.toggle_notification()}>
                 <span>
