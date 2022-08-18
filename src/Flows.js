@@ -890,7 +890,7 @@ class FlowItemRow extends PureComponent {
       props.info.cw &&
       window.config.whitelist_cw.indexOf('*') === -1 &&
       window.config.whitelist_cw.indexOf(props.info.cw) === -1 &&
-      props.mode === 'list';
+      (props.mode === 'list' || this.props.is_quote);
     this.has_block_words = check_block(props.info);
     this.color_picker = new ColorPicker();
     this.state = {
@@ -1078,7 +1078,10 @@ class FlowItemRow extends PureComponent {
       return (
         (!this.has_block_words || mode !== 'list') && (
           <div
-            className="flow-item-row flow-item-row-with-prompt"
+            className={
+              'flow-item-row flow-item-row-with-prompt' +
+              (is_quote ? ' flow-item-row-quote' : '')
+            }
             onClick={(event) => {
               if (!CLICKABLE_TAGS[event.target.tagName.toLowerCase()])
                 this.show_sidebar();
