@@ -294,6 +294,9 @@ class FlowItem extends PureComponent {
             <code className="box-id">
               <a href={'##' + info.pid} onClick={this.copy_link.bind(this)}>
                 #{info.pid}
+                {info.room_id !== parseInt(process.env.REACT_APP_ROOM_ID) && (
+                  <> @{info.room_id}</>
+                )}
               </a>
             </code>
             &nbsp;

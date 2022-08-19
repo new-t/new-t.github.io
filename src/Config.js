@@ -22,11 +22,12 @@ const BUILTIN_IMGS = {
 
 const DEFAULT_CONFIG = {
   background_img:
-    '//cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/gbp.jpg',
+    'https://cdn.jsdelivr.net/gh/thuhole/webhole@gh-pages/static/bg/gbp.jpg',
   background_color: '#113366',
   pressure: false,
   easter_egg: true,
   color_scheme: 'default',
+  show_all_rooms: false,
   block_tmp: true,
   block_cw: ['xxg', 'zzxg'],
   block_words_v4: ['🕷️', '[系统自动代发]'],
@@ -361,6 +362,13 @@ export class ConfigUI extends PureComponent {
           <ConfigColorScheme
             id="color-scheme"
             callback={this.save_changes_bound}
+          />
+          <hr />
+          <ConfigSwitch
+            callback={this.save_changes_bound}
+            id="show_all_rooms"
+            name="展示所有分区"
+            description="展示来自所有分区而非仅当前分区的洞"
           />
           <hr />
           <ConfigSwitch

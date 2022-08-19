@@ -588,7 +588,7 @@ export class PostForm extends Component {
       text: text,
       allow_search: allow_search ? '1' : '',
       use_title: use_title ? '1' : '',
-      type: 'text',
+      room_id: process.env.REACT_APP_ROOM_ID,
     });
     if (has_poll) {
       poll_options.forEach((opt) => {
