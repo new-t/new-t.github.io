@@ -35,7 +35,8 @@ const DZ_NAME = '洞主';
 
 function check_block(info) {
   return (
-    ((window.config.block_tmp && info.is_tmp) ||
+    (((window.config.block_tmp || !window.config.show_all_rooms) &&
+      info.is_tmp) ||
       window.config.block_words_v4.some((word) => info.text.includes(word)) ||
       (info.cw &&
         window.config.block_words_v4
@@ -294,7 +295,7 @@ class FlowItem extends PureComponent {
             <code className="box-id">
               <a href={'##' + info.pid} onClick={this.copy_link.bind(this)}>
                 #{info.pid}
-                {info.room_id !== parseInt(process.env.REACT_APP_ROOM_ID) && (
+                {info.room_id !== parseInt(window.config.room_id) && (
                   <> @{info.room_id}</>
                 )}
               </a>

@@ -588,7 +588,7 @@ export class PostForm extends Component {
       text: text,
       allow_search: allow_search ? '1' : '',
       use_title: use_title ? '1' : '',
-      room_id: process.env.REACT_APP_ROOM_ID,
+      room_id: window.config.room_id,
     });
     if (has_poll) {
       poll_options.forEach((opt) => {
@@ -881,7 +881,7 @@ export class PostForm extends Component {
             <a href="/policy.html" target="_blank">
               树洞管理规范（试行）
             </a>
-            ，文明发言。
+            和所在分区的规定，文明发言。
           </small>
         </p>
         <p>
