@@ -112,77 +112,75 @@ class Reply extends PureComponent {
       search_param,
     } = this.props;
     const author = info.name,
-      replyText = info.text,
-      has_block_words = check_block(info);
+      replyText = info.text;
     this.color_picker = new ColorPicker();
     return (
-      <div
-        className={'flow-reply box'}
-        style={
-          info._display_color
-            ? {
-                '--box-bgcolor-light': info._display_color[0],
-                '--box-bgcolor-dark': info._display_color[1],
-              }
-            : null
-        }
-      >
-        <div className="box-header">
-          {!!do_filter_name && (
-            <span
-              className="reply-header-badge clickable"
-              onClick={() => {
-                do_filter_name(info.name);
-              }}
-            >
-              <span className="icon icon-locate" />
-            </span>
-          )}
-          &nbsp;
-          {<span className="box-header-name">{info.name}</span>}
-          {info.author_title && (
-            <span className="box-header-name author-title">{`"${info.author_title}"`}</span>
-          )}
-          {info.is_tmp && (
-            <span className="box-header-name tmp-title">临时账号</span>
-          )}
-          {!!do_delete && !!info.can_del && (
-            <span
-              className="clickable"
-              onClick={() => {
-                do_delete('cid', info.cid);
-              }}
-            >
-              {' '}
-              🗑️{' '}
-            </span>
-          )}
-          {!!do_block && (
-            <span className="clickable" onClick={do_block}>
-              {' '}
-              🚫{' '}
-            </span>
-          )}
-          {!!do_report && (
-            <>
-              &nbsp;
-              <span className="clickable" onClick={do_report}>
-                <span className="icon icon-flag" />
+      !check_block(info) && (
+        <div
+          className={'flow-reply box'}
+          style={
+            info._display_color
+              ? {
+                  '--box-bgcolor-light': info._display_color[0],
+                  '--box-bgcolor-dark': info._display_color[1],
+                }
+              : null
+          }
+        >
+          <div className="box-header">
+            {!!do_filter_name && (
+              <span
+                className="reply-header-badge clickable"
+                onClick={() => {
+                  do_filter_name(info.name);
+                }}
+              >
+                <span className="icon icon-locate" />
               </span>
-              &nbsp;
-            </>
-          )}
-          {info.dangerous_user && (
-            <span className="danger-info"> {info.dangerous_user} </span>
-          )}
-          {info.blocked_count && (
-            <span className="danger-info"> {info.blocked_count} </span>
-          )}
-          <Time stamp={info.timestamp} short={!do_report} />
-          &nbsp;
-          {has_block_words && <span className="box-header-badge">已屏蔽</span>}
-        </div>
-        {!has_block_words && (
+            )}
+            &nbsp;
+            {<span className="box-header-name">{info.name}</span>}
+            {info.author_title && (
+              <span className="box-header-name author-title">{`"${info.author_title}"`}</span>
+            )}
+            {info.is_tmp && (
+              <span className="box-header-name tmp-title">临时账号</span>
+            )}
+            {!!do_delete && !!info.can_del && (
+              <span
+                className="clickable"
+                onClick={() => {
+                  do_delete('cid', info.cid);
+                }}
+              >
+                {' '}
+                🗑️{' '}
+              </span>
+            )}
+            {!!do_block && (
+              <span className="clickable" onClick={do_block}>
+                {' '}
+                🚫{' '}
+              </span>
+            )}
+            {!!do_report && (
+              <>
+                &nbsp;
+                <span className="clickable" onClick={do_report}>
+                  <span className="icon icon-flag" />
+                </span>
+                &nbsp;
+              </>
+            )}
+            {info.dangerous_user && (
+              <span className="danger-info"> {info.dangerous_user} </span>
+            )}
+            {info.blocked_count && (
+              <span className="danger-info"> {info.blocked_count} </span>
+            )}
+            <Time stamp={info.timestamp} short={!do_report} />
+            &nbsp;
+          </div>
           <div className="box-content">
             <HighlightedMarkdown
               author={author}
@@ -192,8 +190,8 @@ class Reply extends PureComponent {
               search_param={search_param}
             />
           </div>
-        )}
-      </div>
+        </div>
+      )
     );
   }
 }
