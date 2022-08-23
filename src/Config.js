@@ -32,7 +32,7 @@ const DEFAULT_CONFIG = {
   block_cw: ['xxg', 'zzxg'],
   block_words_v4: ['🕷️', '[系统自动代发]'],
   whitelist_cw: [],
-  room_id: process.env.REACT_APP_ROOM_ID,
+  room: process.env.REACT_APP_ROOM_ID,
 };
 
 export function load_config() {
@@ -222,13 +222,13 @@ class ConfigRoomId extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      room_id: window.config.room_id,
+      room: window.config.room,
     };
   }
 
   save_changes() {
     this.props.callback({
-      room_id: this.state.room_id,
+      room: this.state.room,
     });
   }
 
@@ -236,7 +236,7 @@ class ConfigRoomId extends PureComponent {
     let value = e.target.value;
     this.setState(
       {
-        room_id: value,
+        room: value,
       },
       this.save_changes.bind(this),
     );
@@ -249,7 +249,7 @@ class ConfigRoomId extends PureComponent {
           <b>分区编号：</b>
           <select
             className="config-select"
-            value={this.state.room_id}
+            value={this.state.room}
             onChange={this.on_select.bind(this)}
           >
             <option value="0">0区(默认分区)</option>
@@ -259,7 +259,7 @@ class ConfigRoomId extends PureComponent {
             <option value="4">4区</option>
             <option value="5">5区</option>
           </select>
-          &nbsp;<small>#room_id</small>
+          &nbsp;<small>#room</small>
         </p>
         <p className="config-description">
           选择分区编号，会作为发言时的分区和影响查看到的内容
@@ -416,7 +416,7 @@ export class ConfigUI extends PureComponent {
             callback={this.save_changes_bound}
           />
           <hr />
-          <ConfigRoomId id="room-id" callback={this.save_changes_bound} />
+          <ConfigRoomId id="room" callback={this.save_changes_bound} />
           <hr />
           <ConfigSwitch
             callback={this.save_changes_bound}

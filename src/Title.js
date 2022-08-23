@@ -206,7 +206,7 @@ export function Title(props) {
               }
             >
               新T树洞
-              <sup>{window.config.room_id || '?'}</sup>
+              <sup>{window.config.room || '?'}</sup>
             </span>
           </p>
         </div>

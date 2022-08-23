@@ -6,13 +6,13 @@ import {
   SafeTextarea,
   PromotionBar,
   HighlightedMarkdown,
+  check_service_work_update,
 } from './Common';
 import { MessageViewer } from './Message';
 import { LoginPopup } from './infrastructure/widgets';
 import { ColorPicker } from './color_picker';
 import { ConfigUI } from './Config';
 import copy from 'copy-to-clipboard';
-import { cache } from './cache';
 import { get_json } from './flows_api';
 import { save_attentions } from './Attention';
 
@@ -60,25 +60,7 @@ export function InfoSidebar(props) {
           <a
             href="###"
             onClick={() => {
-              if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.ready.then((serviceWorker) => {
-                  const waitingServiceWorker = serviceWorker.waiting;
-                  if (waitingServiceWorker) {
-                    cache().clear();
-                    waitingServiceWorker.addEventListener(
-                      'statechange',
-                      (event) => {
-                        if (event.target.state === 'activated') {
-                          window.location.reload();
-                        }
-                      },
-                    );
-                    waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
-                  } else {
-                    alert('没有已下载的更新');
-                  }
-                });
-              }
+              check_service_work_update(true);
             }}
           >
             立即更新
@@ -588,7 +570,7 @@ export class PostForm extends Component {
       text: text,
       allow_search: allow_search ? '1' : '',
       use_title: use_title ? '1' : '',
-      room_id: window.config.room_id,
+      room_id: window.config.room,
     });
     if (has_poll) {
       poll_options.forEach((opt) => {

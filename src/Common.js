@@ -11,6 +11,7 @@ import {
   split_text,
 } from './text_splitter';
 import renderMd from './Markdown';
+import { cache } from './cache';
 
 export { format_time, Time, TitleLine };
 
@@ -486,5 +487,27 @@ export class ClickHandler extends PureComponent {
         {this.props.children}
       </div>
     );
+  }
+}
+
+export function check_service_work_update(update_now = false) {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then((serviceWorker) => {
+      const waitingServiceWorker = serviceWorker.waiting;
+      if (
+        waitingServiceWorker &&
+        (update_now || window.confirm('发现新版本，是否立即使用并刷新？'))
+      ) {
+        cache().clear();
+        waitingServiceWorker.addEventListener('statechange', (event) => {
+          if (event.target.state === 'activated') {
+            window.location.reload();
+          }
+        });
+        waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
+      } else {
+        if (update_now) alert('没有已下载的更新');
+      }
+    });
   }
 }

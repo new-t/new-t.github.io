@@ -5,6 +5,7 @@ import { Sidebar } from './Sidebar';
 import { PressureHelper } from './PressureHelper';
 import { TokenCtx } from './UserAction';
 import { load_config, bgimg_style } from './Config';
+import { check_service_work_update } from './Common';
 import { load_attentions } from './Attention.js';
 import { listen_darkmode } from './infrastructure/functions';
 import { LoginPopup, TitleLine } from './infrastructure/widgets';
@@ -40,6 +41,7 @@ class App extends Component {
     window.BACKEND =
       localStorage['BACKEND'] || process.env.REACT_APP_BACKEND || '/';
 
+    check_service_work_update(false);
     if (process.env.NODE_ENV === 'production') {
       setTimeout(() => {
         fetch('https://api.github.com/users/hole-thu')

@@ -169,7 +169,7 @@ export const API = {
   get_list: async (page, token, submode) => {
     let response = await fetch(
       `${get_api_base()}/getlist?p=${page}&order_mode=${submode}&room_id=${
-        window.config.show_all_rooms ? '' : window.config.room_id
+        window.config.show_all_rooms ? '' : window.config.room
       }`,
       {
         headers: { 'User-Token': token },
@@ -181,7 +181,7 @@ export const API = {
   get_search: async (page, keyword, token, submode) => {
     let response = await fetch(
       `${get_api_base()}/search?search_mode=${submode}&page=${page}&room_id=${
-        window.config.show_all_rooms ? '' : window.config.room_id
+        window.config.show_all_rooms ? '' : window.config.room
       }&keywords=${encodeURIComponent(keyword)}&pagesize=${SEARCH_PAGESIZE}`,
       {
         headers: { 'User-Token': token },
