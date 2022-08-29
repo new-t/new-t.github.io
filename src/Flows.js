@@ -1324,6 +1324,7 @@ export class Flow extends PureComponent {
     }
     this.state = {
       submode: submode,
+      announcement: null,
     };
   }
 
@@ -1347,15 +1348,23 @@ export class Flow extends PureComponent {
     });
   }
 
+  update_announcement(text) {
+    if (text !== this.state.announcement) {
+      this.setState({
+        announcement: text,
+      });
+    }
+  }
+
   render() {
-    const { submode } = this.state;
+    const { submode, announcement } = this.state;
     const { mode, show_sidebar, search_text, token } = this.props;
     const submode_names = this.get_submode_names(mode);
     return (
       <>
-        {window.ANN && window.LAST_ANN !== window.ANN && (
+        {announcement && window.LAST_ANN !== announcement && (
           <Announcement
-            text={window.ANN}
+            text={announcement}
             show_pid={load_single_meta(show_sidebar, token)}
           />
         )}
@@ -1375,6 +1384,7 @@ export class Flow extends PureComponent {
         <SubFlow
           key={submode}
           show_sidebar={show_sidebar}
+          update_announcement={(text) => this.update_announcement(text)}
           mode={mode}
           submode={submode}
           search_text={search_text}
@@ -1417,7 +1427,7 @@ class SubFlow extends PureComponent {
     if (page > this.state.loaded_pages + 1) throw new Error('bad page');
     if (page === this.state.loaded_pages + 1) {
       const { mode, search_param } = this.state;
-      const { token, submode } = this.props;
+      const { token, submode, update_announcement } = this.props;
       console.log('fetching page', page);
       cache();
       if (mode === 'list') {
@@ -1444,22 +1454,26 @@ class SubFlow extends PureComponent {
                 cache().put(x.pid, parseInt(x.reply, 10), comment_json);
               }
             });
-            window.ANN = json.announcement;
-            this.setState((prev, props) => ({
-              chunks: {
-                title: 'News Feed',
-                data: prev.chunks.data.concat(
-                  json.data.filter(
-                    (x) =>
-                      prev.chunks.data.length === 0 ||
-                      !prev.chunks.data
-                        .slice(-100)
-                        .some((p) => p.pid === x.pid),
+            this.setState(
+              (prev, props) => ({
+                chunks: {
+                  title: 'News Feed',
+                  data: prev.chunks.data.concat(
+                    json.data.filter(
+                      (x) =>
+                        prev.chunks.data.length === 0 ||
+                        !prev.chunks.data
+                          .slice(-100)
+                          .some((p) => p.pid === x.pid),
+                    ),
                   ),
-                ),
+                },
+                loading_status: 'done',
+              }),
+              () => {
+                update_announcement(json.announcement);
               },
-              loading_status: 'done',
-            }));
+            );
           })
           .catch(failed);
       } else if (mode === 'search' && search_param) {
