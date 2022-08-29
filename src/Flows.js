@@ -1349,9 +1349,16 @@ export class Flow extends PureComponent {
 
   render() {
     const { submode } = this.state;
-    const submode_names = this.get_submode_names(this.props.mode);
+    const { mode, show_sidebar, search_text, token } = this.props;
+    const submode_names = this.get_submode_names(mode);
     return (
       <>
+        {window.ANN && window.LAST_ANN !== window.ANN && (
+          <Announcement
+            text={window.ANN}
+            show_pid={load_single_meta(show_sidebar, token)}
+          />
+        )}
         <div className="aux-margin flow-submode-choice">
           {submode_names.map((name, idx) => (
             <a
@@ -1367,11 +1374,11 @@ export class Flow extends PureComponent {
 
         <SubFlow
           key={submode}
-          show_sidebar={this.props.show_sidebar}
-          mode={this.props.mode}
+          show_sidebar={show_sidebar}
+          mode={mode}
           submode={submode}
-          search_text={this.props.search_text}
-          token={this.props.token}
+          search_text={search_text}
+          token={token}
         />
       </>
     );
@@ -1389,7 +1396,6 @@ class SubFlow extends PureComponent {
         title: '',
         data: [],
       },
-      announcement: null,
       local_attention_text: null,
       loading_status: 'done',
       error_msg: null,
@@ -1438,6 +1444,7 @@ class SubFlow extends PureComponent {
                 cache().put(x.pid, parseInt(x.reply, 10), comment_json);
               }
             });
+            window.ANN = json.announcement;
             this.setState((prev, props) => ({
               chunks: {
                 title: 'News Feed',
@@ -1451,7 +1458,6 @@ class SubFlow extends PureComponent {
                   ),
                 ),
               },
-              announcement: json.announcement,
               loading_status: 'done',
             }));
           })
@@ -1631,10 +1637,8 @@ class SubFlow extends PureComponent {
 
   render() {
     const should_deletion_detect = localStorage['DELETION_DETECT'] === 'on';
-    const { mode, chunks, local_attention_text, search_param, announcement } =
-      this.state;
-    const { submode, show_sidebar, token } = this.props;
-    console.log(announcement);
+    const { mode, chunks, local_attention_text, search_param } = this.state;
+    const { submode, show_sidebar } = this.props;
     return (
       <div className="flow-container">
         {mode === 'attention' &&
@@ -1652,15 +1656,6 @@ class SubFlow extends PureComponent {
         {local_attention_text && (
           <LocalAttentionEditer init_text={local_attention_text} />
         )}
-
-        {mode === 'list' &&
-          announcement &&
-          window.LAST_ANN !== announcement && (
-            <Announcement
-              text={announcement}
-              show_pid={load_single_meta(show_sidebar, token)}
-            />
-          )}
 
         <FlowChunk
           title={chunks.title}
