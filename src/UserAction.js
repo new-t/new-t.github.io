@@ -592,13 +592,13 @@ export class PostForm extends Component {
           throw new Error(json.msg);
         }
 
-        window.CW_BACKUP = '';
-        window.POLL_BACKUP = null;
         this.setState(
           {
             loading_status: 'done',
             text: '',
             preview: false,
+            cw: null,
+            has_poll: false,
           },
           () => {
             this.area_ref.current.clear_and_then(this.props.on_complete);
