@@ -1283,6 +1283,38 @@ function FlowChunk(props) {
   );
 }
 
+function Announcement(props) {
+  const [show, setShow] = useState(true);
+  function do_close() {
+    window.LAST_ANN = props.text;
+    localStorage['LAST_ANN'] = props.text;
+    setShow(false);
+  }
+  return (
+    show && (
+      <div className="flow-item-row">
+        <div className="flow-item">
+          <div className="box">
+            <div className="box-header announcement-header">
+              <a href="###" className="no-underline" onClick={do_close}>
+                &nbsp;
+                <span className="icon icon-close" />
+                &nbsp;
+              </a>
+            </div>
+            <div className="box-content">
+              <HighlightedMarkdown
+                text={props.text}
+                show_pid={props.show_pid}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  );
+}
+
 export class Flow extends PureComponent {
   constructor(props) {
     super(props);
@@ -1357,6 +1389,7 @@ class SubFlow extends PureComponent {
         title: '',
         data: [],
       },
+      announcement: null,
       local_attention_text: null,
       loading_status: 'done',
       error_msg: null,
@@ -1418,6 +1451,7 @@ class SubFlow extends PureComponent {
                   ),
                 ),
               },
+              announcement: json.announcement,
               loading_status: 'done',
             }));
           })
@@ -1597,11 +1631,14 @@ class SubFlow extends PureComponent {
 
   render() {
     const should_deletion_detect = localStorage['DELETION_DETECT'] === 'on';
-    const { mode, chunks, local_attention_text, search_param } = this.state;
+    const { mode, chunks, local_attention_text, search_param, announcement } =
+      this.state;
+    const { submode, show_sidebar, token } = this.props;
+    console.log(announcement);
     return (
       <div className="flow-container">
         {mode === 'attention' &&
-          this.props.submode === 1 &&
+          submode === 1 &&
           local_attention_text === null && (
             <button
               className="export-btn"
@@ -1616,12 +1653,21 @@ class SubFlow extends PureComponent {
           <LocalAttentionEditer init_text={local_attention_text} />
         )}
 
+        {mode === 'list' &&
+          announcement &&
+          window.LAST_ANN !== announcement && (
+            <Announcement
+              text={announcement}
+              show_pid={load_single_meta(show_sidebar, token)}
+            />
+          )}
+
         <FlowChunk
           title={chunks.title}
           list={chunks.data}
           mode={mode}
           search_param={search_param || null}
-          show_sidebar={this.props.show_sidebar}
+          show_sidebar={show_sidebar}
           deletion_detect={should_deletion_detect}
         />
         {this.state.loading_status === 'failed' && (

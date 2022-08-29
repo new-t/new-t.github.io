@@ -22,6 +22,7 @@ class App extends Component {
     load_config();
     load_attentions();
     window.AS_BACKUP = localStorage['DEFAULT_ALLOW_SEARCH'] ? true : false;
+    window.LAST_ANN = localStorage['LAST_ANN'];
     listen_darkmode(
       { default: undefined, light: false, dark: true }[
         window.config.color_scheme

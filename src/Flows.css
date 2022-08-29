@@ -388,3 +388,7 @@
 .root-dark-mode .box-poll .styles_votes__3IO-o {
   color: #e0e0e0 !important;
 }
+
+.announcement-header {
+  text-align: right;
+}
