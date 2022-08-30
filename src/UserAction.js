@@ -597,7 +597,7 @@ export class PostForm extends Component {
             loading_status: 'done',
             text: '',
             preview: false,
-            cw: null,
+            cw: '',
             has_poll: false,
           },
           () => {
