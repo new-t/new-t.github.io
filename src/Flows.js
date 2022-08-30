@@ -1324,7 +1324,7 @@ export class Flow extends PureComponent {
     }
     this.state = {
       submode: submode,
-      announcement: null,
+      announcement: window.ANN,
     };
   }
 
@@ -1350,6 +1350,8 @@ export class Flow extends PureComponent {
 
   update_announcement(text) {
     if (text !== this.state.announcement) {
+      window.ANN = text;
+      localStorage['ANN'] = text;
       this.setState({
         announcement: text,
       });
