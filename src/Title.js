@@ -26,17 +26,19 @@ class ControlBar extends PureComponent {
       let text = decodeURIComponent(window.location.hash).substr(1);
       if (text.lastIndexOf('?') !== -1)
         text = text.substr(0, text.lastIndexOf('?')); // fuck wechat '#param?nsukey=...'
-      if (text === '##') return;
-      this.setState(
-        {
-          search_text: text,
-        },
-        () => {
-          this.on_keypress({ key: 'Enter' });
-        },
-      );
+      if (text !== '#' && text !== '##') {
+        this.setState(
+          {
+            search_text: text,
+          },
+          () => {
+            this.on_keypress({ key: 'Enter' });
+          },
+        );
+      }
     }
 
+    console.log('add change lis');
     window.addEventListener(
       'hashchange',
       () => {
