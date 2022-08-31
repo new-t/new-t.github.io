@@ -24,7 +24,7 @@ const IMAGE_BASE = 'https://thimg.yecdn.com/';
 const IMAGE_BAK_BASE = 'https://img2.thuhole.com/';
 */
 
-const CLICKABLE_TAGS = { a: true, audio: true };
+const CLICKABLE_TAGS = { a: true, audio: true, button: true };
 const PREVIEW_REPLY_COUNT = 10;
 // const QUOTE_BLACKLIST=['23333','233333','66666','666666','10086','10000','100000','99999','999999','55555','555555'];
 const QUOTE_BLACKLIST = [];
@@ -361,12 +361,12 @@ class FlowItem extends PureComponent {
             />
           </div>
           {info.poll && (
-            <div className={!do_vote ? 'box-poll disabled' : 'box-poll'}>
+            <div className="box-poll">
               <Poll
                 key={info.poll.vote || 'x'}
                 question={''}
                 answers={info.poll.answers}
-                onVote={do_vote || (() => {})}
+                onVote={do_vote}
                 customStyles={{ theme: 'cyan' }}
                 noStorage={true}
                 vote={localStorage['VOTE_RECORD:' + info.pid] || info.poll.vote}
@@ -919,6 +919,23 @@ class FlowItemRow extends PureComponent {
   //   this.setState({ hidden: false });
   // }
 
+  do_vote(vote) {
+    API.add_vote(vote, this.state.info.pid, this.props.token)
+      .then((json) => {
+        if (json.code !== 0) return;
+        localStorage['VOTE_RECORD:' + this.state.info.pid] = vote;
+        console.log('resp:', json.data);
+        console.log('prev info', this.state.info);
+        this.setState((prev, props) => ({
+          info: Object.assign({}, prev.info, { poll: json.data }),
+        }));
+      })
+      .catch((e) => {
+        console.error(e);
+        alert('投票失败');
+      });
+  }
+
   load_replies(callback, update_count = true) {
     //console.log('fetching reply', this.state.info.pid);
     this.setState({
@@ -1033,6 +1050,7 @@ class FlowItemRow extends PureComponent {
           replies={this.state.replies}
           cached={this.state.cached}
           search_param={search_param}
+          do_vote={this.do_vote.bind(this)}
         />
         <div className="flow-reply-row">
           {this.state.reply_status === 'loading' && (
