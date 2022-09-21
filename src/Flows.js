@@ -927,22 +927,25 @@ class FlowItemRow extends PureComponent {
       if (ans.option === vote) ans.votes += 1;
     });
 
-    this.setState({
-      info: Object.assign({}, info, { poll: current_poll }),
-    });
-
-    API.add_vote(vote, info.pid, this.props.token)
-      .then((json) => {
-        if (json.code !== 0) return;
-        localStorage['VOTE_RECORD:' + info.pid] = vote;
-        this.setState((prev, props) => ({
-          info: Object.assign({}, prev.info, { poll: json.data }),
-        }));
-      })
-      .catch((e) => {
-        console.error(e);
-        alert('投票失败');
-      });
+    this.setState(
+      {
+        info: Object.assign({}, info, { poll: current_poll }),
+      },
+      () => {
+        API.add_vote(vote, info.pid, this.props.token)
+          .then((json) => {
+            if (json.code !== 0) return;
+            localStorage['VOTE_RECORD:' + info.pid] = vote;
+            this.setState((prev, props) => ({
+              info: Object.assign({}, prev.info, { poll: json.data }),
+            }));
+          })
+          .catch((e) => {
+            console.error(e);
+            alert('投票失败');
+          });
+      },
+    );
   }
 
   load_replies(callback, update_count = true) {
