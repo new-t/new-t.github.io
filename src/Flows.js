@@ -1475,6 +1475,13 @@ class SubFlow extends PureComponent {
             }
             window.TITLE = json.custom_title;
             window.AUTO_BLCOK = json.auto_block_rank;
+            if (
+              json.custom_title &&
+              window.TITLE_SECRET !== json.title_secret
+            ) {
+              window.TITLE_SECRET = json.title_secret;
+              localStorage['TITLE_SECRET'] = json.title_secret;
+            }
             json.data.forEach((x) => {
               if (x.comments) {
                 let comment_json = {

@@ -24,6 +24,7 @@ class App extends Component {
     window.AS_BACKUP = localStorage['DEFAULT_ALLOW_SEARCH'] ? true : false;
     window.ANN = localStorage['ANN'];
     window.LAST_ANN = localStorage['LAST_ANN'];
+    window.TITLE_SECRET = localStorage['TITLE_SECRET'] || '';
     listen_darkmode(
       { default: undefined, light: false, dark: true }[
         window.config.color_scheme

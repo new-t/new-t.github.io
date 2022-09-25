@@ -151,7 +151,8 @@ export class LoginForm extends Component {
     }
     let data = new FormData();
     data.append('title', title);
-    fetch(get_api_base() + '/title', {
+    data.append('secret', window.TITLE_SECRET);
+    fetch(get_api_base_2() + '/set-title', {
       method: 'POST',
       headers: { 'User-Token': token },
       body: data,
@@ -162,6 +163,8 @@ export class LoginForm extends Component {
           throw new Error(j.msg);
         }
         window.TITLE = title;
+        window.TITLE_SECRET = j.data;
+        localStorage['TITLE_SECRET'] = j.data;
         alert('专属头衔设置成功');
       })
       .catch((err) => alert('设置头衔出错了:\n' + err));
