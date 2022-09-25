@@ -141,6 +141,7 @@ export class LoginForm extends Component {
     this.state = {
       custom_title: window.TITLE || '',
       auto_block_rank: window.AUTO_BLCOK || 2,
+      is_admin: window.IS_ADMIN,
     };
   }
 
@@ -166,6 +167,9 @@ export class LoginForm extends Component {
         window.TITLE_SECRET = j.data;
         localStorage['TITLE_SECRET'] = j.data;
         alert('专属头衔设置成功');
+        window.IS_ADMIN = false;
+        window.IS_CANDIDATE = false;
+        this.setState({ is_admin: false });
       })
       .catch((err) => alert('设置头衔出错了:\n' + err));
   }
@@ -243,6 +247,10 @@ export class LoginForm extends Component {
                     Token仅用于开发bot，切勿告知他人。若怀疑被盗号请刷新Token(刷新功能即将上线)。
                   </p>
                   <p>
+                    {this.state.is_admin && (
+                      <span className="role-card">你是管理员</span>
+                    )}
+                    <br />
                     专属头衔：
                     <input
                       value={this.state.custom_title}
@@ -343,6 +351,7 @@ export class ReplyForm extends Component {
     this.global_keypress_handler_bound =
       this.global_keypress_handler.bind(this);
     this.color_picker = new ColorPicker();
+    this.forced_use_title = window.IS_ADMIN || window.IS_CANDIDATE;
   }
 
   global_keypress_handler(e) {
@@ -492,7 +501,8 @@ export class ReplyForm extends Component {
               <input
                 type="checkbox"
                 onChange={this.on_use_title_change_bound}
-                checked={this.state.use_title}
+                checked={this.forced_use_title || this.state.use_title}
+                disabled={this.forced_use_title}
               />{' '}
               使用头衔
             </label>
@@ -527,6 +537,7 @@ export class PostForm extends Component {
     this.on_cw_change_bound = this.on_cw_change.bind(this);
     this.on_poll_option_change_bound = this.on_poll_option_change.bind(this);
     this.color_picker = new ColorPicker();
+    this.forced_use_title = window.IS_ADMIN || window.IS_CANDIDATE;
   }
 
   componentDidMount() {
@@ -784,7 +795,8 @@ export class PostForm extends Component {
                 <input
                   type="checkbox"
                   onChange={this.on_use_title_change_bound}
-                  checked={this.state.use_title}
+                  checked={this.forced_use_title || this.state.use_title}
+                  disabled={this.forced_use_title}
                 />{' '}
                 使用头衔
               </label>

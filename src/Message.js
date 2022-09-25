@@ -35,6 +35,8 @@ export class MessageViewer extends PureComponent {
               msg: json.data,
               start_time: json.start_time,
               salt: json.salt,
+              admin_list: json.admin_list,
+              candidate_list: json.candidate_list,
               tmp_token: json.tmp_token,
             });
           })
@@ -106,6 +108,24 @@ export class MessageViewer extends PureComponent {
             >
               使用
             </button>
+          </div>
+          <br />
+          <div>
+            当前管理员:
+            {this.state.admin_list.map((admin) => (
+              <span className="admin-card" key={admin}>
+                {admin}
+              </span>
+            ))}
+          </div>
+          <br />
+          <div>
+            当前候选管理员:
+            {this.state.candidate_list.map((admin) => (
+              <span className="admin-card" key={admin}>
+                {admin}
+              </span>
+            ))}
           </div>
           {this.state.msg.map((msg) => (
             <div className="box" key={msg.type + msg.timestamp}>

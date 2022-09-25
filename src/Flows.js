@@ -1473,15 +1473,21 @@ class SubFlow extends PureComponent {
               });
               localStorage['_LATEST_POST_ID'] = '' + max_id;
             }
-            window.TITLE = json.custom_title;
-            window.AUTO_BLCOK = json.auto_block_rank;
-            if (
-              json.custom_title &&
-              window.TITLE_SECRET !== json.title_secret
-            ) {
-              window.TITLE_SECRET = json.title_secret;
-              localStorage['TITLE_SECRET'] = json.title_secret;
+
+            if (page === 1) {
+              window.IS_ADMIN = json.is_admin;
+              window.IS_CANDIDATE = json.is_candidate;
+              window.TITLE = json.custom_title;
+              window.AUTO_BLCOK = json.auto_block_rank;
+              if (
+                json.custom_title &&
+                window.TITLE_SECRET !== json.title_secret
+              ) {
+                window.TITLE_SECRET = json.title_secret;
+                localStorage['TITLE_SECRET'] = json.title_secret;
+              }
             }
+
             json.data.forEach((x) => {
               if (x.comments) {
                 let comment_json = {

@@ -16,3 +16,11 @@
   vertical-align: top;
   padding: 3px;
 }
+
+.admin-card {
+  display: inline-block;
+  background: #3332;
+  margin-left: 7px;
+  padding: 1px 5px;
+  border-radius: 5px;
+}

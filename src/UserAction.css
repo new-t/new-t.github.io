@@ -155,3 +155,9 @@
 .update-title-btn {
   margin-top: 6px;
 }
+
+.role-card {
+  padding: 5px;
+  background: #d33a;
+  border-radius: 6px;
+}
