@@ -363,7 +363,7 @@ class FlowItem extends PureComponent {
           {info.poll && (
             <div className="box-poll">
               <Poll
-                key={info.poll.vote || 'x'}
+                key={info.poll.answers.map((a) => a.votes).join('_')}
                 question={''}
                 answers={info.poll.answers}
                 onVote={do_vote}
