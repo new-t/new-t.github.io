@@ -21,7 +21,6 @@ class App extends Component {
     super(props);
     load_config();
     load_attentions();
-    window.AS_BACKUP = localStorage['DEFAULT_ALLOW_SEARCH'] ? true : false;
     window.ANN = localStorage['ANN'];
     window.LAST_ANN = localStorage['LAST_ANN'];
     window.TITLE_SECRET = localStorage['TITLE_SECRET'] || '';
