@@ -148,32 +148,23 @@ class Reply extends PureComponent {
             )}
             {!!do_delete && !!info.can_del && (
               <span
-                className="clickable"
+                className="clickable icon icon-delete op-btn"
                 onClick={() => {
                   do_delete('cid', info.cid);
                 }}
-              >
-                {' '}
-                🗑️{' '}
-              </span>
+              />
             )}
             {!!do_block && (
-              <span className="clickable" onClick={do_block}>
-                {' '}
-                🚫{' '}
-              </span>
+              <span
+                className="clickable icon icon-block op-btn"
+                onClick={do_block}
+              />
             )}
             {!!do_report && (
-              <>
-                &nbsp;
-                <span className="clickable" onClick={do_report}>
-                  <span className="icon icon-flag" />
-                </span>
-                &nbsp;
-              </>
-            )}
-            {info.dangerous_user && (
-              <span className="danger-info"> {info.dangerous_user} </span>
+              <span
+                className="clickable icon icon-flag op-btn"
+                onClick={do_report}
+              />
             )}
             {info.blocked_count && (
               <span className="danger-info"> {info.blocked_count} </span>
@@ -287,7 +278,7 @@ class FlowItem extends PureComponent {
             {!!parseInt(info.reply, 10) && (
               <span className="box-header-badge">
                 {info.reply}&nbsp;
-                <span className="icon icon-reply" />
+                <span className="icon icon-comment" />
               </span>
             )}
             <code className="box-id">
@@ -308,20 +299,17 @@ class FlowItem extends PureComponent {
             {info.is_reported && <span className="danger-info"> R </span>}
             {!!do_delete && !!info.can_del && (
               <span
-                className="clickable"
+                className="clickable icon icon-delete op-btn"
                 onClick={() => {
                   do_delete('pid', info.pid);
                 }}
-              >
-                {' '}
-                🗑️{' '}
-              </span>
+              />
             )}
             {!!do_block && (
-              <span className="clickable" onClick={do_block}>
-                {' '}
-                🚫{' '}
-              </span>
+              <span
+                className="clickable icon icon-block op-btn"
+                onClick={do_block}
+              />
             )}
             {info.dangerous_user && (
               <span className="danger-info"> {info.dangerous_user} </span>
@@ -346,7 +334,7 @@ class FlowItem extends PureComponent {
                 </button>
               </div>
             )}
-            {info.allow_search && <span> 📢 </span>}
+            {!!info.allow_search && <span className="icon icon-lock" />}
             <Time stamp={info.timestamp} short={!img_clickable} />
           </div>
           {!!info.hot_score && (
@@ -573,6 +561,7 @@ class FlowSidebar extends PureComponent {
   report(event, text = '') {
     console.log(text);
     let reason = prompt(`举报 #${this.state.info.pid} 的理由：`, text);
+    if (!reason) return;
     let should_hide = window.confirm('是否认为此洞应该被删除或隐藏？');
     if (reason !== null) {
       API.report(this.state.info.pid, reason, should_hide, this.props.token)
@@ -773,7 +762,7 @@ class FlowSidebar extends PureComponent {
               &nbsp;&nbsp;
               <a href="###" onClick={() => this.toggle_notification()}>
                 <span>
-                  <span className="icon icon-star" />
+                  <span className="icon icon-bell" />
                   <label>提醒</label>
                 </span>
               </a>

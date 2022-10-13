@@ -1,0 +1,118 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?yqy2se');
+  src:  url('fonts/icomoon.eot?yqy2se#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?yqy2se') format('truetype'),
+    url('fonts/icomoon.woff?yqy2se') format('woff'),
+    url('fonts/icomoon.svg?yqy2se#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-vote:before {
+  content: "\e903";
+}
+.icon-thumbs-o-down:before {
+  content: "\e902";
+}
+.icon-thumbs-down:before {
+  content: "\e904";
+}
+.icon-send:before {
+  content: "\e901";
+}
+.icon-gitea:before {
+  content: "\e900";
+  color: #609926;
+}
+.icon-textfile:before {
+  content: "\e926";
+}
+.icon-bell:before {
+  content: "\e951";
+}
+.icon-comment:before {
+  content: "\e96b";
+}
+.icon-quote:before {
+  content: "\e977";
+}
+.icon-loading:before {
+  content: "\e979";
+}
+.icon-login:before {
+  content: "\e98d";
+}
+.icon-lock:before {
+  content: "\e98f";
+}
+.icon-settings:before {
+  content: "\e994";
+}
+.icon-delete:before {
+  content: "\e9ad";
+}
+.icon-locate:before {
+  content: "\e9b3";
+}
+.icon-flag:before {
+  content: "\e9cc";
+}
+.icon-eye:before {
+  content: "\e9ce";
+}
+.icon-eye-blocked:before {
+  content: "\e9d1";
+}
+.icon-attention:before {
+  content: "\e9d3";
+}
+.icon-star:before {
+  content: "\e9d7";
+}
+.icon-star-ok:before {
+  content: "\e9d9";
+}
+.icon-plus:before {
+  content: "\ea0a";
+}
+.icon-about:before {
+  content: "\ea0c";
+}
+.icon-close:before {
+  content: "\ea0d";
+}
+.icon-block:before {
+  content: "\ea0e";
+}
+.icon-logout:before {
+  content: "\ea14";
+}
+.icon-refresh:before {
+  content: "\ea2e";
+}
+.icon-back:before {
+  content: "\ea44";
+}
+.icon-order-rev:before {
+  content: "\ea49";
+}
+.icon-new-tab:before {
+  content: "\ea7e";
+}

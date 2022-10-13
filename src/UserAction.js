@@ -87,6 +87,7 @@ export function InfoSidebar(props) {
           </a>
           协议在{' '}
           <a href={REPOSITORY} target="_blank">
+            <span className="icon icon-gitea" />
             Gitea
           </a>{' '}
           开源。
@@ -126,6 +127,7 @@ export function InfoSidebar(props) {
           </a>
           协议在{' '}
           <a href={REPOSITORY} target="_blank">
+            <span className="icon icon-gitea" />
             Gitea
           </a>{' '}
           开源。
@@ -850,6 +852,7 @@ export class PostForm extends Component {
             this.setState({ has_poll: !has_poll });
           }}
         >
+          <span className="icon icon-vote" />
           {has_poll ? '取消' : '添加'}投票
         </button>
 
