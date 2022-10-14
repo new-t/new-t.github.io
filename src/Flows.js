@@ -334,7 +334,7 @@ class FlowItem extends PureComponent {
                 </button>
               </div>
             )}
-            {!!info.allow_search && <span className="icon icon-lock" />}
+            {!info.allow_search && <span className="icon icon-lock" />}
             <Time stamp={info.timestamp} short={!img_clickable} />
           </div>
           {!!info.hot_score && (
