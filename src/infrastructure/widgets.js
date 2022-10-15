@@ -82,7 +82,7 @@ class LoginPopupSelf extends Component {
             <b>通过第三方验证登陆新T树洞</b>
           </p>
           <p>
-            <a href={(process.env.REACT_APP_BACKEND || '/') + "_login?p=cs"} target="_blank"
+            <a href={window.BACKEND + "_login?p=cs"} target="_blank"
               referrerPolicy="origin"
             >
               <span className="icon icon-login" />
@@ -93,7 +93,7 @@ class LoginPopupSelf extends Component {
             <input ref={this.input_token_ref} placeholder="T大树洞Token" />
             <br />
             <a
-              href="/_login?p=thuhole"
+              href={window.BACKEND + "_login?p=thuhole"}
               target="_blank"
               onClick={(e) => {
                 this.setThuhole(e, e.target, this.input_token_ref);
