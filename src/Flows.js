@@ -353,7 +353,9 @@ class FlowItem extends PureComponent {
             <div className="box-content-vote">
               <span
                 className={do_react ? 'clickable' : ''}
-                onClick={() => do_react && do_react(1)}
+                onClick={() =>
+                  do_react && do_react(info.reaction_status === 1 ? 0 : 1)
+                }
               >
                 <svg
                   className={
@@ -381,7 +383,9 @@ class FlowItem extends PureComponent {
               )}
               <span
                 className={do_react ? 'clickable' : ''}
-                onClick={() => do_react && do_react(-1)}
+                onClick={() =>
+                  do_react && do_react(info.reaction_status === -1 ? 0 : -1)
+                }
               >
                 <svg
                   className={
@@ -949,6 +953,9 @@ class FlowItemRow extends PureComponent {
       window.config.whitelist_cw.indexOf(props.info.cw) === -1 &&
       (props.mode === 'list' || this.props.is_quote);
     this.has_block_words = check_block(props.info);
+    this.too_many_downvotes =
+      props.info.down_votes > 10 &&
+      props.info.down_votes > 2 * props.info.up_votes;
     this.color_picker = new ColorPicker();
     this.state = {
       replies: props.info.comments
@@ -1161,7 +1168,7 @@ class FlowItemRow extends PureComponent {
       </div>
     );
 
-    if (this.needFold || this.has_block_words) {
+    if (this.needFold || this.has_block_words || this.too_many_downvotes) {
       return (
         (!this.has_block_words || mode !== 'list') && (
           <div
@@ -1214,7 +1221,9 @@ class FlowItemRow extends PureComponent {
                   )}
                   <Time stamp={this.props.info.timestamp} short={true} />
                   <span className="box-header-badge">
-                    {this.needFold ? '已折叠' : '已屏蔽'}
+                    {this.needFold && '已折叠'}
+                    {this.has_block_words && '已屏蔽'}
+                    {this.too_many_downvotes && '反对较多'}
                   </span>
                   <div style={{ clear: 'both' }} />
                 </div>
