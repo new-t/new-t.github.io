@@ -100,6 +100,21 @@ export const API = {
     return handle_response(response, true);
   },
 
+  set_reaction: async (pid, reaction_status, token) => {
+    let data = new URLSearchParams([['status', reaction_status]]);
+
+    let response = await fetch(`${get_api_base_2()}/post/${pid}/reaction`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Token': token,
+      },
+      body: data,
+    });
+
+    return handle_response(response, true);
+  },
+
   report: async (pid, reason, should_hide, token) => {
     let data = new URLSearchParams([
       ['pid', pid],

@@ -228,6 +228,7 @@ class FlowItem extends PureComponent {
       show_pid,
       do_vote,
       do_block,
+      do_react,
       search_param,
     } = this.props;
     const { cw } = this.state;
@@ -340,13 +341,62 @@ class FlowItem extends PureComponent {
           {!!info.hot_score && (
             <span className="box-header">hot score: {info.hot_score}</span>
           )}
-          <div className="box-content">
-            <HighlightedMarkdown
-              text={info.text}
-              color_picker={color_picker}
-              show_pid={show_pid}
-              search_param={search_param}
-            />
+          <div className="box-content-wrapper">
+            <div className="box-content">
+              <HighlightedMarkdown
+                text={info.text}
+                color_picker={color_picker}
+                show_pid={show_pid}
+                search_param={search_param}
+              />
+            </div>
+            <div className="box-content-vote">
+              <span
+                className={do_react ? 'clickable' : ''}
+                onClick={() => do_react && do_react(1)}
+              >
+                <svg
+                  className={
+                    info.reaction_status === 1
+                      ? 'vote-icon-active'
+                      : 'vote-icon-inactive'
+                  }
+                  width="28"
+                  height="28"
+                  viewBox="0 0 36 36"
+                >
+                  <path d="M2 25h32L18 9 2 25Z" />
+                </svg>
+              </span>
+              {do_react ? (
+                <>
+                  <div className="vote-num">{info.up_votes}</div>
+                  <hr />
+                  <div className="vote-num">{info.down_votes}</div>
+                </>
+              ) : (
+                <div className="vote-num">
+                  {info.up_votes - info.down_votes}
+                </div>
+              )}
+              <span
+                className={do_react ? 'clickable' : ''}
+                onClick={() => do_react && do_react(-1)}
+              >
+                <svg
+                  className={
+                    info.reaction_status === -1
+                      ? 'vote-icon-active'
+                      : 'vote-icon-inactive'
+                  }
+                  width="28"
+                  height="28"
+                  viewBox="0 0 36 36"
+                >
+                  <path d="M2 11h32L18 27 2 11Z"></path>
+                </svg>
+              </span>
+            </div>
           </div>
           {info.poll && (
             <div className="box-poll">
@@ -467,6 +517,21 @@ class FlowSidebar extends PureComponent {
           error_msg: '' + e,
         });
       });
+  }
+
+  set_reaction(reaction_status) {
+    console.log(reaction_status);
+    const prev_info = this.state.info;
+    const pid = prev_info.pid;
+    API.set_reaction(pid, reaction_status, this.props.token).then((json) => {
+      this.setState({
+        info: Object.assign({}, prev_info, json.data),
+      });
+      // TODO: save to localStore
+      this.syncState({
+        info: Object.assign({}, prev_info, json.data),
+      });
+    });
   }
 
   toggle_attention() {
@@ -710,6 +775,7 @@ class FlowSidebar extends PureComponent {
                 window.location.reload();
               });
             }}
+            do_react={this.set_reaction.bind(this)}
           />
         </ClickHandler>
       );
