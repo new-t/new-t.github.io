@@ -1221,9 +1221,9 @@ class FlowItemRow extends PureComponent {
                   )}
                   <Time stamp={this.props.info.timestamp} short={true} />
                   <span className="box-header-badge">
-                    {this.needFold && '已折叠'}
-                    {this.has_block_words && '已屏蔽'}
-                    {this.too_many_downvotes && '反对较多'}
+                    {this.needFold && ' 已折叠'}
+                    {this.has_block_words && ' 已屏蔽'}
+                    {this.too_many_downvotes && ' 争议较大'}
                   </span>
                   <div style={{ clear: 'both' }} />
                 </div>
