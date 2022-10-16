@@ -370,8 +370,8 @@ class FlowItem extends PureComponent {
                         ? 'vote-icon-active'
                         : 'vote-icon-inactive'
                     }
-                    width="28"
-                    height="28"
+                    width="24"
+                    height="24"
                     viewBox="0 0 36 36"
                   >
                     <path d="M2 25h32L18 9 2 25Z" />
@@ -392,8 +392,8 @@ class FlowItem extends PureComponent {
                         ? 'vote-icon-active'
                         : 'vote-icon-inactive'
                     }
-                    width="28"
-                    height="28"
+                    width="24"
+                    height="24"
                     viewBox="0 0 36 36"
                   >
                     <path d="M2 11h32L18 27 2 11Z"></path>

@@ -145,6 +145,10 @@
   font-size: 0.8em;
 }
 
+.box-header {
+  display: flow-root;
+}
+
 .flow-item-row p.img {
   text-align: center;
   margin-top: 0.5em;
@@ -404,6 +408,7 @@
 
 .box-content-wrapper .box-content-vote {
   flex: 0 0;
+  margin-left: 6px;
 }
 
 .vote-num {
