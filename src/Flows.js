@@ -268,6 +268,14 @@ class FlowItem extends PureComponent {
                 <span className="icon icon-locate" />
               </span>
             )}
+            {!do_react && (
+              <span className="box-header-badge">
+                <span className="icon icon-up-and-down" />
+                <span style={{ verticalAlign: 'super' }}>
+                  {info.up_votes - info.down_votes}
+                </span>
+              </span>
+            )}
             {!!parseInt(info.likenum, 10) && (
               <span className="box-header-badge">
                 {info.likenum}&nbsp;
@@ -350,57 +358,49 @@ class FlowItem extends PureComponent {
                 search_param={search_param}
               />
             </div>
-            <div className="box-content-vote">
-              <span
-                className={do_react ? 'clickable' : ''}
-                onClick={() =>
-                  do_react && do_react(info.reaction_status === 1 ? 0 : 1)
-                }
-              >
-                <svg
-                  className={
-                    info.reaction_status === 1
-                      ? 'vote-icon-active'
-                      : 'vote-icon-inactive'
-                  }
-                  width="28"
-                  height="28"
-                  viewBox="0 0 36 36"
+            {do_react && (
+              <div className="box-content-vote">
+                <span
+                  className="clickable"
+                  onClick={() => do_react(info.reaction_status === 1 ? 0 : 1)}
                 >
-                  <path d="M2 25h32L18 9 2 25Z" />
-                </svg>
-              </span>
-              {do_react ? (
-                <>
-                  <div className="vote-num">{info.up_votes}</div>
-                  <hr />
-                  <div className="vote-num">{info.down_votes}</div>
-                </>
-              ) : (
-                <div className="vote-num">
-                  {info.up_votes - info.down_votes}
-                </div>
-              )}
-              <span
-                className={do_react ? 'clickable' : ''}
-                onClick={() =>
-                  do_react && do_react(info.reaction_status === -1 ? 0 : -1)
-                }
-              >
-                <svg
-                  className={
-                    info.reaction_status === -1
-                      ? 'vote-icon-active'
-                      : 'vote-icon-inactive'
+                  <svg
+                    className={
+                      info.reaction_status === 1
+                        ? 'vote-icon-active'
+                        : 'vote-icon-inactive'
+                    }
+                    width="28"
+                    height="28"
+                    viewBox="0 0 36 36"
+                  >
+                    <path d="M2 25h32L18 9 2 25Z" />
+                  </svg>
+                </span>
+                <div className="vote-num">{info.up_votes}</div>
+                <hr />
+                <div className="vote-num">{info.down_votes}</div>
+                <span
+                  className="clickable"
+                  onClick={() =>
+                    do_react && do_react(info.reaction_status === -1 ? 0 : -1)
                   }
-                  width="28"
-                  height="28"
-                  viewBox="0 0 36 36"
                 >
-                  <path d="M2 11h32L18 27 2 11Z"></path>
-                </svg>
-              </span>
-            </div>
+                  <svg
+                    className={
+                      info.reaction_status === -1
+                        ? 'vote-icon-active'
+                        : 'vote-icon-inactive'
+                    }
+                    width="28"
+                    height="28"
+                    viewBox="0 0 36 36"
+                  >
+                    <path d="M2 11h32L18 27 2 11Z"></path>
+                  </svg>
+                </span>
+              </div>
+            )}
           </div>
           {info.poll && (
             <div className="box-poll">

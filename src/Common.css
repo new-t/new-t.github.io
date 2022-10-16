@@ -82,3 +82,17 @@ blockquote {
   padding-left: 5px;
   border-left: 3px solid #cbcbcb;
 }
+
+.icon-up-and-down:before {
+  content:"";
+  background-image: url('images/up_and_down.png');
+  background-size: 18px 18px;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+}
+
+.icon-up-and-down {
+  height: 18px;
+  display: inline-block;
+}
