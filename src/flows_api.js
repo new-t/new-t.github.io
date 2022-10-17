@@ -7,6 +7,12 @@ export { get_json };
 const SEARCH_PAGESIZE = 50;
 
 const handle_response = async (response, notify = false) => {
+  if (response.status === 401) {
+    alert('token无效或过期');
+    window.localStorage.removeItem('TOKEN');
+    window.location.reload();
+    return;
+  }
   let json = await get_json(response);
   if (json.code !== 0) {
     if (json.msg) {
