@@ -140,14 +140,16 @@ export class HighlightedMarkdown extends Component {
       {
         shouldProcessNode: (node) => node.name === 'img',
         processNode(node, index) {
-          const rp =
-            STORAGE_BASE && node.attribs.src.startsWith(STORAGE_BASE)
-              ? 'origin'
-              : 'no-referrer';
+          const with_referrer =
+            STORAGE_BASE &&
+            node.attribs.src &&
+            node.attribs.src.startsWith(STORAGE_BASE);
+          const rp = with_referrer ? 'origin' : 'no-referrer';
           return (
             <a
               href={normalize_url(node.attribs.src)}
               target="_blank"
+              rel={with_referrer ? 'noopener' : 'noopener noreferrer'}
               referrerPolicy={rp}
             >
               <span className="ext-img__warpper loading">
@@ -167,16 +169,16 @@ export class HighlightedMarkdown extends Component {
       {
         shouldProcessNode: (node) => node.name === 'a',
         processNode(node, children, index) {
+          const with_referrer =
+            STORAGE_BASE &&
+            node.attribs.href &&
+            node.attribs.href.startsWith(STORAGE_BASE);
           return (
             <a
               href={normalize_url(node.attribs.href)}
               target="_blank"
-              rel="noopenner"
-              referrerPolicy={
-                STORAGE_BASE && node.attribs.href.startsWith(STORAGE_BASE)
-                  ? 'origin'
-                  : 'no-referrer'
-              }
+              rel={with_referrer ? 'noopener' : 'noopener noreferrer'}
+              referrerPolicy={with_referrer ? 'origin' : 'no-referrer'}
               className="ext-link"
               key={index}
             >
@@ -218,11 +220,13 @@ export class HighlightedMarkdown extends Component {
           return (
             <React.Fragment key={index}>
               {splitted.map(([rule, p], idx) => {
+                const with_referrer =
+                  STORAGE_BASE && p && p.startsWith(STORAGE_BASE);
                 return (
                   <span key={idx}>
                     {rule === 'url_pid' ? (
                       <span
-                        className="url-pid-link"
+                        className="url-pid-link clickable"
                         title={p}
                         onClick={(e) => {
                           e.preventDefault();
@@ -237,21 +241,17 @@ export class HighlightedMarkdown extends Component {
                           href={normalize_url(p)}
                           className="ext-link"
                           target="_blank"
-                          rel="noopener"
+                          rel={
+                            with_referrer ? 'noopener' : 'noopener noreferrer'
+                          }
                           referrerPolicy={
-                            STORAGE_BASE && p.startsWith(STORAGE_BASE)
-                              ? 'origin'
-                              : 'no-referrer'
+                            with_referrer ? 'origin' : 'no-referrer'
                           }
                         >
                           {p}
                           <span className="icon icon-new-tab" />
                         </a>
 
-                        {/*
-                          这里对referrer暂时没有比较好的办法
-                          如果使用ifrmae对fireofx可行在chomre上很容易变成下载
-                        */}
                         {is_video(p) && (
                           <video className="ext-video" src={p} controls />
                         )}
