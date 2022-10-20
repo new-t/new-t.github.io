@@ -317,6 +317,7 @@ a.app-switcher-item,
 
 .time-str {
   color: #999999;
+  display: inline-block;
 }
 
 a.button {

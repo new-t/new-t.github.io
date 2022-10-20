@@ -246,110 +246,113 @@ class FlowItem extends PureComponent {
           </div>
         )}
         <div
-          className="box"
+          className="box box-post"
           style={{
             '--box-bgcolor-light': _display_color[0],
             '--box-bgcolor-dark': _display_color[1],
           }}
         >
-          {!!window.LATEST_POST_ID &&
-            parseInt(info.pid, 10) > window.LATEST_POST_ID && (
-              <div className="flow-item-dot" />
-            )}
-          {!!attention && !cached && <div className="flow-item-dot" />}
-          <div className="box-header">
-            {!!do_filter_name && (
-              <span
-                className="reply-header-badge clickable"
-                onClick={() => {
-                  do_filter_name(DZ_NAME);
-                }}
-              >
-                <span className="icon icon-locate" />
-              </span>
-            )}
-            {!do_react && (
-              <span className="box-header-badge">
-                <span className="icon icon-up-and-down" />
-                <span style={{ verticalAlign: 'super' }}>
-                  {info.up_votes - info.down_votes}
-                </span>
-              </span>
-            )}
-            {!!parseInt(info.likenum, 10) && (
-              <span className="box-header-badge">
-                {info.likenum}&nbsp;
+          <div className="box-post-main">
+            {!!window.LATEST_POST_ID &&
+              parseInt(info.pid, 10) > window.LATEST_POST_ID && (
+                <div className="flow-item-dot" />
+              )}
+            {!!attention && !cached && <div className="flow-item-dot" />}
+            <div className="box-header">
+              {!!do_filter_name && (
                 <span
-                  className={'icon icon-' + (attention ? 'star-ok' : 'star')}
+                  className="reply-header-badge clickable"
+                  onClick={() => {
+                    do_filter_name(DZ_NAME);
+                  }}
+                >
+                  <span className="icon icon-locate" />
+                </span>
+              )}
+              {!do_react && (
+                <span className="box-header-badge">
+                  <span className="icon icon-up-and-down" />
+                  <span style={{ verticalAlign: 'super' }}>
+                    {info.up_votes - info.down_votes}
+                  </span>
+                </span>
+              )}
+              {!!parseInt(info.likenum, 10) && (
+                <span className="box-header-badge">
+                  {info.likenum}&nbsp;
+                  <span
+                    className={'icon icon-' + (attention ? 'star-ok' : 'star')}
+                  />
+                </span>
+              )}
+              {!!parseInt(info.reply, 10) && (
+                <span className="box-header-badge">
+                  {info.reply}&nbsp;
+                  <span className="icon icon-comment" />
+                </span>
+              )}
+              <code className="box-id">
+                <a href={'##' + info.pid} onClick={this.copy_link.bind(this)}>
+                  #{info.pid}
+                  {info.room_id !== parseInt(window.config.room) && (
+                    <> @{info.room_id}</>
+                  )}
+                </a>
+              </code>
+              &nbsp;
+              {info.author_title && (
+                <span className="box-header-name author-title">{`"${info.author_title}"`}</span>
+              )}
+              {info.is_tmp && (
+                <span className="box-header-name tmp-title">临时账号</span>
+              )}
+              {info.is_reported && <span className="danger-info"> R </span>}
+              {!!do_delete && !!info.can_del && (
+                <span
+                  className="clickable icon icon-delete op-btn"
+                  onClick={() => {
+                    do_delete('pid', info.pid);
+                  }}
                 />
-              </span>
-            )}
-            {!!parseInt(info.reply, 10) && (
-              <span className="box-header-badge">
-                {info.reply}&nbsp;
-                <span className="icon icon-comment" />
-              </span>
-            )}
-            <code className="box-id">
-              <a href={'##' + info.pid} onClick={this.copy_link.bind(this)}>
-                #{info.pid}
-                {info.room_id !== parseInt(window.config.room) && (
-                  <> @{info.room_id}</>
-                )}
-              </a>
-            </code>
-            &nbsp;
-            {info.author_title && (
-              <span className="box-header-name author-title">{`"${info.author_title}"`}</span>
-            )}
-            {info.is_tmp && (
-              <span className="box-header-name tmp-title">临时账号</span>
-            )}
-            {info.is_reported && <span className="danger-info"> R </span>}
-            {!!do_delete && !!info.can_del && (
-              <span
-                className="clickable icon icon-delete op-btn"
-                onClick={() => {
-                  do_delete('pid', info.pid);
-                }}
-              />
-            )}
-            {!!do_block && (
-              <span
-                className="clickable icon icon-block op-btn"
-                onClick={do_block}
-              />
-            )}
-            {info.dangerous_user && (
-              <span className="danger-info"> {info.dangerous_user} </span>
-            )}
-            {info.blocked_count && (
-              <span className="danger-info"> {info.blocked_count} </span>
-            )}
-            {info.cw !== null && (!do_edit_cw || !info.can_del) && (
-              <span className="box-header-cw">{info.cw}</span>
-            )}
-            {!!do_edit_cw && !!info.can_del && (
-              <div className="box-header-cw-edit clickable">
-                <input
-                  type="text"
-                  value={cw}
-                  maxLength="32"
-                  placeholder="编辑折叠警告"
-                  onChange={this.on_cw_change.bind(this)}
+              )}
+              {!!do_block && (
+                <span
+                  className="clickable icon icon-block op-btn"
+                  onClick={do_block}
                 />
-                <button type="button" onClick={(e) => do_edit_cw(cw, info.pid)}>
-                  更新
-                </button>
-              </div>
+              )}
+              {info.dangerous_user && (
+                <span className="danger-info"> {info.dangerous_user} </span>
+              )}
+              {info.blocked_count && (
+                <span className="danger-info"> {info.blocked_count} </span>
+              )}
+              {info.cw !== null && (!do_edit_cw || !info.can_del) && (
+                <span className="box-header-cw">{info.cw}</span>
+              )}
+              {!!do_edit_cw && !!info.can_del && (
+                <div className="box-header-cw-edit clickable">
+                  <input
+                    type="text"
+                    value={cw}
+                    maxLength="32"
+                    placeholder="编辑折叠警告"
+                    onChange={this.on_cw_change.bind(this)}
+                  />
+                  <button
+                    type="button"
+                    onClick={(e) => do_edit_cw(cw, info.pid)}
+                  >
+                    更新
+                  </button>
+                </div>
+              )}
+              {!info.allow_search && <span className="icon icon-lock" />}
+              <Time stamp={info.timestamp} short={!img_clickable} />
+            </div>
+            {!!info.hot_score && (
+              <span className="box-header">hot score: {info.hot_score}</span>
             )}
-            {!info.allow_search && <span className="icon icon-lock" />}
-            <Time stamp={info.timestamp} short={!img_clickable} />
-          </div>
-          {!!info.hot_score && (
-            <span className="box-header">hot score: {info.hot_score}</span>
-          )}
-          <div className="box-content-wrapper">
             <div className="box-content">
               <HighlightedMarkdown
                 text={info.text}
@@ -358,67 +361,70 @@ class FlowItem extends PureComponent {
                 search_param={search_param}
               />
             </div>
-            {do_react && (
-              <div className="box-content-vote">
-                <span
-                  className="clickable"
-                  onClick={() => do_react(info.reaction_status === 1 ? 0 : 1)}
-                >
-                  <svg
-                    className={
-                      info.reaction_status === 1
-                        ? 'vote-icon-active'
-                        : 'vote-icon-inactive'
-                    }
-                    width="24"
-                    height="24"
-                    viewBox="0 0 36 36"
-                  >
-                    <path d="M2 25h32L18 9 2 25Z" />
-                  </svg>
-                </span>
-                <div className="vote-num">{info.up_votes}</div>
-                <hr />
-                <div className="vote-num">{info.down_votes}</div>
-                <span
-                  className="clickable"
-                  onClick={() =>
-                    do_react && do_react(info.reaction_status === -1 ? 0 : -1)
+            {info.poll && (
+              <div className="box-poll">
+                <Poll
+                  key={info.poll.answers.map((a) => a.votes).join('_')}
+                  question={''}
+                  answers={info.poll.answers}
+                  onVote={do_vote}
+                  customStyles={{ theme: 'cyan' }}
+                  noStorage={true}
+                  vote={
+                    localStorage['VOTE_RECORD:' + info.pid] || info.poll.vote
                   }
-                >
-                  <svg
-                    className={
-                      info.reaction_status === -1
-                        ? 'vote-icon-active'
-                        : 'vote-icon-inactive'
-                    }
-                    width="24"
-                    height="24"
-                    viewBox="0 0 36 36"
-                  >
-                    <path d="M2 11h32L18 27 2 11Z"></path>
-                  </svg>
-                </span>
+                />
               </div>
             )}
+            {!!(attention && info.variant.latest_reply) && (
+              <p className="box-footer">
+                最新回复{' '}
+                <Time stamp={info.variant.latest_reply} short={false} />
+              </p>
+            )}
           </div>
-          {info.poll && (
-            <div className="box-poll">
-              <Poll
-                key={info.poll.answers.map((a) => a.votes).join('_')}
-                question={''}
-                answers={info.poll.answers}
-                onVote={do_vote}
-                customStyles={{ theme: 'cyan' }}
-                noStorage={true}
-                vote={localStorage['VOTE_RECORD:' + info.pid] || info.poll.vote}
-              />
+          {do_react && (
+            <div className="box-post-vote">
+              <span
+                className="clickable"
+                onClick={() => do_react(info.reaction_status === 1 ? 0 : 1)}
+              >
+                <svg
+                  className={
+                    info.reaction_status === 1
+                      ? 'vote-icon-active'
+                      : 'vote-icon-inactive'
+                  }
+                  width="24"
+                  height="24"
+                  viewBox="0 0 36 36"
+                >
+                  <path d="M2 25h32L18 9 2 25Z" />
+                </svg>
+              </span>
+              <div className="vote-num">{info.up_votes}</div>
+              <hr />
+              <div className="vote-num">{info.down_votes}</div>
+              <span
+                className="clickable"
+                onClick={() =>
+                  do_react && do_react(info.reaction_status === -1 ? 0 : -1)
+                }
+              >
+                <svg
+                  className={
+                    info.reaction_status === -1
+                      ? 'vote-icon-active'
+                      : 'vote-icon-inactive'
+                  }
+                  width="24"
+                  height="24"
+                  viewBox="0 0 36 36"
+                >
+                  <path d="M2 11h32L18 27 2 11Z"></path>
+                </svg>
+              </span>
             </div>
-          )}
-          {!!(attention && info.variant.latest_reply) && (
-            <p className="box-footer">
-              最新回复 <Time stamp={info.variant.latest_reply} short={false} />
-            </p>
           )}
         </div>
       </div>

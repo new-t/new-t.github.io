@@ -398,15 +398,15 @@
   margin: 0 0.25em;
 }
 
-.box-content-wrapper {
+.box-post {
   display: flex;
 }
 
-.box-content-wrapper .box-content {
+.box .box-post-main {
   flex: 1 1;
 }
 
-.box-content-wrapper .box-content-vote {
+.box .box-post-vote {
   flex: 0 0;
   margin-left: 6px;
 }
