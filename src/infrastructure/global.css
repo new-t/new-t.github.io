@@ -18,6 +18,7 @@ pre {
 * {
   box-sizing: border-box;
   word-wrap: break-word;
+  word-break: break-word;
   -webkit-overflow-scrolling: touch;
 }
 
