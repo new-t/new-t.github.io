@@ -404,7 +404,6 @@ class FlowItem extends PureComponent {
               </span>
               <div className="vote-num">{info.up_votes}</div>
               <hr />
-              <div className="vote-num">{info.down_votes}</div>
               <span
                 className="clickable"
                 onClick={() =>
