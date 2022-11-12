@@ -19,7 +19,7 @@ import { save_attentions } from './Attention';
 import './UserAction.css';
 
 const REPOSITORY = 'https://git.thu.monster/newthuhole/';
-const EMAIL = 'hole_thu@riseup.net';
+export const EMAIL = 'hole_thu@riseup.net';
 
 export const TokenCtx = React.createContext({
   value: null,

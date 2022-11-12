@@ -4,11 +4,13 @@ import ReactDOM from 'react-dom';
 import TimeAgo from 'react-timeago';
 import chineseStrings from 'react-timeago/lib/language-strings/zh-CN';
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
+import copy from 'copy-to-clipboard';
 
 import './global.css';
 import './widgets.css';
 
 import { get_json, API_VERSION_PARAM } from './functions';
+import { EMAIL } from '../UserAction';
 
 function pad2(x) {
   return x < 10 ? '0' + x : '' + x;
@@ -55,31 +57,87 @@ export function GlobalTitle(props) {
   );
 }
 
+async function sha256_hex(text, l = null) {
+  let hash_buffer = await window.crypto.subtle.digest('SHA-256' , new TextEncoder().encode(text));
+  let hex_str = Array.from(new Uint8Array(hash_buffer)).map((b) => b.toString(16).padStart(2, '0')).join('');
+  return l ? hex_str.slice(0, l) : hex_str
+}
+
 class LoginPopupSelf extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading_status: 'idle',
+      token_phrase: '',
     };
-
-    this.input_token_ref = React.createRef();
   }
 
-  setThuhole(e, tar, ref) {
-    console.log(tar);
+  setThuhole(e) {
     e.preventDefault();
-    tar.href = '/_login?p=thuhole&token=' + ref.current.value;
-    console.log(tar);
     alert('T大树洞已经没有啦😭');
   }
 
+  copy_token_hash(event) {
+    const { token_phrase } = this.state;
+    if (!token_phrase) {
+      alert('不可以为空');
+      return;
+    }
+
+    sha256_hex(token_phrase + 'hole' + new Date().toDateString(), 16)
+      .then((token) => sha256_hex(token + 'hole', 16))
+      .then((token_hash) => copy('|' + token_hash + '|'));
+  }
+
+  use_token(event) {
+    const { token_phrase } = this.state;
+    if (!token_phrase) {
+      alert('不可以为空');
+      return;
+    }
+
+    sha256_hex(token_phrase + 'hole' + new Date().toDateString(), 16)
+      .then((token) => {
+        localStorage['TOKEN'] = 'sha256:' + token;
+        window.location.reload();
+      });
+  }
+
   render() {
+    const { token_phrase } = this.state;
     return (
       <div>
         <div className="thuhole-login-popup-shadow" />
         <div className="thuhole-login-popup">
           <p>
-            <b>通过第三方验证登陆新T树洞</b>
+            <h3>直接邮箱登陆</h3>
+          </p>
+          <p>
+            <input value={token_phrase} onChange={(event) => this.setState({token_phrase: event.target.value})} />
+          </p>
+          <div className="thuhole-login-popup-info">
+            <ol>
+              <li>
+                输入任意<b>独特</b>内容或
+                <a href="###" onClick={() => this.setState({token_phrase: window.crypto.randomUUID()})}>
+                  使用随机值
+                </a>
+                ，以生成token。请务必保存好输入的内容，并避免泄漏。
+              </li>
+              <li>
+                <a href="###" onClick={this.copy_token_hash.bind(this)}><b>点击此处</b></a>
+                复制token的哈希，通过<b>你的清华邮箱</b>发送到
+                <a href={'mailto:' + EMAIL}>{EMAIL}</a>。不同设备在同一天输入相同内容即可，请勿重复发件。
+              </li>
+              <li>
+                  后台每15分钟查收一次邮件，等待一段时间后
+                  <a href="###" onClick={this.use_token.bind(this)}><b>点击此处</b></a>
+                  使用此token登陆。
+              </li>
+            </ol>
+          </div>
+          <br />
+          <p>
+            <h3>第三方认证登陆</h3>
           </p>
           <p>
             <a href={window.BACKEND + "_login?p=cs"} target="_blank"
@@ -90,14 +148,10 @@ class LoginPopupSelf extends Component {
             </a>
           </p>
           <p>
-            <input ref={this.input_token_ref} placeholder="T大树洞Token" />
-            <br />
             <a
               href={window.BACKEND + "_login?p=thuhole"}
               target="_blank"
-              onClick={(e) => {
-                this.setThuhole(e, e.target, this.input_token_ref);
-              }}
+              onClick={this.setThuhole}
             >
               <span className="icon icon-login" />
               &nbsp;T大树洞
@@ -114,12 +168,6 @@ class LoginPopupSelf extends Component {
           <p>
             <button type="button" disabled>
               <span className="icon icon-login" />
-              &nbsp;未名bbs
-            </button>
-          </p>
-          <p>
-            <button type="button" disabled>
-              <span className="icon icon-login" />
               &nbsp;清华统一身份认证
             </button>
           </p>
@@ -131,15 +179,8 @@ class LoginPopupSelf extends Component {
           <div className="thuhole-login-popup-info">
             <p>提醒:</p>
             <ul>
-              <li>
-                {' '}
-                无论采用哪种方式注册，你后台记录的用户名都是本质实名的（除临时token），因为闭社/T大树洞的管理员可以根据你的闭社id/树洞评论区代号查到邮箱。但是这不影响新T树洞的安全性。新T树洞的匿名性来自隔离用户名与发布的内容，而非试图隔离用户名与真实身份。
-              </li>
-              <li>
-                {' '}
-                由于T大树洞仍未提供授权接口，使用T大树洞方式登陆需要用你的token在特定洞发布一段随机内容以确定身份。这是否违反用户条例由T大树洞管理员决定，需自行承担相关风险。完成登陆后建议立即重置T大树洞token。{' '}
-              </li>
-              <li> 目前一个人可能有两个帐号。</li>
+              <li>新T树洞的匿名性来自隔离用户名与发布的内容，而非试图隔离用户名与真实身份。</li>
+              <li> 目前一个人可能有多个帐号。</li>
             </ul>
           </div>
         </div>

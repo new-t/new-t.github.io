@@ -239,10 +239,11 @@ a.app-switcher-item,
   margin: 0.25em 1em;
   text-align: left;
 }
-.thuhole-login-popup-info ul {
+.thuhole-login-popup-info ul,
+.thuhole-login-popup-info ol {
   margin: 0.75em 1em;
   text-align: left;
-  font-size: 75%;
+  font-size: 80%;
 }
 /* override ant design */
 .thuhole-login-popup input,
