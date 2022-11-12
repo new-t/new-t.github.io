@@ -108,9 +108,7 @@ class LoginPopupSelf extends Component {
       <div>
         <div className="thuhole-login-popup-shadow" />
         <div className="thuhole-login-popup">
-          <p>
-            <h3>直接邮箱登陆</h3>
-          </p>
+          <h3>直接邮箱登陆</h3>
           <p>
             <input value={token_phrase} onChange={(event) => this.setState({token_phrase: event.target.value})} />
           </p>
@@ -136,8 +134,14 @@ class LoginPopupSelf extends Component {
             </ol>
           </div>
           <br />
+          <h3>第三方认证登陆</h3>
           <p>
-            <h3>第三方认证登陆</h3>
+            <a href={window.BACKEND + "_login/gh"} target="_blank"
+              referrerPolicy="origin"
+            >
+              <span className="icon icon-login" />
+              &nbsp;GitHub
+            </a>
           </p>
           <p>
             <a href={window.BACKEND + "_login?p=cs"} target="_blank"
