@@ -8,6 +8,7 @@ import copy from 'copy-to-clipboard';
 
 import './global.css';
 import './widgets.css';
+import emailExample from '../images/email_example.jpg';
 
 import { get_json, API_VERSION_PARAM } from './functions';
 import { EMAIL } from '../UserAction';
@@ -68,6 +69,7 @@ class LoginPopupSelf extends Component {
     super(props);
     this.state = {
       token_phrase: '',
+      already_copy: false,
     };
   }
 
@@ -86,6 +88,17 @@ class LoginPopupSelf extends Component {
     sha256_hex(token_phrase + 'hole' + new Date().toDateString(), 16)
       .then((token) => sha256_hex(token + 'hole', 16))
       .then((token_hash) => copy('|' + token_hash + '|'));
+
+    this.setState({already_copy: true});
+  }
+
+  copy_token_phrase(event) {
+    const { token_phrase } = this.state;
+    if (!token_phrase) {
+      alert('不可以为空');
+      return;
+    }
+    copy(token_phrase);
   }
 
   use_token(event) {
@@ -103,7 +116,7 @@ class LoginPopupSelf extends Component {
   }
 
   render() {
-    const { token_phrase } = this.state;
+    const { token_phrase, already_copy } = this.state;
     return (
       <div>
         <div className="thuhole-login-popup-shadow" />
@@ -115,22 +128,36 @@ class LoginPopupSelf extends Component {
           <div className="thuhole-login-popup-info">
             <ol>
               <li>
-                输入任意<b>独特</b>内容或
-                <a href="###" onClick={() => this.setState({token_phrase: window.crypto.randomUUID()})}>
-                  使用随机值
+                <a href="###" onClick={() => this.setState({token_phrase: window.crypto.randomUUID(), already_copy: false})}>
+                  生成
                 </a>
-                ，以生成token。请务必保存好输入的内容，并避免泄漏。
+                或粘贴用来生成token的ID。
               </li>
-              <li>
-                <a href="###" onClick={this.copy_token_hash.bind(this)}><b>点击此处</b></a>
-                复制token的哈希，通过<b>你的清华邮箱</b>发送到
-                <a href={'mailto:' + EMAIL}>{EMAIL}</a>。不同设备在同一天输入相同内容即可，请勿重复发件。
-              </li>
-              <li>
+              {!!token_phrase && (
+                <li>
+                  <a href="###" onClick={this.copy_token_phrase.bind(this)}><b>点击此处</b></a>
+                  复制此ID用于在其他设备上登录，当日有效，注意妥善保管。
+                </li>
+              )}
+              {!!token_phrase && (
+                <li>
+                  <a href="###" onClick={this.copy_token_hash.bind(this)}><b>点击此处</b></a>
+                  复制用来发送邮件的内容
+                </li>
+              )}
+              {!!already_copy ? (
+                <li>
+                  发送邮件到
+                  <a href={'mailto:' + EMAIL}>{EMAIL}</a>。
+                  不同设备请勿重复发件。
                   后台每15分钟查收一次邮件，等待一段时间后
                   <a href="###" onClick={this.use_token.bind(this)}><b>点击此处</b></a>
-                  使用此token登陆。
-              </li>
+                  使用此token登录。示例:
+                  <img src={emailExample} className="li-image"/>
+                </li>
+              ) : (
+                <li>...</li>
+              )}
             </ol>
           </div>
           <br />
