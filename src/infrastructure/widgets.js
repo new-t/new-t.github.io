@@ -134,27 +134,32 @@ class LoginPopupSelf extends Component {
                 或粘贴用来生成token的ID。
               </li>
               {!!token_phrase && (
-                <li>
-                  <a href="###" onClick={this.copy_token_phrase.bind(this)}><b>点击此处</b></a>
-                  复制此ID用于在其他设备上登录，当日有效，注意妥善保管。
-                </li>
-              )}
-              {!!token_phrase && (
-                <li>
-                  <a href="###" onClick={this.copy_token_hash.bind(this)}><b>点击此处</b></a>
-                  复制用来发送邮件的内容
-                </li>
+                <>
+                  <li>
+                    <a href="###" onClick={this.copy_token_phrase.bind(this)}><b>点击此处</b></a>
+                    复制此ID用于在其他设备上登录，当日有效，注意妥善保管。
+                  </li>
+                  <li>
+                    <a href="###" onClick={this.copy_token_hash.bind(this)}><b>点击此处</b></a>
+                    复制用来发送邮件的内容
+                  </li>
+                </>
               )}
               {!!already_copy ? (
-                <li>
-                  发送邮件到
-                  <a href={'mailto:' + EMAIL}>{EMAIL}</a>。
-                  不同设备请勿重复发件。
-                  后台每15分钟查收一次邮件，等待一段时间后
-                  <a href="###" onClick={this.use_token.bind(this)}><b>点击此处</b></a>
-                  使用此token登录。示例:
-                  <img src={emailExample} className="li-image"/>
-                </li>
+                <>
+                  <li>
+                    发送邮件到
+                    <a href={'mailto:' + EMAIL}>{EMAIL}</a>。
+                    不同设备请勿重复发件。<b>不要带中文小尾巴，不要带格式。</b>
+                    示例:
+                    <img src={emailExample} className="li-image"/>
+                  </li>
+                  <li>
+                    后台每15分钟查收一次邮件，等待一段时间后
+                    <a href="###" onClick={this.use_token.bind(this)}><b>点击此处</b></a>
+                    使用此token登录。
+                  </li>
+                </>
               ) : (
                 <li>...</li>
               )}
