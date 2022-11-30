@@ -23,8 +23,8 @@ jobs:
         run: yarn build
         env:
           REACT_APP_ROOM_ID: 1
-          REACT_APP_BACKEND: "https://api.hole-thu-qwertyuiop.xyz/"
-          REACT_APP_STORAGE: "https://file.hole-thu-qwertyuiop.xyz/"
+          REACT_APP_BACKEND: "https://api.sbsybqlaaaaaaa.buzz/"
+          REACT_APP_STORAGE: "https://file.sbsybqlaaaaaaa.buzz/"
           REACT_APP_BUILD_INFO: "v-${{steps.date.outputs.date}}"
       - name: "Deploy with gh-pages"
         run: |
