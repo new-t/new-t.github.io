@@ -38,6 +38,7 @@ export class MessageViewer extends PureComponent {
               admin_list: json.admin_list,
               candidate_list: json.candidate_list,
               tmp_token: json.tmp_token,
+              user_count: json.user_count,
             });
           })
           .catch((err) => {
@@ -86,6 +87,9 @@ export class MessageViewer extends PureComponent {
           <br />
           <p>
             最近一次重置 <Time stamp={this.state.start_time} short={false} />
+          </p>
+          <p>
+            重置后用户数(非实时): <b>{this.state.user_count}</b>
           </p>
           <p>
             随机盐 <b>{this.state.salt}</b>
