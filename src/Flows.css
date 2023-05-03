@@ -196,6 +196,10 @@
   overflow-x: auto;
 }
 
+.box-content > p:not(:last-child) {
+  margin-bottom: 1em;
+}
+
 .left-container .box-content {
   max-height: calc(100vh + 15em);
   overflow-y: hidden;
