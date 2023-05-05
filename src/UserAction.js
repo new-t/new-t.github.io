@@ -245,8 +245,7 @@ export class LoginForm extends Component {
                       复制 User Token
                     </a>
                     <br />
-                    User
-                    Token仅用于开发bot，切勿告知他人。若怀疑被盗号请刷新Token(刷新功能即将上线)。
+                    User Token仅用于开发bot，切勿告知他人。每次重置后Token失效。
                   </p>
                   <p>
                     {this.state.is_admin && (

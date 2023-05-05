@@ -215,7 +215,7 @@ class LoginPopupSelf extends Component {
           <div className="thuhole-login-popup-info">
             <p>提醒:</p>
             <ul>
-              <li>新T树洞的匿名性来自隔离用户名与发布的内容，而非试图隔离用户名与真实身份。</li>
+              <li>新T树洞的匿名性既来自隔离用户名与发布的内容，也来自隔离用户名与真实身份。</li>
               <li> 目前一个人可能有多个帐号。</li>
             </ul>
           </div>

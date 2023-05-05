@@ -196,6 +196,7 @@
   overflow-x: auto;
 }
 
+.post-preview > p:not(:last-child),
 .box-content > p:not(:last-child) {
   margin-bottom: 1em;
 }
