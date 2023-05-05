@@ -17,8 +17,7 @@ jobs:
       - name: "Install Dependencies"
         run: yarn
       - name: "Get current date"
-        id: "date"
-        run: echo "::set-output name=date::$(date --rfc-3339=date)"
+        run: echo "date=$(date --rfc-3339=date)" >> "$GITHUB_ENV"
       - name: "Build"
         run: yarn build
         env:
@@ -26,7 +25,7 @@ jobs:
           REACT_APP_ROOM_ID: 1
           REACT_APP_BACKEND: "https://api.sbsybqlaaaaaaa.buzz/"
           REACT_APP_STORAGE: "https://file.sbsybqlaaaaaaa.buzz/"
-          REACT_APP_BUILD_INFO: "v-${{steps.date.outputs.date}}"
+          REACT_APP_BUILD_INFO: "v-${{ env.date }}"
       - name: "Deploy with gh-pages"
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
