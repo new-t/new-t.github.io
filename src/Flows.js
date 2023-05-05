@@ -1083,7 +1083,8 @@ class FlowItemRow extends PureComponent {
   }
 
   render() {
-    const { show_sidebar, token, search_param, is_quote, mode } = this.props;
+    const { show_sidebar, token, search_param, is_quote, mode, submode } =
+      this.props;
     let show_pid = load_single_meta(show_sidebar, token, [this.state.info.pid]);
 
     let hl_rules = [['pid', PID_RE]];
@@ -1107,6 +1108,11 @@ class FlowItemRow extends PureComponent {
           }
         }
       }
+
+    let replies_to_show = this.state.replies.slice(0, PREVIEW_REPLY_COUNT);
+    if (mode === 'list' && submode === 1) {
+      replies_to_show.reverse();
+    }
 
     let res = (
       <div
@@ -1150,20 +1156,18 @@ class FlowItemRow extends PureComponent {
               <p>{this.state.reply_error}</p>
             </div>
           )}
-          {this.state.replies
-            .slice(0, PREVIEW_REPLY_COUNT)
-            .map(
-              (reply) =>
-                (reply.can_del || !reply.is_blocked) && (
-                  <Reply
-                    key={reply.cid}
-                    info={reply}
-                    color_picker={this.color_picker}
-                    show_pid={show_pid}
-                    search_param={search_param}
-                  />
-                ),
-            )}
+          {replies_to_show.map(
+            (reply) =>
+              (reply.can_del || !reply.is_blocked) && (
+                <Reply
+                  key={reply.cid}
+                  info={reply}
+                  color_picker={this.color_picker}
+                  show_pid={show_pid}
+                  search_param={search_param}
+                />
+              ),
+          )}
           {this.state.replies.length > PREVIEW_REPLY_COUNT && (
             <div className="box box-tip">
               还有 {this.state.replies.length - PREVIEW_REPLY_COUNT} 条
@@ -1367,6 +1371,7 @@ function FlowChunk(props) {
                     <FlowItemRow
                       info={info}
                       mode={props.mode}
+                      submode={props.submode}
                       show_sidebar={props.show_sidebar}
                       token={token}
                       deletion_detect={props.deletion_detect}
@@ -1789,6 +1794,7 @@ class SubFlow extends PureComponent {
           title={chunks.title}
           list={chunks.data}
           mode={mode}
+          submode={submode}
           search_param={search_param || null}
           show_sidebar={show_sidebar}
           deletion_detect={should_deletion_detect}
