@@ -1430,7 +1430,7 @@ export class Flow extends PureComponent {
   get_submode_names(mode) {
     switch (mode) {
       case 'list':
-        return ['最新', '最近回复', '近期热门', '随机'];
+        return ['最新', '回复', '热门', '随机', '典藏'];
       case 'attention':
         return ['线上关注', '本地收藏'];
       case 'search':
