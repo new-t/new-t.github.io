@@ -691,7 +691,7 @@ export class PostForm extends Component {
       '\n' +
       (file_type.startsWith('image/') ? `![](${url})` : url);
     this.setState({ text: new_text });
-    this.area_ref.current.set(new_text);
+    this.area_ref.current.set(new_text, true);
   }
 
   upload_progress(event) {

@@ -1109,10 +1109,10 @@ class FlowItemRow extends PureComponent {
         }
       }
 
-    let replies_to_show = this.state.replies.slice(0, PREVIEW_REPLY_COUNT);
     if (mode === 'list' && submode === 1) {
-      replies_to_show.reverse();
+      this.state.replies.reverse();
     }
+    let replies_to_show = this.state.replies.slice(0, PREVIEW_REPLY_COUNT);
 
     let res = (
       <div

@@ -360,15 +360,17 @@ export class SafeTextarea extends Component {
     );
   }
 
-  set(text) {
+  set(text, keep_pos = false) {
     this.change_callback(text);
-    let currPos = this.area_ref.current.selectionStart;
+    let currPosStart = this.area_ref.current.selectionStart;
+    let currPosEnd = this.area_ref.current.selectionEnd;
     this.setState(
       {
         text: text,
       },
       () => {
-        this.area_ref.current.setSelectionRange(currPos, currPos);
+        if (keep_pos)
+          this.area_ref.current.setSelectionRange(currPosStart, currPosEnd);
         this.area_ref.current.focus();
       },
     );
