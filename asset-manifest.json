@@ -1,10 +1,9 @@
 {
   "files": {
-    "main.css": "./static/css/main.a37510bb.css",
-    "main.js": "./static/js/main.64b111a2.js",
+    "main.css": "./static/css/main.fbdc094c.css",
+    "main.js": "./static/js/main.90c53272.js",
     "static/media/loading.gif": "./static/media/loading.706124a2c0232f216d63.gif",
     "static/media/KaTeX_AMS-Regular.ttf": "./static/media/KaTeX_AMS-Regular.853be92419a6c3766b9a.ttf",
-    "service-worker.js": "./service-worker.js",
     "static/media/KaTeX_Main-Regular.ttf": "./static/media/KaTeX_Main-Regular.9eba1d77abcf2aa6e94e.ttf",
     "static/media/KaTeX_Main-Bold.ttf": "./static/media/KaTeX_Main-Bold.8169508bf58f8bd92ad8.ttf",
     "static/media/KaTeX_Main-Italic.ttf": "./static/media/KaTeX_Main-Italic.fa675e5e4bec9eb250b6.ttf",
@@ -12,6 +11,7 @@
     "static/media/KaTeX_Main-BoldItalic.ttf": "./static/media/KaTeX_Main-BoldItalic.828abcb200061cffbaae.ttf",
     "static/media/KaTeX_Math-Italic.ttf": "./static/media/KaTeX_Math-Italic.8a5f936332e8028c7278.ttf",
     "static/media/KaTeX_Math-BoldItalic.ttf": "./static/media/KaTeX_Math-BoldItalic.bf2d440b3a42ea78a998.ttf",
+    "service-worker.js": "./service-worker.js",
     "static/media/KaTeX_Main-Regular.woff": "./static/media/KaTeX_Main-Regular.4f35fbcc9ee8614c2bcc.woff",
     "static/media/KaTeX_Main-Bold.woff": "./static/media/KaTeX_Main-Bold.0c3b8929d377c0e9b2f3.woff",
     "static/media/KaTeX_AMS-Regular.woff2": "./static/media/KaTeX_AMS-Regular.73ea273a72f4aca30ca5.woff2",
@@ -72,7 +72,7 @@
     "index.html": "./index.html"
   },
   "entrypoints": [
-    "static/css/main.a37510bb.css",
-    "static/js/main.64b111a2.js"
+    "static/css/main.fbdc094c.css",
+    "static/js/main.90c53272.js"
   ]
 }
