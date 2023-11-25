@@ -18,7 +18,10 @@ export { format_time, Time, TitleLine };
 const pushServerPublicKey =
   'BLM6zZy2CWlsfQ9KsALDgrjPXBf8E3cJ7qQ5vZipN_IjOfeDXFjeYb_zRLzwglyiwr9QpVL9Lt1TS_sZKewJYuY';
 
-export const STORAGE_BASE = `${process.env.REACT_APP_STORAGE || '/'}`;
+export const STORAGE_BASE = (localStorage['BACKEND'] || '/').replace(
+  'api.',
+  'file.',
+);
 
 export function get_api_base() {
   return `${window.BACKEND}_api/v1`;
