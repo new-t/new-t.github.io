@@ -22,7 +22,7 @@ jobs:
         run: yarn build
         env:
           REACT_APP_ROOM_ID: 1
-          REACT_APP_BACKEND: "https://api.sbsybqlaaaaaaa.buzz/"
+          REACT_APP_BACKEND: "https://api.tholeapis.top/"
           REACT_APP_BUILD_INFO: "v-${{ env.date }}"
       - name: "Deploy with gh-pages"
         run: |
