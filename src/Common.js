@@ -508,7 +508,10 @@ export class ClickHandler extends PureComponent {
   }
 }
 
-export function check_service_work_update(update_now = false) {
+export function check_service_work_update(
+  update_now = false,
+  manually = false,
+) {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready.then((serviceWorker) => {
       const waitingServiceWorker = serviceWorker.waiting;
@@ -524,7 +527,7 @@ export function check_service_work_update(update_now = false) {
         });
         waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
       } else {
-        if (update_now) alert('没有已下载的更新');
+        if (manually) alert('没有已下载的更新');
       }
     });
   }

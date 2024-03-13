@@ -43,7 +43,7 @@ class App extends Component {
     window.BACKEND =
       localStorage['BACKEND'] || process.env.REACT_APP_BACKEND || '/';
 
-    check_service_work_update(false);
+    check_service_work_update(true);
     if (process.env.NODE_ENV === 'production') {
       setTimeout(() => {
         fetch('https://api.github.com/users/hole-thu')

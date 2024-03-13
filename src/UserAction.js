@@ -60,7 +60,7 @@ export function InfoSidebar(props) {
           <a
             href="###"
             onClick={() => {
-              check_service_work_update(true);
+              check_service_work_update(true, true);
             }}
           >
             立即更新
