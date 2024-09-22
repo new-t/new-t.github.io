@@ -1,5 +1,4 @@
-import React, { Component, PureComponent } from 'react';
-import ReactDOM from 'react-dom';
+import React, { Component } from 'react';
 
 import TimeAgo from 'react-timeago';
 import chineseStrings from 'react-timeago/lib/language-strings/zh-CN';
@@ -10,7 +9,6 @@ import './global.css';
 import './widgets.css';
 import emailExample from '../images/email_example.jpg';
 
-import { get_json, API_VERSION_PARAM } from './functions';
 import { EMAIL } from '../UserAction';
 
 function pad2(x) {
@@ -78,7 +76,7 @@ class LoginPopupSelf extends Component {
     alert('T大树洞已经没有啦😭');
   }
 
-  copy_token_hash(event) {
+  copy_token_hash() {
     const { token_phrase } = this.state;
     if (!token_phrase) {
       alert('不可以为空');
@@ -87,12 +85,12 @@ class LoginPopupSelf extends Component {
 
     sha256_hex(token_phrase + 'hole' + new Date().toDateString(), 16)
       .then((token) => sha256_hex(token + 'hole', 16))
-      .then((token_hash) => copy('|' + token_hash + '|'));
+      .then((token_hash) => copy(`|${token_hash}|\n\n随便写点内容以免被当成垃圾邮件`));
 
     this.setState({already_copy: true});
   }
 
-  copy_token_phrase(event) {
+  copy_token_phrase() {
     const { token_phrase } = this.state;
     if (!token_phrase) {
       alert('不可以为空');
@@ -101,7 +99,7 @@ class LoginPopupSelf extends Component {
     copy(token_phrase);
   }
 
-  use_token(event) {
+  use_token() {
     const { token_phrase } = this.state;
     if (!token_phrase) {
       alert('不可以为空');
@@ -150,7 +148,7 @@ class LoginPopupSelf extends Component {
                   <li>
                     发送邮件到
                     <a href={'mailto:' + EMAIL}>{EMAIL}</a>。
-                    不同设备请勿重复发件。<b>不要带中文小尾巴，不要带格式。</b>
+                    不同设备请勿重复发件。
                     示例:
                     <img src={emailExample} className="li-image"/>
                   </li>
@@ -174,6 +172,8 @@ class LoginPopupSelf extends Component {
               <span className="icon icon-login" />
               &nbsp;GitHub
             </a>
+            <br/ >
+            <small>(请先添加清华邮箱/校友邮箱)</small>
           </p>
           <p>
             <a href={window.BACKEND + "_login?p=cs"} target="_blank"
