@@ -120,6 +120,7 @@ class LoginPopupSelf extends Component {
         <div className="thuhole-login-popup-shadow" />
         <div className="thuhole-login-popup">
           <h3>直接邮箱登录</h3>
+          <small>(请使用清华邮箱/校友邮箱发件)</small>
           <p>
             <input value={token_phrase} onChange={(event) => this.setState({token_phrase: event.target.value})} />
           </p>
