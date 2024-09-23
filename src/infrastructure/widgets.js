@@ -85,7 +85,7 @@ class LoginPopupSelf extends Component {
 
     sha256_hex(token_phrase + 'hole' + new Date().toDateString(), 16)
       .then((token) => sha256_hex(token + 'hole', 16))
-      .then((token_hash) => copy(`|${token_hash}|\n\n随便写点内容以免被当成垃圾邮件`));
+      .then((token_hash) => copy(`|${token_hash}|`));
 
     this.setState({already_copy: true});
   }
@@ -136,7 +136,7 @@ class LoginPopupSelf extends Component {
                 <>
                   <li>
                     <a href="###" onClick={this.copy_token_phrase.bind(this)}><b>点击此处</b></a>
-                    复制此ID用于在其他设备上登录，当日有效，注意妥善保管。
+                    复制此ID用于在其他设备上登录，当日有效，<b>注意妥善保管</b>。
                   </li>
                   <li>
                     <a href="###" onClick={this.copy_token_hash.bind(this)}><b>点击此处</b></a>
@@ -148,7 +148,8 @@ class LoginPopupSelf extends Component {
                 <>
                   <li>
                     发送邮件到
-                    <a href={'mailto:' + EMAIL}>{EMAIL}</a>。
+                    <a href={'mailto:' + EMAIL}>{EMAIL}</a>，
+                    复制的内容请放入邮件正文，是否包含其他内容随意。
                     不同设备请勿重复发件。
                     示例:
                     <img src={emailExample} className="li-image"/>
