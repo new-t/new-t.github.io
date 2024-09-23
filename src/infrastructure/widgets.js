@@ -165,51 +165,48 @@ class LoginPopupSelf extends Component {
               )}
             </ol>
           </div>
-          <br />
-          <h3>第三方认证登录</h3>
-          <p>
-            <a href={window.BACKEND + "_login/gh"} target="_blank"
-              referrerPolicy="origin"
-            >
-              <span className="icon icon-login" />
-              &nbsp;GitHub
-            </a>
-            <br/ >
-            <small>(请先添加清华邮箱/校友邮箱)</small>
-          </p>
-          <p>
-            <a href={window.BACKEND + "_login?p=cs"} target="_blank"
-              referrerPolicy="origin"
-            >
-              <span className="icon icon-login" />
-              &nbsp;闭社
-            </a>
-          </p>
-          <p>
-            <a
-              href={window.BACKEND + "_login?p=thuhole"}
-              target="_blank"
-              onClick={this.setThuhole}
-            >
-              <span className="icon icon-login" />
-              &nbsp;T大树洞
-            </a>
-          </p>
-          <p>
-            <small>前往Telegram群查询15分钟临时token</small>
-            <br />
-            <a href="//t.me/THUChatBot" target="_blank">
-              <span className="icon icon-login" />
-              &nbsp;清华大水群
-            </a>
-          </p>
-          <p>
-            <button type="button" disabled>
-              <span className="icon icon-login" />
-              &nbsp;清华统一身份认证
-            </button>
-          </p>
-          <hr />
+
+          {!token_phrase && (
+            <>
+              <h3>第三方认证登录</h3>
+              <p>
+                <a href={window.BACKEND + "_login/gh"} target="_blank"
+                  referrerPolicy="origin"
+                >
+                  <span className="icon icon-login" />
+                  &nbsp;GitHub
+                </a>
+                <br/ >
+                <small>(请先添加清华邮箱/校友邮箱)</small>
+              </p>
+              <p>
+                <a href={window.BACKEND + "_login?p=cs"} target="_blank"
+                  referrerPolicy="origin"
+                >
+                  <span className="icon icon-login" />
+                  &nbsp;闭社
+                </a>
+              </p>
+              <p>
+                <a
+                  href={window.BACKEND + "_login?p=thuhole"}
+                  target="_blank"
+                  onClick={this.setThuhole}
+                >
+                  <span className="icon icon-login" />
+                  &nbsp;T大树洞
+                </a>
+              </p>
+              <p>
+                <small>前往Telegram群查询15分钟临时token</small>
+                <br />
+                <a href="//t.me/THUChatBot" target="_blank">
+                  <span className="icon icon-login" />
+                  &nbsp;清华大水群
+                </a>
+              </p>
+            </>
+          )}
           <p>
             <button onClick={this.props.on_close}>取消</button>
           </p>
