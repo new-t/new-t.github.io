@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.b92b7813.css",
-    "main.js": "./static/js/main.9944fa50.js",
+    "main.css": "./static/css/main.7c93107b.css",
+    "main.js": "./static/js/main.3353d1b4.js",
     "static/media/loading.gif": "./static/media/loading.706124a2c0232f216d63.gif",
     "static/media/KaTeX_AMS-Regular.ttf": "./static/media/KaTeX_AMS-Regular.853be92419a6c3766b9a.ttf",
     "static/media/KaTeX_Main-Regular.ttf": "./static/media/KaTeX_Main-Regular.9eba1d77abcf2aa6e94e.ttf",
@@ -9,10 +9,10 @@
     "static/media/KaTeX_Main-Italic.ttf": "./static/media/KaTeX_Main-Italic.fa675e5e4bec9eb250b6.ttf",
     "static/media/KaTeX_AMS-Regular.woff": "./static/media/KaTeX_AMS-Regular.d562e886c52f12660a41.woff",
     "static/media/KaTeX_Main-BoldItalic.ttf": "./static/media/KaTeX_Main-BoldItalic.828abcb200061cffbaae.ttf",
+    "service-worker.js": "./service-worker.js",
     "static/media/KaTeX_Math-Italic.ttf": "./static/media/KaTeX_Math-Italic.8a5f936332e8028c7278.ttf",
     "static/media/KaTeX_Math-BoldItalic.ttf": "./static/media/KaTeX_Math-BoldItalic.bf2d440b3a42ea78a998.ttf",
     "static/media/KaTeX_Main-Regular.woff": "./static/media/KaTeX_Main-Regular.4f35fbcc9ee8614c2bcc.woff",
-    "service-worker.js": "./service-worker.js",
     "static/media/KaTeX_Main-Bold.woff": "./static/media/KaTeX_Main-Bold.0c3b8929d377c0e9b2f3.woff",
     "static/media/KaTeX_AMS-Regular.woff2": "./static/media/KaTeX_AMS-Regular.73ea273a72f4aca30ca5.woff2",
     "static/media/KaTeX_Typewriter-Regular.ttf": "./static/media/KaTeX_Typewriter-Regular.c5c02d763c89380dcb4e.ttf",
@@ -69,10 +69,11 @@
     "static/media/KaTeX_Size4-Regular.woff2": "./static/media/KaTeX_Size4-Regular.e418bf257af1052628d8.woff2",
     "static/media/KaTeX_Size3-Regular.woff": "./static/media/KaTeX_Size3-Regular.7947224e8a9914fa332b.woff",
     "static/media/KaTeX_Size3-Regular.woff2": "./static/media/KaTeX_Size3-Regular.e1951519f6f0596f7356.woff2",
-    "index.html": "./index.html"
+    "index.html": "./index.html",
+    "static/media/watermark.svg": "./static/media/watermark.c9239b1e45c018c34519.svg"
   },
   "entrypoints": [
-    "static/css/main.b92b7813.css",
-    "static/js/main.9944fa50.js"
+    "static/css/main.7c93107b.css",
+    "static/js/main.3353d1b4.js"
   ]
 }
