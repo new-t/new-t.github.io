@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.a5a008a4.css",
-    "main.js": "./static/js/main.51a80267.js",
+    "main.js": "./static/js/main.37bcd85b.js",
     "static/media/loading.gif": "./static/media/loading.706124a2c0232f216d63.gif",
     "static/media/KaTeX_AMS-Regular.ttf": "./static/media/KaTeX_AMS-Regular.853be92419a6c3766b9a.ttf",
     "static/media/KaTeX_Main-Regular.ttf": "./static/media/KaTeX_Main-Regular.9eba1d77abcf2aa6e94e.ttf",
@@ -74,6 +74,6 @@
   },
   "entrypoints": [
     "static/css/main.a5a008a4.css",
-    "static/js/main.51a80267.js"
+    "static/js/main.37bcd85b.js"
   ]
 }
